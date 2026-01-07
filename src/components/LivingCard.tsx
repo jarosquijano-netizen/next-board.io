@@ -210,11 +210,11 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
     >
       {/* Drag Handle */}
       <div 
-        className="absolute left-1.5 sm:left-2 top-3 sm:top-4 cursor-grab active:cursor-grabbing touch-manipulation"
+        className="absolute left-2 top-4 cursor-grab active:cursor-grabbing touch-manipulation"
         {...attributes}
         {...listeners}
       >
-        <GripVertical className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 dark:text-slate-400" strokeWidth={1.5} />
+        <GripVertical className="w-4 h-4 text-gray-400" strokeWidth={1.5} />
       </div>
 
       <div 
@@ -327,68 +327,37 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
           </div>
         )}
 
-        {/* Metadata Row */}
-        <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-xs text-gray-600 dark:text-slate-400 mb-1.5 sm:mb-2 flex-wrap">
+        {/* Metadata Row - Clean minimal matching reference */}
+        <div className="flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400 flex-wrap">
           {card.owner && (
-            <div className="flex items-center gap-1">
-              <User className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0" />
-              <span className="truncate max-w-[100px] sm:max-w-none">{card.owner}</span>
+            <div className="flex items-center gap-1.5">
+              <div className="w-5 h-5 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-700 dark:text-purple-300 font-semibold text-[10px]">
+                {card.owner.charAt(0)}
+              </div>
+              <span className="truncate">{card.owner}</span>
             </div>
           )}
           {card.dueDate && (
-            <div className="flex items-center gap-1">
-              <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0" />
+            <div className="flex items-center gap-1.5">
+              <Clock className="w-3 h-3 flex-shrink-0" />
               <span className={timeStatus.displayColor}>
                 {timeStatus.displayText}
               </span>
             </div>
           )}
+          {activities.length > 0 && (
+            <div className="flex items-center gap-1.5">
+              <MessageSquare className="w-3 h-3 flex-shrink-0" />
+              <span>{activities.length}</span>
+            </div>
+          )}
           {card.timeEstimate && (
-            <span className="whitespace-nowrap">{getTimeEstimateDisplay(card.timeEstimate)}</span>
+            <div className="flex items-center gap-1.5">
+              <Clock className="w-3 h-3 flex-shrink-0" />
+              <span>{getTimeEstimateDisplay(card.timeEstimate)}</span>
+            </div>
           )}
         </div>
-
-        {/* Time Tracking */}
-        <div className="flex items-center justify-between text-xs p-2 bg-gray-100 dark:bg-slate-800/50 rounded-lg mb-2 border border-gray-200 dark:border-slate-700">
-          <div className="flex items-center gap-2">
-            <span className={timeInStatus.color}>
-              {getTimeIcon(timeInStatus.urgencyLevel)}
-            </span>
-            <span className="text-gray-600 dark:text-gray-400">In {card.status}:</span>
-            <span className={`font-semibold ${timeInStatus.color}`}>
-              {timeInStatus.displayText}
-            </span>
-          </div>
-          {card.priorityAutoUpdated && (
-            <span className="px-2 py-0.5 rounded text-xs font-semibold bg-orange-500/20 text-orange-700 dark:text-orange-300 border border-orange-500/40">
-              Auto ⬆️
-            </span>
-          )}
-        </div>
-
-        {/* Stale Warning */}
-        {timeInStatus.isStale && (
-          <div className="flex items-center gap-2 text-xs text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/20 px-2 py-1.5 rounded-lg mb-2 border border-yellow-300 dark:border-yellow-500/30">
-            <AlertTriangle className="w-3 h-3" />
-            <span>⚠️ Needs attention - {timeInStatus.displayText} in this status</span>
-          </div>
-        )}
-
-        {/* Activity Count Badge */}
-        {activities.length > 0 && (
-          <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-slate-400 mt-2">
-            <MessageSquare className="w-3 h-3" />
-            <span>{activities.length} {activities.length === 1 ? 'update' : 'updates'}</span>
-          </div>
-        )}
-
-        {/* AI Summary Indicator */}
-        {card.status === 'Done' && card.aiSummary && (
-          <div className="mt-2 flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
-            <Sparkles className="w-3 h-3" />
-            <span>AI Summary Available</span>
-          </div>
-        )}
       </div>
     </div>
   );
