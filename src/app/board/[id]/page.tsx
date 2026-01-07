@@ -744,9 +744,9 @@ export default function BoardPage({ params }: PageProps) {
                       }
                       
                       return (
-                        <div key={column.id} className="flex flex-col relative">
-                          {/* Column Header - Sticky */}
-                          <div className={`sticky top-40 z-[1] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm`}>
+                        <div key={column.id} className="flex flex-col">
+                          {/* Column Header - Not sticky in Top layout to avoid overlay issues */}
+                          <div className={`bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm`}>
                             <div className="flex items-center justify-between mb-0.5">
                               <div className="flex items-center gap-1.5">
                                 <column.icon className="w-5 h-5 text-white" />
