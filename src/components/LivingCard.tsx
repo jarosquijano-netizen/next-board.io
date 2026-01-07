@@ -177,11 +177,11 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
       {...attributes}
       {...listeners}
       className={`
-        group relative rounded-lg sm:rounded-xl p-3 sm:p-4 mb-2 sm:mb-3 transition-all duration-300 ease-in-out cursor-move
+        group relative rounded-xl p-4 mb-3 transition-all duration-300 ease-in-out cursor-move
         border-l-4 ${styles.border} ${styles.bg}
         bg-white dark:bg-transparent
-        shadow-sm border border-slate-200 dark:border-slate-700
-        hover:shadow-md hover:border-indigo-400 hover:border-l-indigo-500
+        shadow-md border-2 border-slate-300 dark:border-slate-600
+        hover:shadow-xl hover:border-indigo-500 hover:border-l-indigo-600 hover:scale-[1.02]
         active:scale-95
         ${getUrgencyBorderClass(timeStatus.urgencyLevel)}
         ${staleClass}
