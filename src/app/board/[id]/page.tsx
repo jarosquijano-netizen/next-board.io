@@ -988,7 +988,7 @@ export default function BoardPage({ params }: PageProps) {
                       return (
                         <div key={column.id} className="flex flex-col relative">
                           {/* Column Header - Enhanced */}
-                          <div className={`sticky ${isSearchFiltersVisible ? 'top-[350px]' : 'top-[140px]'} z-[5] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300 pointer-events-auto`}>
+                          <div className={`sticky ${isSearchFiltersVisible ? 'top-[350px]' : 'top-[140px]'} z-[4] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300 pointer-events-auto`}>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <button
@@ -1035,7 +1035,7 @@ export default function BoardPage({ params }: PageProps) {
 
                           {/* Cards Container - Enhanced with animations */}
                           {!collapsedColumns.has(column.id) && (
-                            <div className="relative z-[6] mt-0">
+                            <div className="relative z-[10] -mt-0">
                               <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
                                 <DroppableColumn id={column.id}>
                                   {(() => {
