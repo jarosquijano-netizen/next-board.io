@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* UI Improvements - Force Tailwind recompilation */
+/* UI Improvements - Force Tailwind recompilation - Updated 2026-01-07 */
 
 @layer base {
   * {

@@ -87,7 +87,7 @@ export function TimelineDashboard({ cards, allCards }: TimelineDashboardProps) {
       {!isCollapsed && (
         <div className="grid grid-cols-8 gap-2">
           {/* Stale Items */}
-          <div className="group bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-400 dark:border-yellow-500/50 rounded-xl p-4 min-w-0 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-yellow-500">
+          <div className="group bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-500 dark:border-yellow-600 rounded-xl p-4 min-w-0 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-yellow-600 hover:bg-yellow-100 dark:hover:bg-yellow-900/30">
             <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-yellow-900 dark:text-white leading-none">{staleCards.length}</p>
               <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400 flex-shrink-0" strokeWidth={1.5} />
