@@ -16,7 +16,6 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '50mb',
     },
-    optimizeCss: true,
   },
   // Disable cache during build to avoid issues
   onDemandEntries: {
