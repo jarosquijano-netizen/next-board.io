@@ -233,7 +233,7 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
               <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide ${styles.badge}`}>
                 {card.type}
               </span>
-              {card.priority && card.priority !== 'medium' && (
+              {card.priority && (
                 <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${getPriorityColor(card.priority)}`}>
                   {card.priority.toUpperCase()}
                 </span>
