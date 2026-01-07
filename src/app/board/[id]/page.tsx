@@ -975,8 +975,8 @@ export default function BoardPage({ params }: PageProps) {
           {/* Kanban Board View - Top Layout */}
           {viewMode === 'kanban' && layoutMode === 'top' && (
                 <DndContext sensors={sensors} collisionDetection={rectIntersection} onDragEnd={handleDragEnd}>
-                  <div className="overflow-x-auto scrollbar-hide pb-4 lg:pb-0">
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 min-w-[800px] lg:min-w-0 px-4 sm:px-6 lg:px-8">
+                  <div className="overflow-x-auto scrollbar-hide pb-4 lg:pb-0" style={{ position: 'relative' }}>
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 min-w-[800px] lg:min-w-0 px-4 sm:px-6 lg:px-8" style={{ position: 'relative' }}>
                     {COLUMNS.map((column) => {
                       let columnCards = filteredCards.filter(card => card.status === column.id);
                       
