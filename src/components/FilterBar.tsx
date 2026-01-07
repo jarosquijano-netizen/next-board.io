@@ -63,7 +63,7 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
 
         {/* Grid of filter buttons */}
         <div className="grid grid-cols-2 gap-2">
-          {cardTypes.map(({ type, label, color, bgColor, emoji }) => {
+          {cardTypes.map(({ type, label, color, bgColor, icon: Icon }) => {
             const isSelected = selectedTypes.includes(type);
             
             return (
@@ -71,13 +71,13 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
                 key={type}
                 onClick={() => toggleType(type)}
                 className={cn(
-                  "px-3 py-2 rounded-lg border transition-all text-xs font-medium flex flex-col items-center justify-center gap-1 h-16",
+                  "px-3 py-2 rounded-lg border transition-all text-xs font-medium flex flex-col items-center justify-center gap-1 h-16 relative",
                   isSelected
                     ? `${bgColor} ${color} border-current`
                     : "bg-white dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 transition-all duration-300"
                 )}
               >
-                <span className="text-lg">{emoji}</span>
+                <Icon className="w-4 h-4" strokeWidth={1.5} />
                 <span className="text-center leading-tight">{label}</span>
                 {isSelected && <CheckCircle2 className="w-3 h-3 absolute top-1 right-1" strokeWidth={1.5} />}
               </button>
@@ -108,7 +108,7 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
         All Types
       </button>
 
-      {cardTypes.map(({ type, label, color, bgColor, emoji }) => {
+      {cardTypes.map(({ type, label, color, bgColor, icon: Icon }) => {
         const isSelected = selectedTypes.includes(type);
         
         return (
@@ -122,7 +122,7 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
                 : "bg-white dark:bg-slate-800/50 border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white"
             )}
           >
-            <span className="text-base">{emoji}</span>
+            <Icon className="w-4 h-4" strokeWidth={1.5} />
             {label}
             {isSelected && <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />}
           </button>

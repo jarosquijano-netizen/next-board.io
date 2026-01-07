@@ -85,12 +85,12 @@ function sortTodoCards(cards: MeetingCard[]): MeetingCard[] {
   });
 }
 
-// 4-Column Meeting Action Items System
+// 4-Column Meeting Action Items System - Clean Minimal Design
 const COLUMNS: { id: CardStatus; label: string; color: string; icon: React.ComponentType<{ className?: string }>; description: string }[] = [
-  { id: 'To Do', label: 'To Do', color: 'from-blue-600 to-blue-500', icon: TodoIcon, description: 'Procrastination station' },
-  { id: 'In Progress', label: 'In Progress', color: 'from-purple-600 to-purple-500', icon: InProgressIcon, description: 'Actually doing stuff' },
-  { id: 'Blocked', label: 'Blocked', color: 'from-red-600 to-red-500', icon: BlockedIcon, description: "Someone else's problem" },
-  { id: 'Done', label: 'Done', color: 'from-emerald-600 to-emerald-500', icon: DoneIcon, description: 'Victory lap time' },
+  { id: 'To Do', label: 'To Do', color: 'bg-gray-100 border-gray-200', icon: TodoIcon, description: 'Procrastination station' },
+  { id: 'In Progress', label: 'In Progress', color: 'bg-gray-100 border-gray-200', icon: InProgressIcon, description: 'Actually doing stuff' },
+  { id: 'Blocked', label: 'Blocked', color: 'bg-gray-100 border-gray-200', icon: BlockedIcon, description: "Someone else's problem" },
+  { id: 'Done', label: 'Done', color: 'bg-gray-100 border-gray-200', icon: DoneIcon, description: 'Victory lap time' },
 ];
 
 // Droppable Column Component
@@ -790,29 +790,29 @@ export default function BoardPage({ params }: PageProps) {
                       
                       return (
                         <div key={column.id} className="flex flex-col relative">
-                          {/* Column Header - Enhanced */}
-                          <div className={`sticky top-[140px] z-[5] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300 pointer-events-auto`}>
+                          {/* Column Header - Clean Minimal Design */}
+                          <div className={`sticky top-[140px] z-[5] ${column.color} border rounded-lg p-3 mb-3 shadow-sm transition-all duration-300 pointer-events-auto`}>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <button
                                   onClick={() => toggleColumnCollapse(column.id)}
-                                  className="p-1 hover:bg-white/20 rounded transition-colors flex-shrink-0"
+                                  className="p-1 hover:bg-gray-200 rounded transition-colors flex-shrink-0"
                                   title={collapsedColumns.has(column.id) ? 'Expand column' : 'Collapse column'}
                                 >
                                   {collapsedColumns.has(column.id) ? (
-                                    <ChevronDown className="w-4 h-4 text-white" />
+                                    <ChevronDown className="w-4 h-4 text-gray-600" />
                                   ) : (
-                                    <ChevronUp className="w-4 h-4 text-white" />
+                                    <ChevronUp className="w-4 h-4 text-gray-600" />
                                   )}
                                 </button>
-                                <column.icon className="w-5 h-5 text-white flex-shrink-0" />
-                                <h3 className="text-base font-semibold text-white truncate">
+                                <column.icon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+                                <h3 className="text-base font-semibold text-gray-900 truncate">
                                   {column.label}
                                 </h3>
                               </div>
                               <div className="flex items-center gap-2 flex-shrink-0">
                                 {getColumnTimeEstimate(columnCards) && (
-                                  <div className="flex items-center gap-1 px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-xs font-medium text-white">
+                                  <div className="flex items-center gap-1 px-2 py-0.5 bg-white border border-gray-200 rounded text-xs font-medium text-gray-600">
                                     <Clock className="w-3 h-3" />
                                     {getColumnTimeEstimate(columnCards)}
                                   </div>
