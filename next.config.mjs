@@ -4,16 +4,16 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '50mb',
     },
+    forceSwcTransforms: true,
   },
   // Generate unique build ID to force cache invalidation
   generateBuildId: async () => {
     return `build-${Date.now()}-${Math.random().toString(36).substring(7)}`;
   },
-  // Disable static optimization to force server-side rendering
-  experimental: {
-    ...nextConfig.experimental,
-    forceSwcTransforms: true,
-  },
+  // Disable static optimization
+  output: 'standalone',
+  // Force revalidation
+  revalidate: 0,
 };
 
 export default nextConfig;
