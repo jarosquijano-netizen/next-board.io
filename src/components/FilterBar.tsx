@@ -63,7 +63,7 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
 
         {/* Grid of filter buttons */}
         <div className="grid grid-cols-2 gap-2">
-          {cardTypes.map(({ type, label, color, bgColor, icon: Icon }) => {
+          {cardTypes.map(({ type, label, color, bgColor, Icon }) => {
             const isSelected = selectedTypes.includes(type);
             
             return (
