@@ -132,14 +132,21 @@ NOW ANALYZE AND RETURN VALID JSON WITH ONLY ACTION ITEMS:`;
         console.log(`✅ Received response from Claude (${response.usage.output_tokens} tokens)`);
       } catch (apiError: any) {
         console.error('❌ Anthropic API Error:', apiError);
+        console.error('❌ Error status:', apiError?.status);
+        console.error('❌ Error message:', apiError?.message);
+        console.error('❌ Error details:', JSON.stringify(apiError?.error || apiError, null, 2));
+        console.error('❌ API Key present:', !!process.env.ANTHROPIC_API_KEY);
+        console.error('❌ API Key length:', process.env.ANTHROPIC_API_KEY?.length || 0);
+        console.error('❌ API Key prefix:', process.env.ANTHROPIC_API_KEY?.substring(0, 10) || 'none');
         
         // Check if it's an authentication error
         if (apiError?.status === 401 || apiError?.message?.includes('authentication') || apiError?.error?.type === 'authentication_error') {
+          const errorDetails = apiError?.error ? JSON.stringify(apiError.error) : apiError?.message || 'Unknown error';
           return NextResponse.json(
             { 
               error: 'Failed to process transcript',
-              details: 'Anthropic API authentication failed. Please check your ANTHROPIC_API_KEY environment variable.',
-              hint: 'Make sure your API key is valid and has sufficient credits.'
+              details: `Anthropic API authentication failed: ${errorDetails}`,
+              hint: 'Please check: 1) API key is valid in Anthropic console, 2) Key has credits, 3) Service was redeployed after setting the key'
             },
             { status: 500 }
           );

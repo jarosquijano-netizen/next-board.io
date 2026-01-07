@@ -3,6 +3,15 @@ import Anthropic from '@anthropic-ai/sdk';
 // Demo mode if no API key provided
 const DEMO_MODE = !process.env.ANTHROPIC_API_KEY;
 
+// Log API key status (without exposing the key)
+if (process.env.ANTHROPIC_API_KEY) {
+  const keyLength = process.env.ANTHROPIC_API_KEY.length;
+  const keyPrefix = process.env.ANTHROPIC_API_KEY.substring(0, 10);
+  console.log(`🔑 Anthropic API Key detected: ${keyPrefix}... (length: ${keyLength})`);
+} else {
+  console.log('🎭 DEMO MODE: No ANTHROPIC_API_KEY found');
+}
+
 export const anthropic = DEMO_MODE ? null : new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY || '',
 });
