@@ -145,13 +145,14 @@ export function formatDueDate(date: Date | string | null): string {
  * Get color class for priority badge
  */
 export function getPriorityColor(priority: string): string {
+  // Clean minimal design - matching reference
   const colors = {
-    urgent: 'bg-red-600 text-white',
-    high: 'bg-orange-600 text-white',
-    medium: 'bg-blue-600 text-white',
-    low: 'bg-gray-600 text-white'
+    urgent: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
+    high: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300',
+    medium: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+    low: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
   };
-  return colors[priority as keyof typeof colors] || 'bg-gray-600 text-white';
+  return colors[priority as keyof typeof colors] || 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
 }
 
 /**
