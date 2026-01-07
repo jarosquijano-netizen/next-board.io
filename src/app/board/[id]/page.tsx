@@ -573,7 +573,7 @@ export default function BoardPage({ params }: PageProps) {
         style={{ marginLeft: sidebarWidth === '16' ? '16rem' : '4rem' }}
       >
         {/* Header */}
-        <div className="header-glass border-b sticky top-0 z-40 shadow-sm" style={{ borderTop: '4px solid #4f46e5', backgroundColor: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(12px)' }}>
+        <div className="header-glass border-b sticky top-0 z-40 shadow-sm" style={{ borderTop: '8px solid #4f46e5', backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
           <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
               <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
