@@ -1,0 +1,1014 @@
+================================================================================
+                    NEXTBOARD.AI - COMPLETE PROJECT DOCUMENTATION
+================================================================================
+
+Version: 1.0.0
+Last Updated: January 7, 2026
+Status: Production Ready
+
+================================================================================
+                            TABLE OF CONTENTS
+================================================================================
+
+1. PROJECT OVERVIEW
+2. FEATURES
+3. TECH STACK
+4. INSTALLATION & SETUP
+5. ENVIRONMENT VARIABLES
+6. DATABASE SCHEMA
+7. API DOCUMENTATION
+8. PROJECT STRUCTURE
+9. DEPLOYMENT GUIDE
+10. DEVELOPMENT COMMANDS
+11. TROUBLESHOOTING
+12. ARCHITECTURE
+13. SECURITY
+14. FUTURE ENHANCEMENTS
+
+================================================================================
+1. PROJECT OVERVIEW
+================================================================================
+
+NextBoard.ai is a full-stack web application that transforms meeting recordings 
+and transcripts into structured, AI-generated action boards. It eliminates the 
+need for PowerPoint summaries and manual follow-ups by automatically extracting 
+actionable items from meetings.
+
+Key Value Proposition:
+- Upload meeting transcripts (TXT, PDF) or recordings
+- AI-powered extraction of actions, decisions, follow-ups, and updates
+- Beautiful Kanban board interface with drag-and-drop
+- Multiple view modes (Kanban, Calendar, Focus, Priority Matrix)
+- Time tracking and analytics
+- Multi-user support with authentication
+- Email notifications
+
+Production URLs:
+- Primary: https://next-board.io
+- Backup: https://next-board.ai
+
+================================================================================
+2. FEATURES
+================================================================================
+
+2.1 CORE FEATURES
+-----------------
+✓ File Upload (TXT, PDF with text extraction)
+✓ AI Processing (Anthropic Claude 3 Haiku)
+✓ Demo Mode (works without API key)
+✓ Card Generation from transcripts
+✓ 8 Card Types: Action, Decision, Follow-up, Update, Blocker, Idea, Risk, Question
+
+2.2 BOARD VIEWS (4 Total)
+-------------------------
+✓ Kanban Board - 4 columns: To Do, In Progress, Blocked, Done
+✓ Calendar View - Monthly grid with due dates
+✓ My Focus Today - Prioritized daily view
+✓ Priority Matrix - Eisenhower matrix with 4 quadrants
+
+2.3 CARD MANAGEMENT
+-------------------
+✓ Drag and drop between columns
+✓ Inline editing (title, owner, due date)
+✓ Card detail modal with activity log
+✓ Delete cards
+✓ Priority indicators (urgent, high, medium, low)
+✓ Time estimates
+✓ Urgency indicators (overdue, urgent, soon)
+✓ Due date formatting (Today, Tomorrow, specific dates)
+✓ Date picker with hourly time selection
+
+2.4 TIME TRACKING & ANALYTICS
+------------------------------
+✓ 8 Analytics Widgets:
+  - Stale Items (stuck 3+ days)
+  - Auto-Escalated (priority increased)
+  - Avg Time (average time in status)
+  - Total Time (total work time)
+  - Overdue (past deadline)
+  - Due Soon (urgent items)
+  - This Week (upcoming)
+  - Done Today (completed)
+✓ Time spent in each status tracked
+✓ Status history logging
+✓ Auto-priority escalation logic (backend ready)
+
+2.5 UI/UX FEATURES
+------------------
+✓ Modern, professional design
+✓ Light/Dark mode with theme toggle
+✓ Logo switches with theme
+✓ Vertical sidebar navigation
+✓ Search functionality
+✓ Filter by card type (8 types)
+✓ Keyboard shortcuts (K, C, F, M)
+✓ Responsive design
+✓ Loading states
+✓ Empty states
+✓ Error handling
+
+2.6 AUTHENTICATION & MULTI-TENANCY
+-----------------------------------
+✓ Clerk integration
+✓ Sign up / Sign in
+✓ Protected routes
+✓ User-specific boards
+✓ Organization support
+
+2.7 LIVING CARD SYSTEM
+---------------------
+✓ Activity log for each card
+✓ Add notes to cards
+✓ AI summary generation (for done cards)
+✓ Card detail modal
+✓ Status change tracking
+
+2.8 EXPORT
+----------
+✓ Export as Markdown
+
+================================================================================
+3. TECH STACK
+================================================================================
+
+Frontend:
+- Next.js 15.5.9 (App Router)
+- React 18.3.1
+- TypeScript 5
+- Tailwind CSS 3.4.1
+- Zustand 4.5.2 (State Management)
+
+Backend:
+- Next.js API Routes
+- Prisma ORM 5.14.0
+- PostgreSQL (Production) / SQLite (Local Dev)
+
+AI & Processing:
+- Anthropic Claude 3 Haiku (@anthropic-ai/sdk 0.20.0)
+- PDF parsing (pdf-parse 1.1.1)
+
+UI Components:
+- @dnd-kit/core 6.1.0 (Drag & Drop)
+- @dnd-kit/sortable 8.0.0
+- lucide-react 0.546.0 (Icons)
+- react-datepicker 8.8.0
+- recharts 3.3.0 (Charts)
+
+Authentication:
+- @clerk/nextjs 6.33.6
+
+Email:
+- Resend 6.2.0
+- @react-email/components 0.5.7
+
+Deployment:
+- Railway (Primary)
+- Netlify (Alternative)
+- Vercel (Alternative)
+
+================================================================================
+4. INSTALLATION & SETUP
+================================================================================
+
+4.1 PREREQUISITES
+-----------------
+- Node.js 18+ (recommended: Node.js 20)
+- npm or yarn
+- PostgreSQL database (or Railway account)
+- Anthropic API Key (optional - demo mode available)
+- Clerk account (for authentication)
+- Resend account (for email notifications)
+
+4.2 LOCAL DEVELOPMENT SETUP
+---------------------------
+
+Step 1: Clone Repository
+  git clone <your-repo-url>
+  cd next-board.io
+
+Step 2: Install Dependencies
+  npm install
+
+Step 3: Set Up Environment Variables
+  Create .env file in root directory (see section 5 for details)
+
+Step 4: Set Up Database
+  # For local SQLite (development)
+  npx prisma db push
+
+  # OR for PostgreSQL (production-like)
+  # Set DATABASE_URL in .env first
+  npx prisma migrate dev
+
+Step 5: Generate Prisma Client
+  npx prisma generate
+
+Step 6: Start Development Server
+  npm run dev
+
+  Server will start on http://localhost:3005
+
+4.3 FIRST TIME SETUP CHECKLIST
+--------------------------------
+□ Install Node.js 18+
+□ Clone repository
+□ Run npm install
+□ Create .env file with all required variables
+□ Set up Clerk account and get API keys
+□ Set up Anthropic account and get API key (optional)
+□ Set up Resend account and get API key
+□ Run database migrations
+□ Start dev server
+□ Test sign-up/sign-in
+□ Upload a test transcript
+□ Verify AI processing works
+
+================================================================================
+5. ENVIRONMENT VARIABLES
+================================================================================
+
+5.1 REQUIRED VARIABLES
+----------------------
+
+# Database
+DATABASE_URL="postgresql://user:password@host:port/database"
+# OR for local SQLite:
+# DATABASE_URL="file:./dev.db"
+
+# Clerk Authentication (REQUIRED)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_..."
+CLERK_SECRET_KEY="sk_test_..."
+NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
+NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/"
+
+# Anthropic Claude API (OPTIONAL - Demo mode works without it)
+ANTHROPIC_API_KEY="sk-ant-api03-..."
+
+# Resend Email (REQUIRED for email notifications)
+RESEND_API_KEY="re_..."
+RESEND_FROM_EMAIL="onboarding@resend.dev"
+RESEND_FROM_NAME="NextBoard"
+
+# Cron Jobs (REQUIRED for scheduled email notifications)
+CRON_SECRET="your-random-secret-string-here"
+
+# Environment
+NODE_ENV="production"  # or "development"
+
+5.2 OPTIONAL VARIABLES
+----------------------
+
+# AWS S3 for file storage (if not using local storage)
+AWS_ACCESS_KEY_ID=""
+AWS_SECRET_ACCESS_KEY=""
+AWS_REGION=""
+AWS_S3_BUCKET=""
+
+5.3 GETTING API KEYS
+--------------------
+
+Clerk:
+  1. Go to https://clerk.com
+  2. Sign up for free account
+  3. Create new application
+  4. Copy Publishable Key and Secret Key from API Keys section
+
+Anthropic:
+  1. Go to https://console.anthropic.com
+  2. Sign up/login
+  3. Navigate to API Keys
+  4. Create new key
+  5. Copy the key (starts with sk-ant-api03-)
+
+Resend:
+  1. Go to https://resend.com
+  2. Sign up for free account
+  3. Navigate to API Keys
+  4. Create new key
+  5. Copy the key (starts with re_)
+
+================================================================================
+6. DATABASE SCHEMA
+================================================================================
+
+6.1 MAIN MODELS
+---------------
+
+Meeting:
+  - id (String, cuid)
+  - title (String)
+  - summary (String)
+  - userId (String) - Clerk user ID
+  - organizationId (String?) - Optional for team workspaces
+  - meetingDate (DateTime?)
+  - nextMeetingDate (DateTime?)
+  - duration (Int?) - Minutes
+  - seriesId (String?) - For recurring meetings
+  - seriesNumber (Int?)
+  - isRecurring (Boolean)
+  - recurrence (String?) - "weekly", "biweekly", "monthly", "quarterly"
+  - previousMeetingId (String?)
+  - nextMeetingId (String?)
+  - completionRate (Float?)
+  - carryoverCount (Int)
+  - newItemsCount (Int)
+  - createdAt (DateTime)
+  - updatedAt (DateTime)
+
+MeetingCard:
+  - id (String, cuid)
+  - meetingId (String)
+  - type (String) - "Action", "Decision", "Follow-up", "Update", "Blocker", "Idea", "Risk", "Question"
+  - summary (String)
+  - owner (String?)
+  - dueDate (DateTime?)
+  - dueDateRaw (String?)
+  - priority (String) - "low", "medium", "high", "urgent"
+  - timeEstimate (Int?) - Minutes
+  - reminderSent (Boolean)
+  - isOverdue (Boolean)
+  - daysUntilDue (Int?)
+  - timestamp (String?)
+  - context (String?)
+  - status (String) - "To Do", "In Progress", "Blocked", "Done"
+  - blockedReason (String?)
+  - blockedBy (String?)
+  - blockedSince (DateTime?)
+  - involvedPeople (String?) - JSON array
+  - interactionType (String?)
+  - primaryContact (String?)
+  - additionalContacts (String?) - JSON array
+  - interactionNote (String?)
+  - carriedOver (Boolean)
+  - sourceCardId (String?)
+  - carriedFromMeetingId (String?)
+  - completedInMeeting (Boolean)
+  - originalMeetingId (String?)
+  - aiSummary (String?)
+  - aiSummaryCreatedAt (DateTime?)
+  - currentStatusSince (DateTime)
+  - timeInTodo (Int)
+  - timeInProgress (Int)
+  - timeInBlocked (Int)
+  - priorityAutoUpdated (Boolean)
+  - lastPriorityUpdate (DateTime?)
+  - createdAt (DateTime)
+  - updatedAt (DateTime)
+  - completedAt (DateTime?)
+
+CardActivity:
+  - id (String, cuid)
+  - cardId (String)
+  - userId (String)
+  - activityType (String) - "note", "status_change", "assignment", "attachment", "edit"
+  - content (String)
+  - metadata (String?) - JSON string
+  - createdAt (DateTime)
+
+CardAttachment:
+  - id (String, cuid)
+  - cardId (String)
+  - userId (String)
+  - fileName (String)
+  - fileUrl (String)
+  - fileSize (Int)
+  - mimeType (String)
+  - createdAt (DateTime)
+
+StatusHistoryEntry:
+  - id (String, cuid)
+  - cardId (String)
+  - fromStatus (String?)
+  - toStatus (String)
+  - changedAt (DateTime)
+  - durationInStatus (Int?) - Hours
+
+Person:
+  - id (String, cuid)
+  - name (String)
+  - email (String?)
+  - role (String?)
+  - department (String?)
+  - mentionedInCards (Int)
+  - lastMentioned (DateTime?)
+  - createdAt (DateTime)
+  - userId (String)
+  - organizationId (String?)
+
+MeetingSeries:
+  - id (String, cuid)
+  - userId (String)
+  - organizationId (String?)
+  - title (String)
+  - description (String?)
+  - recurrence (String)
+  - isActive (Boolean)
+  - startDate (DateTime)
+  - lastMeetingDate (DateTime?)
+  - nextMeetingDate (DateTime?)
+  - totalMeetings (Int)
+  - avgCompletionRate (Float?)
+  - avgItemsPerMeeting (Float?)
+  - createdAt (DateTime)
+  - updatedAt (DateTime)
+
+User:
+  - id (String, cuid)
+  - clerkUserId (String, unique)
+  - email (String, unique)
+  - name (String?)
+  - createdAt (DateTime)
+  - updatedAt (DateTime)
+
+NotificationPreferences:
+  - id (String, cuid)
+  - userId (String, unique)
+  - dailyDigest (Boolean)
+  - dailyDigestTime (String) - "HH:MM"
+  - overdueAlerts (Boolean)
+  - dueTodayAlerts (Boolean)
+  - dueTomorrowAlerts (Boolean)
+  - assignedToMe (Boolean)
+  - mentioned (Boolean)
+  - cardComments (Boolean)
+  - blockedAlerts (Boolean)
+  - priorityEscalation (Boolean)
+  - weeklyReport (Boolean)
+  - weeklyReportDay (String)
+  - enableQuietHours (Boolean)
+  - quietHoursStart (String)
+  - quietHoursEnd (String)
+  - createdAt (DateTime)
+  - updatedAt (DateTime)
+
+Notification:
+  - id (String, cuid)
+  - userId (String)
+  - type (String) - "overdue", "due_today", "assigned", "mentioned", "blocked", "digest"
+  - title (String)
+  - message (String)
+  - cardId (String?)
+  - meetingId (String?)
+  - metadata (String?) - JSON string
+  - emailSent (Boolean)
+  - emailSentAt (DateTime?)
+  - emailError (String?)
+  - read (Boolean)
+  - readAt (DateTime?)
+  - createdAt (DateTime)
+
+6.2 RELATIONSHIPS
+-----------------
+- Meeting has many MeetingCard (one-to-many)
+- MeetingCard has many CardActivity (one-to-many)
+- MeetingCard has many CardAttachment (one-to-many)
+- MeetingCard has many StatusHistoryEntry (one-to-many)
+- Meeting can belong to MeetingSeries (many-to-one)
+- Meeting can link to previous/next Meeting (self-referential)
+- User has one NotificationPreferences (one-to-one)
+- User has many Notification (one-to-many)
+
+================================================================================
+7. API DOCUMENTATION
+================================================================================
+
+7.1 BASE URL
+------------
+Development: http://localhost:3005
+Production: https://next-board.io
+
+7.2 ENDPOINTS
+-------------
+
+POST /api/upload
+  Description: Upload a meeting transcript or recording file
+  Content-Type: multipart/form-data
+  Body:
+    - file (File, required)
+    - title (string, optional)
+    - participants (string, optional)
+    - date (string, optional)
+  Response: { success: boolean, file: {...}, metadata: {...} }
+  Supported Types: .txt, .pdf, .vtt, .docx, .mp3, .mp4, .wav
+
+POST /api/process
+  Description: Process uploaded transcript with AI to extract action items
+  Content-Type: application/json
+  Body:
+    - filepath (string, required)
+    - title (string, optional)
+    - participants (string, optional)
+    - date (string, optional)
+    - transcript (string, optional) - Raw transcript text
+  Response: { success: boolean, meeting: {...} }
+
+GET /api/board/:id
+  Description: Retrieve a specific meeting board with all cards
+  Path Params: id (string) - Meeting ID
+  Response: { id, title, summary, createdAt, cards: [...] }
+
+GET /api/boards
+  Description: List all meeting boards for the authenticated user
+  Response: { meetings: [...] }
+
+PUT /api/card/:id
+  Description: Update a card's details
+  Path Params: id (string) - Card ID
+  Content-Type: application/json
+  Body:
+    - status (string, optional)
+    - owner (string, optional)
+    - dueDate (string, optional)
+    - summary (string, optional)
+    - context (string, optional)
+    - priority (string, optional)
+    - timeEstimate (number, optional)
+  Response: { success: boolean, card: {...} }
+
+DELETE /api/card/:id
+  Description: Delete a card permanently
+  Path Params: id (string) - Card ID
+  Response: { success: boolean, message: string }
+
+POST /api/cards/:id/notes
+  Description: Add a note to a card
+  Path Params: id (string) - Card ID
+  Content-Type: application/json
+  Body: { content: string }
+  Response: { success: boolean, activity: {...} }
+
+POST /api/cards/:id/summary
+  Description: Generate AI summary for a completed card
+  Path Params: id (string) - Card ID
+  Response: { success: boolean, summary: string }
+
+GET /api/analytics
+  Description: Get analytics data for dashboard
+  Response: { staleItems, autoEscalated, avgTime, totalTime, overdue, dueSoon, thisWeek, doneToday }
+
+POST /api/cron/auto-priority-escalation
+  Description: Cron job endpoint for auto-priority escalation
+  Headers: { "x-cron-secret": string }
+  Response: { success: boolean, updated: number }
+
+7.3 ERROR RESPONSES
+-------------------
+All endpoints return errors in this format:
+  {
+    "error": "Error message",
+    "details": "Optional detailed error information",
+    "hint": "Optional helpful hint"
+  }
+
+Common Status Codes:
+  400 - Bad Request (Invalid input)
+  401 - Unauthorized (Authentication required)
+  404 - Not Found (Resource doesn't exist)
+  500 - Internal Server Error (Server error)
+
+7.4 AUTHENTICATION
+------------------
+All API endpoints (except /api/upload and /api/process) require Clerk 
+authentication. Include the Clerk session token in requests.
+
+================================================================================
+8. PROJECT STRUCTURE
+================================================================================
+
+next-board.io/
+├── prisma/
+│   ├── schema.prisma              # Database schema
+│   └── migrations/                # Database migrations
+├── public/
+│   ├── images/
+│   │   ├── logo-dark.png          # Dark theme logo
+│   │   └── logo-light.png         # Light theme logo
+│   └── uploads/                    # Uploaded files (local)
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── upload/            # File upload endpoint
+│   │   │   ├── process/           # AI processing endpoint
+│   │   │   ├── board/[id]/        # Board CRUD
+│   │   │   ├── boards/            # List all boards
+│   │   │   ├── card/[id]/         # Card CRUD
+│   │   │   ├── cards/[id]/        # Card activities & summary
+│   │   │   ├── analytics/         # Analytics endpoint
+│   │   │   └── cron/               # Cron jobs
+│   │   ├── boards/                 # Boards list page
+│   │   ├── board/[id]/             # Individual board page
+│   │   ├── analytics/              # Analytics page
+│   │   ├── sign-in/                # Clerk sign-in page
+│   │   ├── sign-up/                # Clerk sign-up page
+│   │   ├── globals.css              # Global styles
+│   │   ├── layout.tsx              # Root layout
+│   │   └── page.tsx                # Home page
+│   ├── components/
+│   │   ├── Sidebar.tsx             # Vertical navigation
+│   │   ├── Logo.tsx                # Theme-aware logo
+│   │   ├── ViewSelector.tsx        # 4 view mode switcher
+│   │   ├── SearchBar.tsx           # Card search
+│   │   ├── FilterBar.tsx           # Type filtering
+│   │   ├── PeopleFilter.tsx        # People filtering
+│   │   ├── TimelineDashboard.tsx   # 8 analytics widgets
+│   │   ├── LivingCard.tsx          # Enhanced card component
+│   │   ├── CardDetailModal.tsx     # Detailed card view
+│   │   ├── CalendarView.tsx        # Monthly calendar
+│   │   ├── ColumnIcons.tsx         # Custom icons
+│   │   ├── Modal.tsx               # Reusable modal
+│   │   ├── UploadPanel.tsx         # File upload UI
+│   │   ├── NotificationSettingsModal.tsx
+│   │   └── views/
+│   │       ├── MyFocusTodayView.tsx
+│   │       └── EisenhowerMatrixView.tsx
+│   ├── contexts/
+│   │   └── ThemeContext.tsx        # Theme management
+│   ├── hooks/
+│   │   └── useThemeToggle.ts       # Theme toggle hook
+│   ├── lib/
+│   │   ├── anthropic.ts           # AI integration
+│   │   ├── time-utils.ts           # Time calculations
+│   │   ├── time-tracker.ts         # Status tracking
+│   │   ├── status-change-handler.ts
+│   │   ├── utils.ts                # Helper functions
+│   │   └── cron/
+│   │       └── auto-priority-escalation.ts
+│   ├── store/
+│   │   └── meetings.ts             # Zustand state
+│   ├── styles/
+│   │   └── datepicker.css          # Date picker styles
+│   └── types/
+│       ├── meeting.ts              # Type definitions
+│       ├── view-types.ts           # View mode types
+│       └── interaction-types.ts    # Interaction types
+├── .env                             # Environment variables (not in git)
+├── .env.example                     # Example env file
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+├── tailwind.config.ts
+├── next.config.mjs
+├── postcss.config.mjs
+├── nixpacks.toml                    # Railway build config
+├── railway.json                     # Railway config
+├── netlify.toml                     # Netlify config
+├── vercel.json                      # Vercel config
+└── README.md
+
+================================================================================
+9. DEPLOYMENT GUIDE
+================================================================================
+
+9.1 RAILWAY DEPLOYMENT (PRIMARY)
+---------------------------------
+
+Step 1: Install Railway CLI
+  npm install -g @railway/cli
+
+Step 2: Login to Railway
+  railway login
+
+Step 3: Create New Project
+  railway init
+  # OR link to existing project
+  railway link
+
+Step 4: Add PostgreSQL Database
+  In Railway dashboard:
+  - Click "+ New" → "Database" → "PostgreSQL"
+  - Copy DATABASE_URL from database service
+
+Step 5: Set Environment Variables
+  railway variables --set DATABASE_URL="postgresql://..."
+  railway variables --set NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_..."
+  railway variables --set CLERK_SECRET_KEY="sk_..."
+  railway variables --set ANTHROPIC_API_KEY="sk-ant-..."
+  railway variables --set RESEND_API_KEY="re_..."
+  railway variables --set RESEND_FROM_EMAIL="onboarding@resend.dev"
+  railway variables --set RESEND_FROM_NAME="NextBoard"
+  railway variables --set CRON_SECRET="your-secret"
+  railway variables --set NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
+  railway variables --set NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
+  railway variables --set NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/"
+  railway variables --set NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/"
+  railway variables --set NODE_ENV="production"
+
+Step 6: Deploy
+  railway up
+  # OR push to GitHub and Railway will auto-deploy
+
+Step 7: Set Custom Domain (Optional)
+  In Railway dashboard → Service → Settings → Domains
+  Add custom domain: next-board.io
+
+9.2 NETLIFY DEPLOYMENT (ALTERNATIVE)
+------------------------------------
+
+Step 1: Install Netlify CLI
+  npm install -g netlify-cli
+
+Step 2: Login
+  netlify login
+
+Step 3: Initialize Site
+  netlify init
+
+Step 4: Set Environment Variables
+  In Netlify dashboard → Site settings → Environment variables
+  Add all required variables (see section 5)
+
+Step 5: Deploy
+  netlify deploy --prod
+
+9.3 VERCEL DEPLOYMENT (ALTERNATIVE)
+-----------------------------------
+
+Step 1: Install Vercel CLI
+  npm install -g vercel
+
+Step 2: Login
+  vercel login
+
+Step 3: Deploy
+  vercel --prod
+
+Step 4: Set Environment Variables
+  In Vercel dashboard → Project → Settings → Environment Variables
+  Add all required variables
+
+9.4 POST-DEPLOYMENT CHECKLIST
+------------------------------
+□ Verify DATABASE_URL is set correctly
+□ Run database migrations: npx prisma migrate deploy
+□ Test sign-up/sign-in flow
+□ Test file upload
+□ Test AI processing
+□ Verify email notifications work
+□ Check analytics dashboard
+□ Test all 4 view modes
+□ Verify drag-and-drop works
+□ Test on mobile devices
+
+================================================================================
+10. DEVELOPMENT COMMANDS
+================================================================================
+
+Development:
+  npm run dev              # Start dev server on port 3005
+  npm run build            # Build for production
+  npm run start            # Start production server
+  npm run lint             # Run ESLint
+
+Database:
+  npm run migrate          # Run migrations (dev)
+  npm run migrate:deploy   # Run migrations (production)
+  npm run db:push          # Push schema changes
+  npm run db:studio        # Open Prisma Studio (port 5555)
+
+Email (Development):
+  npm run email:dev        # Preview emails locally
+
+Railway CLI:
+  railway login            # Login to Railway
+  railway link             # Link to Railway project
+  railway up               # Deploy to Railway
+  railway variables        # List environment variables
+  railway variables --set KEY="value"  # Set variable
+  railway logs             # View logs
+  railway open             # Open in browser
+
+Git:
+  git add .
+  git commit -m "message"
+  git push origin master
+
+================================================================================
+11. TROUBLESHOOTING
+================================================================================
+
+11.1 COMMON ISSUES
+------------------
+
+Issue: "Failed to upload file"
+  Solution:
+    - Check file size (max 50MB)
+    - Verify file format is supported (.txt, .pdf, .vtt, .docx)
+    - Check file permissions
+    - Verify uploads directory exists and is writable
+
+Issue: "Failed to process transcript"
+  Solution:
+    - Ensure ANTHROPIC_API_KEY is set correctly
+    - Check Anthropic API quota/billing
+    - Verify transcript has actual content (not empty)
+    - Check API logs for detailed error messages
+    - Try demo mode (remove API key)
+
+Issue: "Database connection errors"
+  Solution:
+    - Verify DATABASE_URL is correct
+    - Check PostgreSQL is running (local) or Railway database is active
+    - Run: npx prisma migrate deploy
+    - Check database credentials
+    - Verify network connectivity
+
+Issue: "Drag-and-drop not working"
+  Solution:
+    - Clear browser cache
+    - Check console for JavaScript errors
+    - Ensure React version is compatible
+    - Verify @dnd-kit packages are installed
+    - Check z-index conflicts
+
+Issue: "Authentication not working"
+  Solution:
+    - Verify Clerk API keys are set correctly
+    - Check NEXT_PUBLIC_CLERK_* variables are set
+    - Verify Clerk application is active
+    - Check browser console for Clerk errors
+    - Ensure sign-in/sign-up URLs are correct
+
+Issue: "Theme toggle not working"
+  Solution:
+    - Clear localStorage
+    - Check ThemeContext is properly set up
+    - Verify tailwind.config.ts has darkMode: 'class'
+    - Check for conflicting theme systems
+
+Issue: "Email notifications not sending"
+  Solution:
+    - Verify RESEND_API_KEY is set
+    - Check Resend account has credits
+    - Verify RESEND_FROM_EMAIL is valid
+    - Check email logs in Resend dashboard
+    - Verify CRON_SECRET is set for cron jobs
+
+Issue: "Status bar overlaying cards (Top layout)"
+  Solution:
+    - This was fixed by setting proper z-index values
+    - Header: z-[1], Cards container: z-[2]
+    - If issue persists, check for CSS conflicts
+
+11.2 DEBUGGING TIPS
+-------------------
+- Check browser console for errors
+- Check Railway logs: railway logs
+- Check Prisma Studio: npm run db:studio
+- Enable verbose logging in .env: DEBUG=*
+- Check API responses in Network tab
+- Verify environment variables are set: railway variables
+
+11.3 GETTING HELP
+-----------------
+- Check project documentation files (*.md)
+- Review API_DOCUMENTATION.md
+- Check PROJECT_STATUS.md for current status
+- Review error messages in Railway logs
+- Check GitHub issues (if applicable)
+
+================================================================================
+12. ARCHITECTURE
+================================================================================
+
+12.1 APPLICATION ARCHITECTURE
+------------------------------
+
+Frontend (Next.js App Router):
+  - Server Components for initial render
+  - Client Components for interactivity
+  - API Routes for backend logic
+  - Middleware for authentication
+
+State Management:
+  - Zustand for global state (meetings, boards)
+  - React Context for theme management
+  - Local state for component-specific data
+
+Data Flow:
+  1. User uploads transcript → /api/upload
+  2. File saved → /api/process called
+  3. AI processes transcript → Cards extracted
+  4. Cards saved to database
+  5. Board page fetches cards → Displayed in Kanban
+
+12.2 DATABASE ARCHITECTURE
+--------------------------
+- PostgreSQL (Production) / SQLite (Local)
+- Prisma ORM for type-safe queries
+- Migrations for schema changes
+- Indexes for performance optimization
+
+12.3 AI PROCESSING FLOW
+-----------------------
+1. Transcript uploaded
+2. Text extracted (PDF parsing if needed)
+3. Sent to Anthropic Claude API
+4. AI extracts structured JSON:
+   - Meeting title
+   - Summary
+   - Cards (type, summary, owner, due date, etc.)
+5. JSON parsed and validated
+6. Cards saved to database
+7. Board created/updated
+
+12.4 AUTHENTICATION FLOW
+------------------------
+1. User visits protected route
+2. Clerk middleware checks authentication
+3. If not authenticated → Redirect to /sign-in
+4. After sign-in → Redirect to original page
+5. User data fetched using Clerk user ID
+6. All queries filtered by userId
+
+================================================================================
+13. SECURITY
+================================================================================
+
+13.1 IMPLEMENTED SECURITY MEASURES
+-----------------------------------
+✓ Authentication required (Clerk)
+✓ User data isolation (userId in all queries)
+✓ File type validation
+✓ SQL injection prevention (Prisma)
+✓ XSS prevention (React)
+✓ CSRF protection (Next.js)
+✓ Environment variables for secrets
+✓ Protected API routes
+
+13.2 RECOMMENDED FOR PRODUCTION
+--------------------------------
+□ Rate limiting on API routes
+□ File size limits enforcement
+□ Error monitoring (Sentry)
+□ Security headers
+□ Regular dependency updates
+□ API key rotation
+□ Database backups
+□ HTTPS only
+□ Content Security Policy (CSP)
+
+13.3 BEST PRACTICES
+-------------------
+- Never commit .env file
+- Use strong CRON_SECRET
+- Rotate API keys regularly
+- Monitor for suspicious activity
+- Keep dependencies updated
+- Use production Clerk keys in production
+- Enable Clerk security features
+- Regular security audits
+
+================================================================================
+14. FUTURE ENHANCEMENTS
+================================================================================
+
+14.1 PLANNED FEATURES
+---------------------
+□ File attachments in cards
+□ Email notifications (partially implemented)
+□ Team collaboration features
+□ Subscription management
+□ Admin panel
+□ Webhook integrations
+□ Mobile app (React Native)
+□ AI meeting recording transcription
+□ Real-time collaboration
+□ Integrations (Slack, Teams, Zoom)
+□ Advanced analytics
+□ Custom card types
+□ Templates
+□ Recurring meeting series (partially implemented)
+□ Meeting comparison view
+□ AI-driven agenda suggestions
+
+14.2 TECHNICAL IMPROVEMENTS
+---------------------------
+□ Implement rate limiting
+□ Add error monitoring (Sentry)
+□ Optimize bundle size
+□ Add unit tests
+□ Add integration tests
+□ Add E2E tests (Playwright)
+□ Improve accessibility (a11y)
+□ Add PWA support
+□ Implement offline mode
+□ Add caching layer
+□ Optimize database queries
+□ Add CDN for static assets
+
+================================================================================
+                            END OF DOCUMENTATION
+================================================================================
+
+For questions or issues, refer to:
+- README.md - Quick start guide
+- API_DOCUMENTATION.md - API reference
+- PROJECT_STATUS.md - Current project status
+- Individual feature documentation files (*.md)
+
+Last Updated: January 7, 2026
+Version: 1.0.0
+Status: Production Ready
