@@ -830,19 +830,66 @@ export default function BoardPage({ params }: PageProps) {
                           </div>
 
                           {/* Cards */}
-                          <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
-                            <DroppableColumn id={column.id}>
-                              {columnCards.map((card) => (
-                                <LivingCard
-                                  key={card.id}
-                                  card={card}
-                                  onUpdate={handleUpdateCard}
-                                  onDelete={handleDeleteCard}
-                                  onAddNote={(content) => handleAddNote(card.id, content)}
-                                  onGenerateSummary={() => handleGenerateSummary(card.id)}
-                                  onClick={() => handleCardClick(card)}
-                                />
-                              ))}
+                          {!collapsedColumns.has(column.id) && (
+                            <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
+                              <DroppableColumn id={column.id}>
+                                {(() => {
+                                  const grouped = groupCardsBySwimlane(columnCards);
+                                  return Object.entries(grouped).map(([swimlaneKey, cards]) => (
+                                    <div key={swimlaneKey} className="mb-4 last:mb-0">
+                                      {swimlaneMode !== 'none' && swimlaneKey && (
+                                        <div className="mb-2 px-2 py-1 bg-gray-100 dark:bg-slate-800 rounded text-xs font-semibold text-gray-700 dark:text-gray-300">
+                                          {swimlaneKey}
+                                        </div>
+                                      )}
+                                      <div className="space-y-2">
+                                        {cards.map((card) => (
+                                          <div
+                                            key={card.id}
+                                            className="relative group transition-all duration-200 hover:scale-[1.02]"
+                                            onMouseEnter={(e) => {
+                                              const rect = e.currentTarget.getBoundingClientRect();
+                                              setHoveredCard({
+                                                card,
+                                                position: { x: rect.left, y: rect.top }
+                                              });
+                                            }}
+                                            onMouseLeave={() => setHoveredCard(null)}
+                                          >
+                                            {/* Bulk Selection Checkbox */}
+                                            {(selectedCards.size > 0 || selectedCards.has(card.id)) && (
+                                              <div className="absolute left-2 top-2 z-10">
+                                                <button
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleCardSelect(card.id);
+                                                  }}
+                                                  className="p-1 bg-white dark:bg-slate-800 rounded border-2 border-blue-500 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors"
+                                                >
+                                                  {selectedCards.has(card.id) ? (
+                                                    <CheckSquare className="w-4 h-4 text-blue-600" />
+                                                  ) : (
+                                                    <Square className="w-4 h-4 text-gray-400" />
+                                                  )}
+                                                </button>
+                                              </div>
+                                            )}
+                                            <div className={selectedCards.has(card.id) ? 'opacity-50' : ''}>
+                                              <LivingCard
+                                                card={card}
+                                                onUpdate={handleUpdateCard}
+                                                onDelete={handleDeleteCard}
+                                                onAddNote={(content) => handleAddNote(card.id, content)}
+                                                onGenerateSummary={() => handleGenerateSummary(card.id)}
+                                                onClick={() => handleCardClick(card)}
+                                              />
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ));
+                                })()}
 
                                 {columnCards.length === 0 && (
                                   <div className="flex flex-col items-center justify-center py-8 text-center bg-gray-50 dark:bg-slate-900/30 border-2 border-dashed border-gray-300 dark:border-slate-800 rounded-lg">
