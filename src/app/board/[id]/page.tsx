@@ -1035,7 +1035,7 @@ export default function BoardPage({ params }: PageProps) {
 
                           {/* Cards Container - Enhanced with animations */}
                           {!collapsedColumns.has(column.id) && (
-                            <div className="relative z-0 -mt-0">
+                            <div className="mt-0" style={{ zIndex: 0 }}>
                               <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
                                 <DroppableColumn id={column.id}>
                                   {(() => {
@@ -1052,6 +1052,7 @@ export default function BoardPage({ params }: PageProps) {
                                             <div
                                               key={card.id}
                                               className="relative group transition-all duration-200 hover:scale-[1.02]"
+                                              style={{ zIndex: 0 }}
                                               onMouseEnter={(e) => {
                                                 const rect = e.currentTarget.getBoundingClientRect();
                                                 setHoveredCard({
