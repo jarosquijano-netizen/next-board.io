@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
+import { MetricCardSkeleton, DashboardCardSkeleton } from '@/components/SkeletonLoader';
 import {
   AlertTriangle,
   Clock,
@@ -19,6 +20,8 @@ import {
   LayoutGrid,
   ChevronUp,
   ChevronDown,
+  Sparkles,
+  TrendingUp,
 } from 'lucide-react';
 
 export default function Home() {
@@ -100,12 +103,41 @@ export default function Home() {
     }
   };
 
+  // Get time-based greeting
+  const getTimeBasedGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return { emoji: '🌅', text: 'Good morning' };
+    if (hour < 17) return { emoji: '☀️', text: 'Good afternoon' };
+    return { emoji: '🌙', text: 'Good evening' };
+  };
+
+  const greeting = getTimeBasedGreeting();
+
   if (!isLoaded || loading) {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-950">
         <Sidebar />
-        <div className="lg:ml-64 flex items-center justify-center h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
+        <div className="lg:ml-64 min-h-screen transition-colors duration-300 pb-20 lg:pb-0">
+          <div className="border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-50 shadow-sm">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+              <div className="mb-6">
+                <div className="h-10 w-64 bg-gray-200 dark:bg-slate-700 rounded-lg mb-2 animate-pulse" />
+                <div className="h-6 w-96 bg-gray-200 dark:bg-slate-700 rounded-lg animate-pulse" />
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3 lg:gap-4 mb-6">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <MetricCardSkeleton key={i} />
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <DashboardCardSkeleton key={i} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -140,8 +172,9 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
             <div className="flex items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2">
               <div className="flex-1 min-w-0">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-1 sm:mb-2">
-                  ☀️ Welcome back, {user?.firstName || 'User'}!
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-1 sm:mb-2 flex items-center gap-2">
+                  <span className="text-3xl sm:text-4xl">{greeting.emoji}</span>
+                  <span>{greeting.text}, {user?.firstName || 'User'}!</span>
                 </h1>
                 <p className="text-gray-600 dark:text-slate-400 text-sm sm:text-base lg:text-lg">
                   Here&apos;s everything across your {data.meetingSummaries.length} active meetings
@@ -290,21 +323,63 @@ export default function Home() {
 // Component definitions (continuing in next file due to size)
 function QuickStat({ label, value, icon, color, pulse }: any) {
   const colors = {
-    blue: 'from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/30 border-blue-200 dark:border-blue-500/50 text-blue-600 dark:text-blue-400',
-    red: 'from-red-50 to-red-100 dark:from-red-900/50 dark:to-red-800/30 border-red-200 dark:border-red-500/50 text-red-600 dark:text-red-400',
-    orange: 'from-orange-50 to-orange-100 dark:from-orange-900/50 dark:to-orange-800/30 border-orange-200 dark:border-orange-500/50 text-orange-600 dark:text-orange-400',
-    yellow: 'from-yellow-50 to-yellow-100 dark:from-yellow-900/50 dark:to-yellow-800/30 border-yellow-200 dark:border-yellow-500/50 text-yellow-600 dark:text-yellow-400',
-    purple: 'from-purple-50 to-purple-100 dark:from-purple-900/50 dark:to-purple-800/30 border-purple-200 dark:border-purple-500/50 text-purple-600 dark:text-purple-400',
-    green: 'from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/30 border-green-200 dark:border-green-500/50 text-green-600 dark:text-green-400',
+    blue: {
+      bg: 'from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/30',
+      border: 'border-blue-200 dark:border-blue-500/50',
+      icon: 'text-blue-600 dark:text-blue-400',
+      number: 'text-blue-700 dark:text-blue-300',
+      hover: 'hover:from-blue-100 hover:to-blue-200 dark:hover:from-blue-800/40 dark:hover:to-blue-700/40',
+    },
+    red: {
+      bg: 'from-red-50 to-red-100 dark:from-red-900/50 dark:to-red-800/30',
+      border: 'border-red-200 dark:border-red-500/50',
+      icon: 'text-red-600 dark:text-red-400',
+      number: 'text-red-700 dark:text-red-300',
+      hover: 'hover:from-red-100 hover:to-red-200 dark:hover:from-red-800/40 dark:hover:to-red-700/40',
+    },
+    orange: {
+      bg: 'from-orange-50 to-orange-100 dark:from-orange-900/50 dark:to-orange-800/30',
+      border: 'border-orange-200 dark:border-orange-500/50',
+      icon: 'text-orange-600 dark:text-orange-400',
+      number: 'text-orange-700 dark:text-orange-300',
+      hover: 'hover:from-orange-100 hover:to-orange-200 dark:hover:from-orange-800/40 dark:hover:to-orange-700/40',
+    },
+    yellow: {
+      bg: 'from-yellow-50 to-yellow-100 dark:from-yellow-900/50 dark:to-yellow-800/30',
+      border: 'border-yellow-200 dark:border-yellow-500/50',
+      icon: 'text-yellow-600 dark:text-yellow-400',
+      number: 'text-yellow-700 dark:text-yellow-300',
+      hover: 'hover:from-yellow-100 hover:to-yellow-200 dark:hover:from-yellow-800/40 dark:hover:to-yellow-700/40',
+    },
+    purple: {
+      bg: 'from-purple-50 to-purple-100 dark:from-purple-900/50 dark:to-purple-800/30',
+      border: 'border-purple-200 dark:border-purple-500/50',
+      icon: 'text-purple-600 dark:text-purple-400',
+      number: 'text-purple-700 dark:text-purple-300',
+      hover: 'hover:from-purple-100 hover:to-purple-200 dark:hover:from-purple-800/40 dark:hover:to-purple-700/40',
+    },
+    green: {
+      bg: 'from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/30',
+      border: 'border-green-200 dark:border-green-500/50',
+      icon: 'text-green-600 dark:text-green-400',
+      number: 'text-green-700 dark:text-green-300',
+      hover: 'hover:from-green-100 hover:to-green-200 dark:hover:from-green-800/40 dark:hover:to-green-700/40',
+    },
   };
 
+  const colorScheme = colors[color as keyof typeof colors];
+
   return (
-    <div className={`bg-gradient-to-br ${colors[color as keyof typeof colors]} border-2 rounded-lg sm:rounded-xl p-2 sm:p-3 lg:p-4 transition-colors ${pulse ? 'animate-pulse' : ''}`}>
-      <div className="flex items-center justify-between mb-1 sm:mb-2">
-        <div className={`${colors[color as keyof typeof colors].split('text-')[1]} w-4 h-4 sm:w-5 sm:h-5`}>{icon}</div>
+    <div className={`bg-gradient-to-br ${colorScheme.bg} ${colorScheme.border} border-2 rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-5 transition-all duration-300 cursor-default ${colorScheme.hover} hover:scale-105 hover:shadow-lg ${pulse ? 'animate-pulse' : ''}`}>
+      <div className="flex items-center justify-between mb-2 sm:mb-3">
+        <div className={`${colorScheme.icon} w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:scale-110`}>{icon}</div>
       </div>
-      <p className="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900 dark:text-white mb-0.5 sm:mb-1">{value}</p>
-      <p className="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400 leading-tight">{label}</p>
+      <p className={`text-2xl sm:text-3xl lg:text-4xl font-black ${colorScheme.number} mb-1 sm:mb-2 transition-all duration-300`}>
+        {value.toLocaleString()}
+      </p>
+      <p className="text-[10px] sm:text-xs font-semibold text-gray-700 dark:text-gray-300 leading-tight uppercase tracking-wide">
+        {label}
+      </p>
     </div>
   );
 }
@@ -337,11 +412,13 @@ function CriticalView({ data, router }: any) {
 
   if (!hasItems) {
     return (
-      <div className="text-center py-20">
-        <div className="text-6xl mb-4">🎉</div>
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">All Clear!</h3>
-        <p className="text-gray-600 dark:text-gray-400">No critical items right now. Great work!</p>
-      </div>
+      <EmptyState
+        emoji="🎉"
+        title="All Clear!"
+        description="No critical items right now. Great work!"
+        actionLabel="Create New Board"
+        onAction={() => router.push('/new-board')}
+      />
     );
   }
 
@@ -360,7 +437,7 @@ function CriticalView({ data, router }: any) {
         <CriticalSection title="📅 Due Tomorrow" subtitle={`${data.dueTomorrow.length} items due tomorrow`} cards={data.dueTomorrow} color="purple" router={router} />
       )}
       {data.dueThisWeek.length > 0 && (
-        <CriticalSection title="📆 Due This Week" subtitle={`${data.dueThisWeek.length} items due in the next 7 days`} cards={data.dueThisWeek} color="blue" router={router} />
+        <DueThisWeekSection title="📆 Due This Week" subtitle={`${data.dueThisWeek.length} items due in the next 7 days`} cards={data.dueThisWeek} router={router} />
       )}
       {data.dueNextWeek.length > 0 && (
         <CriticalSection title="📋 Due Next Week" subtitle={`${data.dueNextWeek.length} items due in 8-14 days`} cards={data.dueNextWeek} color="purple" router={router} />
@@ -401,11 +478,13 @@ function MyItemsView({ data, router }: any) {
 
   if (!hasItems) {
     return (
-      <div className="text-center py-20">
-        <div className="text-6xl mb-4">😌</div>
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Nothing Assigned</h3>
-        <p className="text-gray-600 dark:text-gray-400">No items currently assigned to you</p>
-      </div>
+      <EmptyState
+        emoji="😌"
+        title="Nothing Assigned"
+        description="No items currently assigned to you. Take a break or explore your boards!"
+        actionLabel="View All Boards"
+        onAction={() => router.push('/boards')}
+      />
     );
   }
 
@@ -551,7 +630,7 @@ function MeetingSummaryCard({ meeting, stats, router }: any) {
   return (
     <div
       onClick={() => router.push(`/board/${meeting.id}`)}
-      className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-900 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 cursor-pointer transition-all border border-gray-200 dark:border-slate-700"
+      className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-900 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 cursor-pointer transition-all border border-gray-200 dark:border-slate-700 hover:shadow-md hover:scale-[1.01]"
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
@@ -594,6 +673,95 @@ function MeetingSummaryCard({ meeting, stats, router }: any) {
       </div>
 
       <ArrowRight className="w-5 h-5 text-gray-400 ml-2 flex-shrink-0" />
+    </div>
+  );
+}
+
+// Empty State Component
+function EmptyState({ emoji, title, description, actionLabel, onAction }: any) {
+  return (
+    <div className="text-center py-20 px-4">
+      <div className="text-8xl mb-6 animate-bounce">{emoji}</div>
+      <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">{title}</h3>
+      <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">{description}</p>
+      {onAction && (
+        <button
+          onClick={onAction}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all hover:scale-105 hover:shadow-lg"
+        >
+          <Plus className="w-5 h-5" />
+          {actionLabel}
+        </button>
+      )}
+    </div>
+  );
+}
+
+// Improved Due This Week Section
+function DueThisWeekSection({ title, subtitle, cards, router }: any) {
+  return (
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-500/50 rounded-xl p-6 transition-all hover:shadow-lg">
+      <div className="mb-6">
+        <div className="flex items-center gap-3 mb-2">
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h3>
+          <TrendingUp className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+        </div>
+        <p className="text-sm text-gray-600 dark:text-gray-400">{subtitle}</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {cards.map((card: any) => (
+          <DueThisWeekCard key={card.id} card={card} router={router} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DueThisWeekCard({ card, router }: any) {
+  const handleClick = () => {
+    router.push(`/board/${card.meetingId}?cardId=${card.id}`);
+  };
+
+  const daysUntilDue = card.dueDate 
+    ? Math.ceil((new Date(card.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+
+  return (
+    <div
+      onClick={handleClick}
+      className="bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 rounded-lg p-4 cursor-pointer transition-all hover:scale-[1.02] hover:shadow-md border border-gray-200 dark:border-slate-700 group"
+    >
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex-1 min-w-0">
+          <div className="text-xs text-gray-500 mb-2 flex items-center gap-1">
+            <span className="truncate">{card.meetingTitle}</span>
+            <ArrowRight className="w-3 h-3 flex-shrink-0" />
+          </div>
+          <h4 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            {card.summary}
+          </h4>
+        </div>
+        <span className="px-2 py-1 rounded text-xs font-bold bg-blue-600 text-white flex-shrink-0 ml-2">
+          {card.type}
+        </span>
+      </div>
+
+      <div className="flex items-center justify-between">
+        {daysUntilDue !== null && (
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              {daysUntilDue === 0 ? 'Today' : daysUntilDue === 1 ? 'Tomorrow' : `${daysUntilDue} days`}
+            </span>
+          </div>
+        )}
+        {card.owner && (
+          <div className="text-xs text-gray-500 flex items-center gap-1">
+            <Users className="w-3 h-3" />
+            {card.owner}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
