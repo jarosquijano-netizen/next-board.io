@@ -21,32 +21,70 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Mark as mounted
     setMounted(true);
     
-    // Load theme from localStorage after mount
+    // Sync with DOM state (set by ThemeScript) and localStorage
     try {
-      const saved = localStorage.getItem('nextboard-theme');
-      if (saved === 'light' || saved === 'dark') {
-        setTheme(saved);
+      // Check if dark class is present (set by ThemeScript)
+      const hasDarkClass = document.documentElement.classList.contains('dark');
+      
+      // Also check localStorage
+      const saved = localStorage.getItem('theme') as 'light' | 'dark' | null;
+      
+      // Determine actual theme: prefer DOM state, then localStorage, then default to dark
+      let actualTheme: 'light' | 'dark' = 'dark';
+      if (hasDarkClass) {
+        // DOM says dark, use dark
+        actualTheme = 'dark';
+      } else if (saved === 'light') {
+        // DOM says light (no dark class) and localStorage says light, use light
+        actualTheme = 'light';
+      } else if (saved === 'dark') {
+        // DOM says light but localStorage says dark - sync to dark
+        actualTheme = 'dark';
       }
+      // Otherwise default to dark
+      
+      // Sync state with actual theme
+      setTheme(actualTheme);
+      
+      // Ensure DOM and localStorage are in sync
+      if (actualTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      localStorage.setItem('theme', actualTheme);
+      
+      console.log('🎨 Theme synced on mount:', actualTheme);
+      console.log('🔍 Has dark class:', document.documentElement.classList.contains('dark'));
     } catch (e) {
       console.error('Error reading theme from localStorage:', e);
+      setTheme('dark');
     }
   }, []);
 
   useEffect(() => {
     if (!mounted) return;
     
-    // Apply theme
+    // Apply theme - Tailwind only uses 'dark' class
+    // For light mode: remove 'dark' class (no class needed)
+    // For dark mode: add 'dark' class
     const root = document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(theme);
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
     root.style.colorScheme = theme;
     
-    // Save to localStorage
+    // Save to localStorage (use 'theme' key to match ThemeScript)
     try {
-      localStorage.setItem('nextboard-theme', theme);
+      localStorage.setItem('theme', theme);
     } catch (e) {
       console.error('Error saving theme to localStorage:', e);
     }
+    
+    console.log('🎨 Theme applied:', theme);
+    console.log('🔍 Has dark class:', root.classList.contains('dark'));
   }, [theme, mounted]);
 
   const toggleTheme = () => {

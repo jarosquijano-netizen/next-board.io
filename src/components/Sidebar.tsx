@@ -14,7 +14,7 @@ import {
   Moon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useThemeToggle } from '@/hooks/useThemeToggle';
+import { useTheme } from '@/contexts/ThemeContext';
 import Logo from '@/components/Logo';
 import { NotificationSettingsModal } from './NotificationSettingsModal';
 
@@ -29,7 +29,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useUser();
-  const { theme, toggleTheme, mounted } = useThemeToggle();
+  const { theme, toggleTheme, mounted } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
