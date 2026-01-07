@@ -53,14 +53,14 @@ export function Modal({ isOpen, onClose, title, children, size = 'lg' }: ModalPr
     <div className="fixed inset-0 z-[100] overflow-y-auto">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-md transition-opacity duration-300"
+        className="modal-overlay fixed inset-0 bg-slate-900/60 transition-opacity duration-300"
         onClick={onClose}
       />
       
       {/* Modal Content */}
       <div className="flex min-h-screen items-center justify-center p-0 sm:p-4">
         <div 
-          className={`relative w-full h-full sm:h-auto ${sizeClasses[size]} bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg rounded-none sm:rounded-2xl shadow-2xl border-0 sm:border border-slate-200/80 dark:border-slate-700/80 transform transition-all duration-300 flex flex-col`}
+          className={`modal-glass relative w-full h-full sm:h-auto ${sizeClasses[size]} rounded-none sm:rounded-2xl shadow-2xl border-0 sm:border transform transition-all duration-300 flex flex-col`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}

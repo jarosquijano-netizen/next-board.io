@@ -87,12 +87,12 @@ export function TimelineDashboard({ cards, allCards }: TimelineDashboardProps) {
       {!isCollapsed && (
         <div className="grid grid-cols-8 gap-2">
           {/* Stale Items */}
-          <div className="stat-card group bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl p-4 min-w-0">
+          <div className="stat-card group bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl p-3 min-w-0">
             <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-yellow-900 dark:text-white leading-none">{staleCards.length}</p>
               <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[10px] font-bold text-yellow-700 dark:text-yellow-400 uppercase tracking-widest truncate mb-0.5">Stale Items</h3>
+            <h3 className="metadata-label text-yellow-700 dark:text-yellow-400 truncate mb-0.5">Stale Items</h3>
             <p className="text-[9px] text-yellow-600 dark:text-yellow-300 truncate">Stuck 3+ days</p>
           </div>
 
