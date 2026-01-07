@@ -109,7 +109,7 @@ function DroppableColumn({
   return (
     <div 
       ref={setNodeRef}
-      className={`flex-1 space-y-3 min-h-[300px] transition-all rounded-xl p-3 ${
+      className={`flex-1 space-y-3 min-h-[300px] transition-all rounded-xl p-3 relative z-0 ${
         isOver 
           ? 'bg-blue-100 dark:bg-blue-900/30 ring-4 ring-blue-500 ring-inset shadow-xl' 
           : 'bg-transparent'
@@ -661,7 +661,7 @@ export default function BoardPage({ params }: PageProps) {
                       return (
                         <div key={column.id} className="flex flex-col">
                           {/* Column Header - Sticky */}
-                          <div className={`sticky top-40 z-10 bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm`}>
+                          <div className={`sticky top-40 z-[5] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm`}>
                             <div className="flex items-center justify-between mb-0.5">
                               <div className="flex items-center gap-1.5">
                                 <column.icon className="w-5 h-5 text-white" />
@@ -746,7 +746,7 @@ export default function BoardPage({ params }: PageProps) {
                       return (
                         <div key={column.id} className="flex flex-col">
                           {/* Column Header - Sticky */}
-                          <div className={`sticky top-40 z-10 bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm`}>
+                          <div className={`sticky top-40 z-[5] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm`}>
                             <div className="flex items-center justify-between mb-0.5">
                               <div className="flex items-center gap-1.5">
                                 <column.icon className="w-5 h-5 text-white" />
