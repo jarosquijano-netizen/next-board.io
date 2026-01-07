@@ -173,19 +173,35 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
   return (
     <div 
       ref={setNodeRef}
-      style={style}
+      style={{
+        ...style,
+        border: '1px solid #e2e8f0',
+        borderLeft: `4px solid ${styles.border.includes('blue') ? '#3b82f6' : styles.border.includes('red') ? '#ef4444' : styles.border.includes('yellow') ? '#eab308' : '#6366f1'}`,
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        backgroundColor: '#ffffff',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      }}
       {...attributes}
       {...listeners}
       className={`
         kanban-card
-        group relative rounded-xl p-4 mb-3 transition-all duration-300 ease-in-out cursor-move
-        border-l-4 ${styles.border} ${styles.bg}
-        bg-white dark:bg-transparent
+        group relative rounded-xl p-4 mb-3 cursor-move
+        ${styles.bg}
         shadow-lg
         ${getUrgencyBorderClass(timeStatus.urgencyLevel)}
         ${staleClass}
         touch-manipulation
       `}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = '#818cf8';
+        e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+        e.currentTarget.style.transform = 'translateY(-1px)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = '#e2e8f0';
+        e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
+        e.currentTarget.style.transform = 'translateY(0)';
+      }}
     >
       {/* Drag Handle */}
       <div 
