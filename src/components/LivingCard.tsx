@@ -142,6 +142,15 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
   const staleClass = getStaleBackgroundClass(timeInStatus.urgencyLevel);
   const styles = cardTypeStyles[card.type as CardType] || cardTypeStyles.Action;
   const activities = card.activities || [];
+  
+  // Get border color based on card type
+  const getBorderLeftColor = () => {
+    const cardType = card.type as CardType;
+    if (cardType === 'Blocker') return '#ef4444';
+    if (cardType === 'Risk') return '#f97316';
+    if (cardType === 'Action') return '#3b82f6';
+    return '#6366f1'; // Default indigo
+  };
 
   const handleAddNote = async () => {
     if (!noteText.trim() || !onAddNote) return;
@@ -176,7 +185,7 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
       style={{
         ...style,
         border: '1px solid #e2e8f0',
-        borderLeft: `4px solid ${styles.border.includes('blue') ? '#3b82f6' : styles.border.includes('red') ? '#ef4444' : styles.border.includes('yellow') ? '#eab308' : '#6366f1'}`,
+        borderLeft: `4px solid ${getBorderLeftColor()}`,
         boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
         backgroundColor: '#ffffff',
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
