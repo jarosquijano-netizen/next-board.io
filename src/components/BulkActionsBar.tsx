@@ -5,8 +5,8 @@ import { CheckCircle2, X, ArrowRight, Trash2 } from 'lucide-react';
 interface BulkActionsBarProps {
   selectedCount: number;
   onClearSelection: () => void;
-  onBulkStatusChange?: (status: string) => void;
-  onBulkDelete?: () => void;
+  onBulkStatusChange?: (status: string) => void | Promise<void>;
+  onBulkDelete?: () => void | Promise<void>;
 }
 
 export function BulkActionsBar({ 

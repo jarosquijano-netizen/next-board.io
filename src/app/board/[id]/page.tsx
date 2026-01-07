@@ -309,10 +309,11 @@ export default function BoardPage({ params }: PageProps) {
     setSelectedCards(new Set());
   };
 
-  const handleBulkStatusChange = async (status: CardStatus) => {
+  const handleBulkStatusChange = async (status: string) => {
     if (!currentMeeting) return;
+    const cardStatus = status as CardStatus;
     const promises = Array.from(selectedCards).map(cardId =>
-      updateCardStatus(currentMeeting.id, cardId, status)
+      updateCardStatus(currentMeeting.id, cardId, cardStatus)
     );
     await Promise.all(promises);
     handleClearSelection();
