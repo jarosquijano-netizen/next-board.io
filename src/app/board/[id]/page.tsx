@@ -35,6 +35,7 @@ import {
 import { formatDateTime } from '@/lib/utils';
 import { CardHoverPreview } from '@/components/CardHoverPreview';
 import { BulkActionsBar } from '@/components/BulkActionsBar';
+import { useSidebar } from '@/contexts/SidebarContext';
 
 interface PageProps {
   params: Promise<{ id: string }>;
