@@ -114,20 +114,47 @@ Example:
 
 NOW ANALYZE AND RETURN VALID JSON WITH ONLY ACTION ITEMS:`;
       
-      const response = await anthropic!.messages.create({
-        model: 'claude-3-haiku-20240307',
-        max_tokens: maxTokens,
-        temperature: 0.1, // Very low temperature for consistent, valid JSON
-        system: SYSTEM_PROMPT,
-        messages: [
-          {
-            role: 'user',
-            content: userPrompt,
+      let response;
+      try {
+        response = await anthropic!.messages.create({
+          model: 'claude-3-haiku-20240307',
+          max_tokens: maxTokens,
+          temperature: 0.1, // Very low temperature for consistent, valid JSON
+          system: SYSTEM_PROMPT,
+          messages: [
+            {
+              role: 'user',
+              content: userPrompt,
+            },
+          ],
+        });
+        
+        console.log(`✅ Received response from Claude (${response.usage.output_tokens} tokens)`);
+      } catch (apiError: any) {
+        console.error('❌ Anthropic API Error:', apiError);
+        
+        // Check if it's an authentication error
+        if (apiError?.status === 401 || apiError?.message?.includes('authentication') || apiError?.error?.type === 'authentication_error') {
+          return NextResponse.json(
+            { 
+              error: 'Failed to process transcript',
+              details: 'Anthropic API authentication failed. Please check your ANTHROPIC_API_KEY environment variable.',
+              hint: 'Make sure your API key is valid and has sufficient credits.'
+            },
+            { status: 500 }
+          );
+        }
+        
+        // For other API errors, provide generic error
+        return NextResponse.json(
+          { 
+            error: 'Failed to process transcript',
+            details: apiError?.message || 'Anthropic API request failed',
+            hint: 'Please try again or contact support if the issue persists.'
           },
-        ],
-      });
-      
-      console.log(`✅ Received response from Claude (${response.usage.output_tokens} tokens)`);
+          { status: 500 }
+        );
+      }
 
       const content = response.content[0];
       if (content.type !== 'text') {

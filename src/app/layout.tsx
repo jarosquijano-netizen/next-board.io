@@ -19,6 +19,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head>
+          <link rel="icon" href="/favicon.ico" />
           <ThemeScript />
         </head>
         <body className="bg-white dark:bg-slate-950 transition-colors duration-300">
