@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* UI Improvements - Force Tailwind recompilation */
+
 @layer base {
   * {
     @apply border-border;
