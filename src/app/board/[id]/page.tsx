@@ -744,9 +744,9 @@ export default function BoardPage({ params }: PageProps) {
                       }
                       
                       return (
-                        <div key={column.id} className="flex flex-col">
-                          {/* Column Header - Not sticky in Top layout to avoid overlay issues */}
-                          <div className={`bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm`}>
+                        <div key={column.id} className="flex flex-col relative">
+                          {/* Column Header - Sticky with lower z-index */}
+                          <div className={`sticky top-40 z-[1] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm`}>
                             <div className="flex items-center justify-between mb-0.5">
                               <div className="flex items-center gap-1.5">
                                 <column.icon className="w-5 h-5 text-white" />
@@ -761,28 +761,30 @@ export default function BoardPage({ params }: PageProps) {
                             <p className="text-xs text-white/70 ml-7">{column.description}</p>
                           </div>
 
-                          {/* Cards */}
-                          <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
-                            <DroppableColumn id={column.id}>
-                              {columnCards.map((card) => (
-                                <LivingCard
-                                  key={card.id}
-                                  card={card}
-                                  onUpdate={handleUpdateCard}
-                                  onDelete={handleDeleteCard}
-                                  onAddNote={(content) => handleAddNote(card.id, content)}
-                                  onGenerateSummary={() => handleGenerateSummary(card.id)}
-                                  onClick={() => handleCardClick(card)}
-                                />
-                              ))}
+                          {/* Cards Container - Ensure proper spacing and z-index */}
+                          <div className="relative z-[2]">
+                            <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
+                              <DroppableColumn id={column.id}>
+                                {columnCards.map((card) => (
+                                  <LivingCard
+                                    key={card.id}
+                                    card={card}
+                                    onUpdate={handleUpdateCard}
+                                    onDelete={handleDeleteCard}
+                                    onAddNote={(content) => handleAddNote(card.id, content)}
+                                    onGenerateSummary={() => handleGenerateSummary(card.id)}
+                                    onClick={() => handleCardClick(card)}
+                                  />
+                                ))}
 
-                              {columnCards.length === 0 && (
-                                <div className="flex flex-col items-center justify-center py-8 text-center bg-gray-50 dark:bg-slate-900/30 border-2 border-dashed border-gray-300 dark:border-slate-800 rounded-lg">
-                                  <p className="text-xs text-gray-500 dark:text-slate-500">No cards</p>
-                                </div>
-                              )}
-                            </DroppableColumn>
-                          </SortableContext>
+                                {columnCards.length === 0 && (
+                                  <div className="flex flex-col items-center justify-center py-8 text-center bg-gray-50 dark:bg-slate-900/30 border-2 border-dashed border-gray-300 dark:border-slate-800 rounded-lg">
+                                    <p className="text-xs text-gray-500 dark:text-slate-500">No cards</p>
+                                  </div>
+                                )}
+                              </DroppableColumn>
+                            </SortableContext>
+                          </div>
                         </div>
                       );
                     })}
