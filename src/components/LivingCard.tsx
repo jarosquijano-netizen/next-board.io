@@ -180,7 +180,9 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
         group relative rounded-lg sm:rounded-xl p-3 sm:p-4 mb-2 sm:mb-3 transition-all duration-300 ease-in-out cursor-move
         border-l-4 ${styles.border} ${styles.bg}
         bg-white dark:bg-transparent
-        shadow-sm hover:shadow-md hover:border-indigo-400 hover:scale-[1.01] active:scale-[0.98] border border-slate-200 dark:border-slate-700
+        shadow-sm border border-slate-200 dark:border-slate-700
+        hover:shadow-md hover:border-indigo-400 hover:border-l-indigo-500
+        active:scale-95
         ${getUrgencyBorderClass(timeStatus.urgencyLevel)}
         ${staleClass}
         touch-manipulation
