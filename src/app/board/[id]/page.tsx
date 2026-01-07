@@ -137,6 +137,7 @@ export default function BoardPage({ params }: PageProps) {
   const [selectedCard, setSelectedCard] = useState<MeetingCard | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSearchFiltersVisible, setIsSearchFiltersVisible] = useState(true);
+  const [isSideFiltersVisible, setIsSideFiltersVisible] = useState(true); // For side layout filters
   const [layoutMode, setLayoutMode] = useState<'top' | 'side'>('side'); // Layout toggle - default to side
   const [comparisonData, setComparisonData] = useState<any | null>(null);
   const [hasComparison, setHasComparison] = useState(false);
