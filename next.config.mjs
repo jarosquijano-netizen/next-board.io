@@ -6,10 +6,11 @@ const nextConfig = {
     },
   },
   // Force fresh builds - PERMANENT FIX
+  // Unique build ID forces Next.js to regenerate all assets including CSS
   generateBuildId: async () => {
     const timestamp = Date.now();
     const random = Math.random().toString(36).substring(7);
-    return `build-${timestamp}-${random}-v2.1`;
+    return `build-${timestamp}-${random}-v2.3-clean-ui`;
   },
   // Disable cache during build to avoid issues
   onDemandEntries: {
