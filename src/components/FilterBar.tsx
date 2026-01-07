@@ -108,7 +108,7 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
         All Types
       </button>
 
-      {cardTypes.map(({ type, label, color, bgColor, icon: Icon }) => {
+      {cardTypes.map(({ type, label, color, bgColor, Icon }) => {
         const isSelected = selectedTypes.includes(type);
         
         return (
