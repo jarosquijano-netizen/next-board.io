@@ -219,7 +219,7 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
                 </span>
               )}
             </div>
-            <h3 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 leading-snug line-clamp-2 transition-colors duration-300">
+            <h3 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 leading-snug line-clamp-2 transition-colors duration-300 border-b-2 border-transparent group-hover:border-indigo-500 pb-1">
               {card.summary}
             </h3>
             {card.context && (
