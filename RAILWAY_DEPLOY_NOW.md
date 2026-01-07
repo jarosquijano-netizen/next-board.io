@@ -113,7 +113,7 @@ railway open
    railway variables --set DATABASE_URL="postgresql://postgres:DcAyvwFiQTKqhMIDktdPCTkiKUHHmiEf@mainline.proxy.rlwy.net:42102/railway"
    railway variables --set NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_ZnVsbC1iZWUtNzIuY2xlcmsuYWNjb3VudHMuZGV2JA"
    railway variables --set CLERK_SECRET_KEY="sk_test_h3WbKiz4bTLY05A6KQ1Nk9UoydZtgJHBKcaHLqLUsP"
-   railway variables --set ANTHROPIC_API_KEY="sk-ant-api03-yWj8WxE3rYqsM_TsbjYzxI5D3mj-LAJR8K6kEQVy6NaQfSVTSMPFHVw7h7Y8ykKqaCOhw6DpwgCrZAVxEcJKNw-r5YW-QAA"
+   railway variables --set ANTHROPIC_API_KEY="sk-ant-your-actual-key-here"
    # ... add all other variables
    ```
 
