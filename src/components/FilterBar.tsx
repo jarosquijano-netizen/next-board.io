@@ -1,6 +1,6 @@
 'use client';
 
-import { Filter, CheckCircle2 } from 'lucide-react';
+import { Filter, CheckCircle2, AlertOctagon, ShieldAlert, Zap, Target, MessageSquare, HelpCircle, FileText, Lightbulb } from 'lucide-react';
 import { CardType } from '@/types/meeting';
 import { cn } from '@/lib/utils';
 
@@ -11,15 +11,15 @@ interface FilterBarProps {
 }
 
 // Standardized color palette - semantic colors only for critical states
-const cardTypes: { type: CardType; label: string; color: string; bgColor: string; emoji: string }[] = [
-  { type: 'Blocker', label: 'Blockers', color: 'text-red-600 dark:text-red-400', bgColor: 'bg-red-500/10 border-red-500/30', emoji: '🚧' },
-  { type: 'Risk', label: 'Risks', color: 'text-orange-600 dark:text-orange-400', bgColor: 'bg-orange-500/10 border-orange-500/30', emoji: '⚠️' },
-  { type: 'Action', label: 'Actions', color: 'text-blue-600 dark:text-blue-400', bgColor: 'bg-blue-500/10 border-blue-500/30', emoji: '✓' },
-  { type: 'Decision', label: 'Decisions', color: 'text-gray-700 dark:text-gray-300', bgColor: 'bg-gray-500/10 border-gray-500/30', emoji: '⚡' },
-  { type: 'Follow-up', label: 'Follow-ups', color: 'text-gray-700 dark:text-gray-300', bgColor: 'bg-gray-500/10 border-gray-500/30', emoji: '🔄' },
-  { type: 'Question', label: 'Questions', color: 'text-gray-700 dark:text-gray-300', bgColor: 'bg-gray-500/10 border-gray-500/30', emoji: '❓' },
-  { type: 'Update', label: 'Updates', color: 'text-gray-700 dark:text-gray-300', bgColor: 'bg-gray-500/10 border-gray-500/30', emoji: '📢' },
-  { type: 'Idea', label: 'Ideas', color: 'text-gray-700 dark:text-gray-300', bgColor: 'bg-gray-500/10 border-gray-500/30', emoji: '💡' },
+const cardTypes: { type: CardType; label: string; color: string; bgColor: string; Icon: React.ElementType }[] = [
+  { type: 'Blocker', label: 'Blockers', color: 'text-red-600 dark:text-red-400', bgColor: 'bg-red-500/10 border-red-500/30', Icon: AlertOctagon },
+  { type: 'Risk', label: 'Risks', color: 'text-orange-600 dark:text-orange-400', bgColor: 'bg-orange-500/10 border-orange-500/30', Icon: ShieldAlert },
+  { type: 'Action', label: 'Actions', color: 'text-blue-600 dark:text-blue-400', bgColor: 'bg-blue-500/10 border-blue-500/30', Icon: Zap },
+  { type: 'Decision', label: 'Decisions', color: 'text-gray-700 dark:text-gray-300', bgColor: 'bg-gray-500/10 border-gray-500/30', Icon: Target },
+  { type: 'Follow-up', label: 'Follow-ups', color: 'text-gray-700 dark:text-gray-300', bgColor: 'bg-gray-500/10 border-gray-500/30', Icon: MessageSquare },
+  { type: 'Question', label: 'Questions', color: 'text-gray-700 dark:text-gray-300', bgColor: 'bg-gray-500/10 border-gray-500/30', Icon: HelpCircle },
+  { type: 'Update', label: 'Updates', color: 'text-gray-700 dark:text-gray-300', bgColor: 'bg-gray-500/10 border-gray-500/30', Icon: FileText },
+  { type: 'Idea', label: 'Ideas', color: 'text-gray-700 dark:text-gray-300', bgColor: 'bg-gray-500/10 border-gray-500/30', Icon: Lightbulb },
 ];
 
 export default function FilterBar({ selectedTypes, onFilterChange, variant = 'horizontal' }: FilterBarProps) {
@@ -77,7 +77,7 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
                     : "bg-white dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 transition-all duration-300"
                 )}
               >
-                <Icon className="w-4 h-4" strokeWidth={1.5} />
+                <Icon className="w-5 h-5" strokeWidth={1.5} />
                 <span className="text-center leading-tight">{label}</span>
                 {isSelected && <CheckCircle2 className="w-3 h-3 absolute top-1 right-1" strokeWidth={1.5} />}
               </button>
