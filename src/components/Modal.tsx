@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
 interface ModalProps {
@@ -12,6 +13,8 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, onClose, title, children, size = 'lg' }: ModalProps) {
+  const [mounted, setMounted] = useState(false);
+
   // Close on Escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -30,7 +33,13 @@ export function Modal({ isOpen, onClose, title, children, size = 'lg' }: ModalPr
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  // Handle mounting for portal
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
 
   const sizeClasses = {
     sm: 'max-w-md',
@@ -40,8 +49,8 @@ export function Modal({ isOpen, onClose, title, children, size = 'lg' }: ModalPr
     full: 'max-w-[95vw]',
   };
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+  const modalContent = (
+    <div className="fixed inset-0 z-[100] overflow-y-auto">
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
@@ -73,6 +82,8 @@ export function Modal({ isOpen, onClose, title, children, size = 'lg' }: ModalPr
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
 
 
