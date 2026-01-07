@@ -60,15 +60,16 @@
   }
 }
 
-/* Kanban Card - Premium Design System - PERMANENT FIX */
+/* Kanban Card - Clean Minimal Design */
 .kanban-card,
 div[class*="kanban-card"],
-div[class*="group"][class*="rounded-xl"][class*="p-4"] {
+div[class*="group"][class*="rounded-lg"] {
   background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 0.75rem !important;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+  padding: 1rem !important;
+  transition: all 0.2s ease-in-out !important;
 }
 
 .dark .kanban-card {
@@ -77,9 +78,7 @@ div[class*="group"][class*="rounded-xl"][class*="p-4"] {
 }
 
 .kanban-card:hover {
-  border-color: #818cf8 !important;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-  transform: translateY(-1px) !important;
 }
 
 .dark .kanban-card:hover {

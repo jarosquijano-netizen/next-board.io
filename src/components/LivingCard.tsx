@@ -184,37 +184,27 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
       ref={setNodeRef}
       style={{
         ...style,
-        // PERMANENT FIX: Force styles directly
-        border: '1px solid #e2e8f0',
-        borderLeft: `4px solid ${getBorderLeftColor()}`,
-        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        // Clean minimal design - matching reference
+        border: '1px solid #e5e7eb',
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
         backgroundColor: '#ffffff',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        // Force override any conflicting styles
-        WebkitTransition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        MozTransition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        msTransition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        borderRadius: '0.5rem',
+        transition: 'all 0.2s ease-in-out',
       }}
       {...attributes}
       {...listeners}
       className={`
         kanban-card
-        group relative rounded-xl p-4 mb-3 cursor-move
-        ${styles.bg}
-        shadow-lg
-        ${getUrgencyBorderClass(timeStatus.urgencyLevel)}
-        ${staleClass}
+        group relative rounded-lg mb-3 cursor-move
+        bg-white
+        hover:shadow-md
         touch-manipulation
       `}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = '#818cf8';
         e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
-        e.currentTarget.style.transform = 'translateY(-1px)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = '#e2e8f0';
-        e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
-        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)';
       }}
     >
       {/* Drag Handle */}
@@ -235,24 +225,24 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
           }
         }}
       >
-        {/* Card Header */}
-        <div className="flex items-start justify-between gap-2 mb-1.5 sm:mb-2">
+        {/* Card Header - Clean Minimal Design */}
+        <div className="flex items-start justify-between gap-2 mb-3">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 flex-wrap">
-              <span className={`px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider border ${styles.badge}`}>
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide ${styles.badge}`}>
                 {card.type}
               </span>
-              {card.priority && (
-                <span className={`px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-wider ${getPriorityColor(card.priority)}`}>
+              {card.priority && card.priority !== 'medium' && (
+                <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${getPriorityColor(card.priority)}`}>
                   {card.priority.toUpperCase()}
                 </span>
               )}
             </div>
-            <h3 className="kanban-card-title font-bold text-base text-slate-900 dark:text-white leading-snug line-clamp-2 transition-colors duration-300">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white leading-relaxed mb-2">
               {card.summary}
             </h3>
             {card.context && (
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-slate-400 italic mt-1.5 border-l-2 border-gray-300 dark:border-gray-600 pl-2 line-clamp-2 leading-relaxed">
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-2">
                 &quot;{card.context}&quot;
               </p>
             )}
