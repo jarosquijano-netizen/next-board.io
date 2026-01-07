@@ -177,7 +177,7 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
       {...attributes}
       {...listeners}
       className={`
-        relative rounded-lg sm:rounded-xl p-3 sm:p-4 mb-2 sm:mb-3 transition-all duration-200 cursor-move
+        relative z-[2] rounded-lg sm:rounded-xl p-3 sm:p-4 mb-2 sm:mb-3 transition-all duration-200 cursor-move
         border-l-4 ${styles.border} ${styles.bg}
         bg-white dark:bg-transparent
         shadow-sm hover:shadow-md active:scale-[0.98]
