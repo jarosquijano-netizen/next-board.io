@@ -1,0 +1,25 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/email-notifications?type=daily-digest&secret=$CRON_SECRET",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/email-notifications?type=overdue-check&secret=$CRON_SECRET",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/email-notifications?type=due-today&secret=$CRON_SECRET",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/email-notifications?type=blocked-alerts&secret=$CRON_SECRET",
+      "schedule": "0 */12 * * *"
+    }
+  ]
+}
+
+
+
+
+

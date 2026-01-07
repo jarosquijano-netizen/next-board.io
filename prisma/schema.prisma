@@ -1,0 +1,320 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Meeting {
+  id              String        @id @default(cuid())
+  title           String
+  summary         String
+  userId          String        // Clerk user ID
+  organizationId  String?       // Optional: for team workspaces
+  
+  // 🆕 Meeting Time Tracking
+  meetingDate     DateTime?     // When the meeting actually happened
+  nextMeetingDate DateTime?     // AI-suggested next meeting date
+  duration        Int?          // Meeting length in minutes
+  
+  // 🆕 Recurring Meeting Fields
+  seriesId        String?       // Links meetings in same series
+  seriesNumber    Int?          // #1, #2, #3 in series
+  isRecurring     Boolean       @default(false)
+  recurrence      String?       // "weekly", "biweekly", "monthly", "quarterly"
+  previousMeetingId String?     // Link to previous meeting in series
+  nextMeetingId     String?     // Link to next meeting in series
+  
+  // Series metadata
+  seriesStartDate   DateTime?
+  expectedNextDate  DateTime?   // AI-suggested next meeting date
+  
+  // Comparison stats (computed from cards)
+  completionRate    Float?      // % of items completed since last meeting
+  carryoverCount    Int         @default(0) // Items carried from previous
+  newItemsCount     Int         @default(0) // New items this meeting
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  cards           MeetingCard[]
+  
+  // Self-referential relations for series
+  previousMeeting Meeting?      @relation("MeetingSeries", fields: [previousMeetingId], references: [id], onDelete: SetNull)
+  nextMeetings    Meeting[]     @relation("MeetingSeries")
+  series          MeetingSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+  
+  @@index([userId])
+  @@index([organizationId])
+  @@index([meetingDate])
+  @@index([seriesId])
+  @@index([userId, seriesId])
+  @@index([previousMeetingId])
+}
+
+model MeetingCard {
+  id          String   @id @default(cuid())
+  meetingId   String
+  type        String
+  summary     String
+  owner       String?
+  
+  // 🆕 Enhanced Time Fields
+  dueDate     DateTime?    // Actual parsed ISO date
+  dueDateRaw  String?      // Original text from transcript ("Friday", "next week")
+  priority    String       @default("medium") // "low", "medium", "high", "urgent"
+  timeEstimate Int?        // Estimated minutes to complete
+  reminderSent Boolean     @default(false)
+  
+  // Computed fields
+  isOverdue   Boolean      @default(false)
+  daysUntilDue Int?        // Can be negative if overdue
+  
+  timestamp   String?      // Transcript timestamp
+  context     String?      // Original context from meeting
+  
+  // 🆕 4-Column Status System: "To Do" → "In Progress" → "Blocked" → "Done"
+  status      String       @default("To Do")  // "To Do", "In Progress", "Blocked", "Done"
+  
+  // 🆕 Blocked-Specific Fields
+  blockedReason  String?   // Why is this blocked?
+  blockedBy      String?   // Who/what is blocking this?
+  blockedSince   DateTime? // When did it get blocked?
+  
+  // 🆕 People Interaction Fields
+  involvedPeople     String? @default("[]") // JSON array of all people mentioned
+  interactionType    String?                 // "speak_with", "email", "meet_with", "call", "check_with", "follow_up", "present_to", "coordinate_with"
+  primaryContact     String?                 // Main person to interact with
+  additionalContacts String? @default("[]")  // JSON array of other people involved
+  interactionNote    String?                 // "to discuss pricing", "about Q4 plans"
+  
+  // 🆕 Carryover Tracking (Recurring Meetings)
+  carriedOver        Boolean @default(false) // Was this carried from previous meeting?
+  sourceCardId       String?                 // Original card ID if carried over
+  carriedFromMeetingId String?               // Which meeting it came from
+  completedInMeeting Boolean @default(false) // Was it completed in this meeting?
+  originalMeetingId  String?                 // Meeting where it was first created
+  
+  // 🆕 Living Card System
+  activities     CardActivity[]
+  attachments    CardAttachment[]
+  aiSummary          String?   // AI-generated summary when completed
+  aiSummaryCreatedAt DateTime? // When AI summary was generated
+  
+  // 🆕 Time Tracking System
+  currentStatusSince DateTime @default(now()) // When moved to current status
+  timeInTodo         Int      @default(0)     // Hours spent in To Do
+  timeInProgress     Int      @default(0)     // Hours spent in In Progress
+  timeInBlocked      Int      @default(0)     // Hours spent in Blocked
+  
+  // 🆕 Auto-Priority Management
+  priorityAutoUpdated Boolean  @default(false) // Was priority auto-escalated?
+  lastPriorityUpdate  DateTime?                // When priority was last changed
+  
+  // 🆕 Status History
+  statusHistory      StatusHistoryEntry[]
+  
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  completedAt DateTime?    // When marked as done
+  
+  meeting     Meeting      @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  
+  @@index([dueDate])
+  @@index([isOverdue])
+  @@index([status])
+  @@index([priority])
+  @@index([currentStatusSince])
+  @@index([priorityAutoUpdated])
+  @@index([primaryContact])
+  @@index([carriedFromMeetingId])
+  @@index([originalMeetingId])
+  @@index([carriedOver])
+}
+
+model CardActivity {
+  id           String   @id @default(cuid())
+  cardId       String
+  userId       String   // Clerk user ID
+  activityType String   // "note", "status_change", "assignment", "attachment", "edit"
+  content      String   // The actual note or description
+  metadata     String?  // JSON string with extra data like old_status → new_status
+  createdAt    DateTime @default(now())
+  
+  card         MeetingCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  
+  @@index([cardId])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model CardAttachment {
+  id        String   @id @default(cuid())
+  cardId    String
+  userId    String   // Clerk user ID
+  fileName  String
+  fileUrl   String
+  fileSize  Int
+  mimeType  String
+  createdAt DateTime @default(now())
+  
+  card      MeetingCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  
+  @@index([cardId])
+  @@index([userId])
+}
+
+// Track every status change with timestamps
+model StatusHistoryEntry {
+  id               String   @id @default(cuid())
+  cardId           String
+  fromStatus       String?  // null if first status
+  toStatus         String
+  changedAt        DateTime @default(now())
+  durationInStatus Int?     // Hours spent in previous status
+  
+  card             MeetingCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  
+  @@index([cardId])
+  @@index([changedAt])
+}
+
+// Track people mentioned across all meetings for analytics
+model Person {
+  id          String   @id @default(cuid())
+  name        String
+  email       String?
+  role        String?
+  department  String?
+  
+  // Analytics
+  mentionedInCards Int      @default(0)
+  lastMentioned    DateTime?
+  
+  createdAt        DateTime @default(now())
+  userId           String   // Owner of this person record
+  organizationId   String?  // For team workspaces
+  
+  @@unique([name, userId]) // Same person name per user
+  @@index([userId])
+  @@index([organizationId])
+  @@index([name])
+}
+
+// 🆕 Meeting Series for recurring meetings
+model MeetingSeries {
+  id              String    @id @default(cuid())
+  userId          String    // Clerk user ID
+  organizationId  String?   // Optional: for team workspaces
+  title           String    // "Product Weekly Sync"
+  description     String?
+  recurrence      String    // "weekly", "biweekly", "monthly", "quarterly"
+  
+  // Series settings
+  isActive        Boolean   @default(true)
+  startDate       DateTime
+  lastMeetingDate DateTime?
+  nextMeetingDate DateTime?
+  
+  // Stats
+  totalMeetings      Int    @default(0)
+  avgCompletionRate  Float?
+  avgItemsPerMeeting Float?
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  meetings        Meeting[]
+  
+  @@index([userId])
+  @@index([organizationId])
+  @@index([isActive])
+}
+
+// 🆕 User Model for Email Notifications
+model User {
+  id                      String   @id @default(cuid())
+  clerkUserId             String   @unique // Link to Clerk
+  email                   String   @unique
+  name                    String?
+  
+  // Notification system
+  notificationPreferences NotificationPreferences?
+  notifications           Notification[]
+  
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  
+  @@index([clerkUserId])
+  @@index([email])
+}
+
+// 🆕 Email Notification Preferences
+model NotificationPreferences {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  
+  // Email notification settings
+  dailyDigest         Boolean  @default(true)
+  dailyDigestTime     String   @default("08:00") // HH:MM format
+  
+  overdueAlerts       Boolean  @default(true)
+  dueTodayAlerts      Boolean  @default(true)
+  dueTomorrowAlerts   Boolean  @default(true)
+  
+  assignedToMe        Boolean  @default(true)
+  mentioned           Boolean  @default(true)
+  cardComments        Boolean  @default(true)
+  
+  blockedAlerts       Boolean  @default(true)
+  priorityEscalation  Boolean  @default(true)
+  
+  weeklyReport        Boolean  @default(true)
+  weeklyReportDay     String   @default("monday") // day of week
+  
+  // Quiet hours
+  enableQuietHours    Boolean  @default(false)
+  quietHoursStart     String   @default("22:00")
+  quietHoursEnd       String   @default("08:00")
+  
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+// 🆕 Notification Log
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  
+  type        String   // "overdue", "due_today", "assigned", "mentioned", "blocked", "digest"
+  title       String
+  message     String
+  
+  // Associated data
+  cardId      String?
+  meetingId   String?
+  metadata    String?  // JSON string with additional context
+  
+  // Delivery status
+  emailSent   Boolean  @default(false)
+  emailSentAt DateTime?
+  emailError  String?
+  
+  read        Boolean  @default(false)
+  readAt      DateTime?
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([userId, read])
+  @@index([type])
+  @@index([createdAt])
+}
+
