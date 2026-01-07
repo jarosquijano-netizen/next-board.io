@@ -227,7 +227,7 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
             )}
           </div>
 
-          <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ transitionDelay: '0ms' }}>
             {onUpdate && (
               <button
                 onClick={() => {/* TODO: Implement edit */}}
