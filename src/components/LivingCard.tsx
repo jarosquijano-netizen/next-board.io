@@ -173,11 +173,7 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
   return (
     <div 
       ref={setNodeRef}
-      style={{
-        ...style,
-        border: '3px solid #6366f1',
-        boxShadow: '0 10px 15px -3px rgba(99, 102, 241, 0.5), 0 4px 6px -2px rgba(99, 102, 241, 0.3)',
-      }}
+      style={style}
       {...attributes}
       {...listeners}
       className={`
@@ -185,27 +181,11 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
         group relative rounded-xl p-4 mb-3 transition-all duration-300 ease-in-out cursor-move
         border-l-4 ${styles.border} ${styles.bg}
         bg-white dark:bg-transparent
-        shadow-xl border-2 border-indigo-500 dark:border-indigo-600
-        hover:shadow-2xl hover:border-indigo-700 hover:border-l-indigo-800 hover:scale-[1.05] hover:bg-indigo-100 dark:hover:bg-indigo-900/40
-        active:scale-95
+        shadow-lg
         ${getUrgencyBorderClass(timeStatus.urgencyLevel)}
         ${staleClass}
         touch-manipulation
       `}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = '#4f46e5';
-        e.currentTarget.style.borderWidth = '4px';
-        e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(79, 70, 229, 0.5), 0 10px 10px -5px rgba(79, 70, 229, 0.3)';
-        e.currentTarget.style.transform = 'scale(1.08)';
-        e.currentTarget.style.backgroundColor = 'rgba(238, 242, 255, 0.9)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = '#6366f1';
-        e.currentTarget.style.borderWidth = '3px';
-        e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(99, 102, 241, 0.5), 0 4px 6px -2px rgba(99, 102, 241, 0.3)';
-        e.currentTarget.style.transform = 'scale(1)';
-        e.currentTarget.style.backgroundColor = '';
-      }}
     >
       {/* Drag Handle */}
       <div 
