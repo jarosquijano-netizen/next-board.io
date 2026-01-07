@@ -111,7 +111,7 @@ function DroppableColumn({
   return (
     <div 
       ref={setNodeRef}
-      className={`flex-1 space-y-3 min-h-[300px] transition-all duration-300 ease-in-out rounded-xl p-3 relative z-[2] ${
+      className={`flex-1 space-y-3 min-h-[300px] transition-all duration-300 ease-in-out rounded-xl p-3 relative z-0 ${
         isOver 
           ? 'bg-blue-100 dark:bg-blue-900/30 ring-4 ring-blue-500 ring-inset shadow-xl scale-[1.02]' 
           : 'bg-transparent'
@@ -785,7 +785,7 @@ export default function BoardPage({ params }: PageProps) {
                       return (
                         <div key={column.id} className="flex flex-col relative">
                           {/* Column Header - Enhanced */}
-                          <div className={`sticky top-40 z-[1] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`}>
+                          <div className={`sticky top-40 z-[10] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`}>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <button
@@ -955,7 +955,7 @@ export default function BoardPage({ params }: PageProps) {
                       return (
                         <div key={column.id} className="flex flex-col relative">
                           {/* Column Header - Enhanced */}
-                          <div className={`sticky top-40 z-[1] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`}>
+                          <div className={`sticky top-40 z-[10] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`}>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <button
@@ -1002,7 +1002,7 @@ export default function BoardPage({ params }: PageProps) {
 
                           {/* Cards Container - Enhanced with animations */}
                           {!collapsedColumns.has(column.id) && (
-                            <div className="relative z-[2]">
+                            <div className="relative z-0">
                               <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
                                 <DroppableColumn id={column.id}>
                                   {(() => {
