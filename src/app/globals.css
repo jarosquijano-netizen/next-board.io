@@ -4,21 +4,24 @@
 
 /* UI Improvements - Force Tailwind recompilation - Updated 2026-01-07 17:50 */
 
-/* FORCE VISIBLE CHANGES - Direct CSS with !important */
-.kanban-card {
-  border: 2px solid #6366f1 !important;
-  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -2px rgba(99, 102, 241, 0.2) !important;
+/* FORCE VISIBLE CHANGES - Direct CSS with !important - UPDATED 2026-01-07 18:00 */
+.kanban-card,
+.group.rounded-xl {
+  border: 3px solid #6366f1 !important;
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.5), 0 4px 6px -2px rgba(99, 102, 241, 0.3) !important;
 }
 
-.kanban-card:hover {
+.kanban-card:hover,
+.group.rounded-xl:hover {
   border-color: #4f46e5 !important;
-  box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4), 0 10px 10px -5px rgba(79, 70, 229, 0.2) !important;
-  transform: scale(1.05) !important;
-  background-color: rgba(238, 242, 255, 0.8) !important;
+  border-width: 4px !important;
+  box-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.5), 0 10px 10px -5px rgba(79, 70, 229, 0.3) !important;
+  transform: scale(1.08) !important;
+  background-color: rgba(238, 242, 255, 0.9) !important;
 }
 
 body {
-  border-top: 6px solid #4f46e5 !important;
+  border-top: 8px solid #4f46e5 !important;
 }
 
 /* Force widget styles */

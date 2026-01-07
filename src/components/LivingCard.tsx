@@ -175,8 +175,8 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
       ref={setNodeRef}
       style={{
         ...style,
-        border: '2px solid #6366f1',
-        boxShadow: '0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -2px rgba(99, 102, 241, 0.2)',
+        border: '3px solid #6366f1',
+        boxShadow: '0 10px 15px -3px rgba(99, 102, 241, 0.5), 0 4px 6px -2px rgba(99, 102, 241, 0.3)',
       }}
       {...attributes}
       {...listeners}
@@ -194,13 +194,15 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
       `}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = '#4f46e5';
-        e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(79, 70, 229, 0.4), 0 10px 10px -5px rgba(79, 70, 229, 0.2)';
-        e.currentTarget.style.transform = 'scale(1.05)';
-        e.currentTarget.style.backgroundColor = 'rgba(238, 242, 255, 0.8)';
+        e.currentTarget.style.borderWidth = '4px';
+        e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(79, 70, 229, 0.5), 0 10px 10px -5px rgba(79, 70, 229, 0.3)';
+        e.currentTarget.style.transform = 'scale(1.08)';
+        e.currentTarget.style.backgroundColor = 'rgba(238, 242, 255, 0.9)';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderColor = '#6366f1';
-        e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -2px rgba(99, 102, 241, 0.2)';
+        e.currentTarget.style.borderWidth = '3px';
+        e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(99, 102, 241, 0.5), 0 4px 6px -2px rgba(99, 102, 241, 0.3)';
         e.currentTarget.style.transform = 'scale(1)';
         e.currentTarget.style.backgroundColor = '';
       }}
