@@ -184,11 +184,16 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
       ref={setNodeRef}
       style={{
         ...style,
+        // PERMANENT FIX: Force styles directly
         border: '1px solid #e2e8f0',
         borderLeft: `4px solid ${getBorderLeftColor()}`,
         boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
         backgroundColor: '#ffffff',
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        // Force override any conflicting styles
+        WebkitTransition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        MozTransition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        msTransition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
       {...attributes}
       {...listeners}

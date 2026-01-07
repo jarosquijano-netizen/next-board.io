@@ -23,7 +23,16 @@ export default function RootLayout({
           <link rel="icon" href="/favicon.ico" />
           <ThemeScript />
         </head>
-        <body className="bg-slate-50 dark:bg-slate-950 transition-colors duration-300" style={{ borderTop: '8px solid #4f46e5', backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+        <body 
+          className="bg-slate-50 dark:bg-slate-950 transition-colors duration-300" 
+          style={{ 
+            borderTop: '8px solid #4f46e5', 
+            backgroundColor: '#f8fafc', 
+            minHeight: '100vh',
+            // Force styles to override any cache
+            '--indigo-primary': '#4f46e5',
+            '--bg-slate-50': '#f8fafc',
+          } as React.CSSProperties & { '--indigo-primary'?: string; '--bg-slate-50'?: string }}>
           <ThemeProvider>
             <SidebarProvider>
               {children}

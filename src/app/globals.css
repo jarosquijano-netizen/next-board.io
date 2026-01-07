@@ -60,8 +60,10 @@
   }
 }
 
-/* Kanban Card - Premium Design System */
-.kanban-card {
+/* Kanban Card - Premium Design System - PERMANENT FIX */
+.kanban-card,
+div[class*="kanban-card"],
+div[class*="group"][class*="rounded-xl"][class*="p-4"] {
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
   border-radius: 0.75rem !important;
@@ -93,19 +95,30 @@
   color: #818cf8 !important;
 }
 
-/* StatCard (Analytics Widgets) - Hover lift effect */
-.stat-card {
+/* StatCard (Analytics Widgets) - Hover lift effect - PERMANENT FIX */
+.stat-card,
+div[class*="stat-card"],
+div[class*="group"][class*="bg-"][class*="rounded-xl"] {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
-.stat-card:hover {
+.stat-card:hover,
+div[class*="stat-card"]:hover,
+div[class*="group"][class*="bg-"][class*="rounded-xl"]:hover {
   transform: translateY(-2px) !important;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Body Border - Primary Indigo Indicator */
+/* Body Border - Primary Indigo Indicator - PERMANENT FIX */
 body {
-  border-top: 4px solid #4f46e5 !important;
+  border-top: 8px solid #4f46e5 !important;
+  background-color: #f8fafc !important;
+}
+
+html body {
+  border-top: 8px solid #4f46e5 !important;
+  background-color: #f8fafc !important;
 }
 
 /* Sidebar Glassmorphism */
