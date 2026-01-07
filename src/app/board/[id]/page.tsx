@@ -923,7 +923,7 @@ export default function BoardPage({ params }: PageProps) {
               </div>
 
               {/* Side Panel - Right Side (Filters Only) */}
-              <div className={`${isSideFiltersVisible ? 'w-80' : 'w-0'} flex-shrink-0 transition-all duration-300 overflow-hidden`}>
+              <div className={`${isSideFiltersVisible ? 'w-80' : 'w-0'} flex-shrink-0 transition-all duration-300 overflow-visible relative`}>
                 {isSideFiltersVisible && (
                   <div className="space-y-4 pr-4">
                     {/* Collapse Button */}
@@ -962,7 +962,7 @@ export default function BoardPage({ params }: PageProps) {
                 {!isSideFiltersVisible && (
                   <button
                     onClick={() => setIsSideFiltersVisible(true)}
-                    className="absolute -left-12 top-1/2 -translate-y-1/2 p-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-l-lg shadow-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors z-10"
+                    className="fixed right-4 top-1/2 -translate-y-1/2 p-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-l-lg shadow-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors z-50"
                     title="Show filters"
                   >
                     <ChevronUp className="w-4 h-4 text-gray-600 dark:text-gray-400 rotate-90" />
