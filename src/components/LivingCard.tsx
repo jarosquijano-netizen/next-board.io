@@ -64,54 +64,55 @@ const interactionIconMap = {
   Users: UsersIcon,
 };
 
+// Clean minimal badge styles matching reference design
 const cardTypeStyles: Record<CardType, { bg: string; border: string; text: string; badge: string }> = {
   Blocker: { 
-    bg: 'bg-gradient-to-br from-red-500/12 to-red-600/8 dark:from-red-500/12 dark:to-red-600/8', 
-    border: 'border-red-500/40',
+    bg: '', 
+    border: '',
     text: 'text-red-700 dark:text-red-400',
-    badge: 'bg-red-500/20 text-red-700 dark:text-red-300 border-red-500/40'
+    badge: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
   },
   Risk: { 
-    bg: 'bg-gradient-to-br from-orange-500/12 to-orange-600/8 dark:from-orange-500/12 dark:to-orange-600/8', 
-    border: 'border-orange-500/40',
+    bg: '', 
+    border: '',
     text: 'text-orange-700 dark:text-orange-400',
-    badge: 'bg-orange-500/20 text-orange-700 dark:text-orange-300 border-orange-500/40'
+    badge: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300'
   },
   Action: { 
-    bg: 'bg-gradient-to-br from-blue-500/12 to-blue-600/8 dark:from-blue-500/12 dark:to-blue-600/8', 
-    border: 'border-blue-500/40',
+    bg: '', 
+    border: '',
     text: 'text-blue-700 dark:text-blue-400',
-    badge: 'bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-500/40'
+    badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
   },
   Decision: { 
-    bg: 'bg-gradient-to-br from-slate-500/12 to-slate-600/8 dark:from-slate-500/12 dark:to-slate-600/8', 
-    border: 'border-slate-400/40',
-    text: 'text-slate-700 dark:text-slate-300',
-    badge: 'bg-slate-500/20 text-slate-700 dark:text-slate-300 border-slate-400/40'
+    bg: '', 
+    border: '',
+    text: 'text-gray-700 dark:text-gray-300',
+    badge: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300'
   },
   'Follow-up': { 
-    bg: 'bg-gradient-to-br from-slate-500/12 to-slate-600/8 dark:from-slate-500/12 dark:to-slate-600/8', 
-    border: 'border-slate-400/40',
-    text: 'text-slate-700 dark:text-slate-300',
-    badge: 'bg-slate-500/20 text-slate-700 dark:text-slate-300 border-slate-400/40'
+    bg: '', 
+    border: '',
+    text: 'text-gray-700 dark:text-gray-300',
+    badge: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
   },
   Question: { 
-    bg: 'bg-gradient-to-br from-slate-500/12 to-slate-600/8 dark:from-slate-500/12 dark:to-slate-600/8', 
-    border: 'border-slate-400/40',
-    text: 'text-slate-700 dark:text-slate-300',
-    badge: 'bg-slate-500/20 text-slate-700 dark:text-slate-300 border-slate-400/40'
+    bg: '', 
+    border: '',
+    text: 'text-gray-700 dark:text-gray-300',
+    badge: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
   },
   Update: { 
-    bg: 'bg-gradient-to-br from-slate-500/12 to-slate-600/8 dark:from-slate-500/12 dark:to-slate-600/8', 
-    border: 'border-slate-400/40',
-    text: 'text-slate-700 dark:text-slate-300',
-    badge: 'bg-slate-500/20 text-slate-700 dark:text-slate-300 border-slate-400/40'
+    bg: '', 
+    border: '',
+    text: 'text-gray-700 dark:text-gray-300',
+    badge: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
   },
   Idea: { 
-    bg: 'bg-gradient-to-br from-slate-500/12 to-slate-600/8 dark:from-slate-500/12 dark:to-slate-600/8', 
-    border: 'border-slate-400/40',
-    text: 'text-slate-700 dark:text-slate-300',
-    badge: 'bg-slate-500/20 text-slate-700 dark:text-slate-300 border-slate-400/40'
+    bg: '', 
+    border: '',
+    text: 'text-gray-700 dark:text-gray-300',
+    badge: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
   },
 };
 
