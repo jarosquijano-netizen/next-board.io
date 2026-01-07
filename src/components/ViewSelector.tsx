@@ -19,7 +19,7 @@ const iconMap = {
 
 export function ViewSelector({ currentView, onChange, hasComparison = false }: ViewSelectorProps) {
   return (
-    <div className="glass flex gap-2 mb-6 p-1 rounded-xl w-fit shadow-sm">
+    <div className="flex gap-2 mb-6 p-1 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg w-fit shadow-sm">
       {Object.values(VIEWS)
         .filter(view => view.id !== 'comparison' || hasComparison) // Hide comparison if not available
         .map(view => {

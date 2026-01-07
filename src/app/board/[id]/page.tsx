@@ -603,7 +603,7 @@ export default function BoardPage({ params }: PageProps) {
               <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                 <button
                   onClick={handleExportMarkdown}
-                  className="btn-premium flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2.5 text-white rounded-xl text-sm sm:text-base font-bold transition-all duration-300 touch-manipulation active:scale-95"
+                  className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 touch-manipulation active:scale-95 shadow-sm"
                 >
                   <Download className="w-4 h-4" strokeWidth={1.5} />
                   <span className="hidden sm:inline">Export as Markdown</span>

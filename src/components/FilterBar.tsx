@@ -54,8 +54,8 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
           className={cn(
             "w-full px-3 py-2 rounded-lg border transition-all text-sm font-medium",
             selectedTypes.length === cardTypes.length
-              ? "btn-sparkle text-white font-semibold"
-              : "bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 font-medium transition-all duration-300"
+              ? "bg-blue-600 text-white font-semibold"
+              : "bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white font-medium transition-all duration-300"
           )}
         >
           All Types

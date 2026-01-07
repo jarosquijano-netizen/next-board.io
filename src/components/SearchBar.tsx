@@ -29,7 +29,7 @@ export default function SearchBar({ onSearch, placeholder = "Search cards..." }:
         value={query}
         onChange={(e) => handleChange(e.target.value)}
         placeholder={placeholder}
-        className="input-premium w-full pl-12 pr-12 py-3 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 transition-all duration-300 font-medium"
+        className="w-full pl-12 pr-12 py-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 font-medium"
       />
       {query && (
         <button

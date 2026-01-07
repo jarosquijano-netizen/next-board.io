@@ -97,7 +97,7 @@ export function TimelineDashboard({ cards, allCards }: TimelineDashboardProps) {
           </div>
 
           {/* Auto-Escalated */}
-          <div className="stat-card group bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700 rounded-xl p-3 min-w-0">
+          <div className="stat-card group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-3 min-w-0 shadow-sm">
             <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{autoEscalated.length}</p>
               <TrendingUp className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" strokeWidth={1.5} />
