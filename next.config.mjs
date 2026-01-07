@@ -7,8 +7,12 @@ const nextConfig = {
   },
   // Force fresh builds - PERMANENT FIX
   generateBuildId: async () => {
-    return `build-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(7);
+    return `build-${timestamp}-${random}-v2.1`;
   },
+  // Disable static optimization to force fresh CSS
+  output: 'standalone',
   // Disable cache during build to avoid issues
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
