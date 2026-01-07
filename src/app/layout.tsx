@@ -23,7 +23,7 @@ export default function RootLayout({
           <link rel="icon" href="/favicon.ico" />
           <ThemeScript />
         </head>
-        <body className="bg-slate-50 dark:bg-slate-950 transition-colors duration-300" style={{ borderTop: '4px solid #4f46e5', backgroundColor: '#f8fafc' }}>
+        <body className="bg-slate-50 dark:bg-slate-950 transition-colors duration-300" style={{ borderTop: '8px solid #4f46e5', backgroundColor: '#f8fafc', minHeight: '100vh' }}>
           <ThemeProvider>
             <SidebarProvider>
               {children}
