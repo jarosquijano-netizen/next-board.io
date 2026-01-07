@@ -18,6 +18,7 @@ export default function UploadPanel({ onProcessComplete }: UploadPanelProps) {
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -195,7 +196,13 @@ export default function UploadPanel({ onProcessComplete }: UploadPanelProps) {
           </button>
           <button
             type="button"
-            onClick={() => setMode('text')}
+            onClick={() => {
+              setMode('text');
+              // Focus textarea after switching to text mode
+              setTimeout(() => {
+                textareaRef.current?.focus();
+              }, 100);
+            }}
             className={`flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all font-medium ${
               mode === 'text'
                 ? 'bg-white dark:bg-slate-700 text-gray-900 dark:text-white shadow-sm'
@@ -257,6 +264,7 @@ export default function UploadPanel({ onProcessComplete }: UploadPanelProps) {
               Paste Meeting Transcript
             </label>
             <textarea
+              ref={textareaRef}
               id="transcript"
               value={transcript}
               onChange={(e) => setTranscript(e.target.value)}
@@ -274,6 +282,7 @@ Discussion Points:
               rows={16}
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-900/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono text-sm"
               disabled={isLoading}
+              autoFocus={mode === 'text'}
             />
             {transcript && (
               <div className="absolute top-2 right-2">
