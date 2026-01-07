@@ -30,9 +30,11 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { 
-  Loader2, ArrowLeft, Download, Plus, Calendar, FileText, LayoutGrid, ChevronUp, ChevronDown, PanelTop, PanelRight
+  Loader2, ArrowLeft, Download, Plus, Calendar, FileText, LayoutGrid, ChevronUp, ChevronDown, PanelTop, PanelRight, CheckSquare, Square, GripVertical, Clock, X
 } from 'lucide-react';
 import { formatDateTime } from '@/lib/utils';
+import { CardHoverPreview } from '@/components/CardHoverPreview';
+import { BulkActionsBar } from '@/components/BulkActionsBar';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -109,9 +111,9 @@ function DroppableColumn({
   return (
     <div 
       ref={setNodeRef}
-      className={`flex-1 space-y-3 min-h-[300px] transition-all rounded-xl p-3 relative z-[2] ${
+      className={`flex-1 space-y-3 min-h-[300px] transition-all duration-300 ease-in-out rounded-xl p-3 relative z-[2] ${
         isOver 
-          ? 'bg-blue-100 dark:bg-blue-900/30 ring-4 ring-blue-500 ring-inset shadow-xl' 
+          ? 'bg-blue-100 dark:bg-blue-900/30 ring-4 ring-blue-500 ring-inset shadow-xl scale-[1.02]' 
           : 'bg-transparent'
       }`}
     >
@@ -136,6 +138,13 @@ export default function BoardPage({ params }: PageProps) {
   const [layoutMode, setLayoutMode] = useState<'top' | 'side'>('top'); // Layout toggle
   const [comparisonData, setComparisonData] = useState<any | null>(null);
   const [hasComparison, setHasComparison] = useState(false);
+  
+  // New UX features state
+  const [selectedCards, setSelectedCards] = useState<Set<string>>(new Set());
+  const [collapsedColumns, setCollapsedColumns] = useState<Set<string>>(new Set());
+  const [swimlaneMode, setSwimlaneMode] = useState<'none' | 'priority' | 'owner' | 'type'>('none');
+  const [hoveredCard, setHoveredCard] = useState<{ card: MeetingCard; position: { x: number; y: number } } | null>(null);
+  const [quickAddColumn, setQuickAddColumn] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -277,6 +286,92 @@ export default function BoardPage({ params }: PageProps) {
     } catch (error) {
       console.error('Failed to delete card:', error);
     }
+  };
+
+  // Bulk selection handlers
+  const handleCardSelect = (cardId: string) => {
+    setSelectedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(cardId)) {
+        newSet.delete(cardId);
+      } else {
+        newSet.add(cardId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSelectAll = (cardIds: string[]) => {
+    setSelectedCards(new Set(cardIds));
+  };
+
+  const handleClearSelection = () => {
+    setSelectedCards(new Set());
+  };
+
+  const handleBulkStatusChange = async (status: CardStatus) => {
+    if (!currentMeeting) return;
+    const promises = Array.from(selectedCards).map(cardId =>
+      updateCardStatus(currentMeeting.id, cardId, status)
+    );
+    await Promise.all(promises);
+    handleClearSelection();
+    await fetchMeeting(currentMeeting.id);
+  };
+
+  const handleBulkDelete = async () => {
+    if (!currentMeeting) return;
+    if (!confirm(`Are you sure you want to delete ${selectedCards.size} card(s)?`)) return;
+    const promises = Array.from(selectedCards).map(cardId =>
+      handleDeleteCard(cardId)
+    );
+    await Promise.all(promises);
+    handleClearSelection();
+  };
+
+  // Column collapse handlers
+  const toggleColumnCollapse = (columnId: string) => {
+    setCollapsedColumns(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(columnId)) {
+        newSet.delete(columnId);
+      } else {
+        newSet.add(columnId);
+      }
+      return newSet;
+    });
+  };
+
+  // Calculate column time estimate
+  const getColumnTimeEstimate = (cards: MeetingCard[]) => {
+    const totalMinutes = cards.reduce((sum, card) => sum + (card.timeEstimate || 0), 0);
+    if (totalMinutes === 0) return null;
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    if (hours > 0) {
+      return `${hours}h ${minutes > 0 ? `${minutes}m` : ''}`;
+    }
+    return `${minutes}m`;
+  };
+
+  // Group cards by swimlane
+  const groupCardsBySwimlane = (cards: MeetingCard[]) => {
+    if (swimlaneMode === 'none') return { '': cards };
+    
+    const groups: Record<string, MeetingCard[]> = {};
+    cards.forEach(card => {
+      let key = '';
+      if (swimlaneMode === 'priority') {
+        key = card.priority || 'medium';
+      } else if (swimlaneMode === 'owner') {
+        key = card.owner || 'Unassigned';
+      } else if (swimlaneMode === 'type') {
+        key = card.type;
+      }
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(card);
+    });
+    return groups;
   };
 
   const handleAddNote = async (cardId: string, content: string) => {
@@ -526,6 +621,34 @@ export default function BoardPage({ params }: PageProps) {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-2">
               <ViewSelector currentView={viewMode} onChange={setViewMode} hasComparison={hasComparison} />
               
+              {/* Swimlane Mode Selector */}
+              {viewMode === 'kanban' && (
+                <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-slate-800 rounded-lg">
+                  <span className="text-xs text-gray-600 dark:text-gray-400">Group by:</span>
+                  <select
+                    value={swimlaneMode}
+                    onChange={(e) => setSwimlaneMode(e.target.value as any)}
+                    className="text-xs bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded px-2 py-1 text-gray-900 dark:text-white"
+                  >
+                    <option value="none">None</option>
+                    <option value="priority">Priority</option>
+                    <option value="owner">Owner</option>
+                    <option value="type">Type</option>
+                  </select>
+                </div>
+              )}
+              
+              {/* Bulk Selection Toggle */}
+              {viewMode === 'kanban' && selectedCards.size > 0 && (
+                <button
+                  onClick={handleClearSelection}
+                  className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                >
+                  <X className="w-4 h-4" />
+                  Clear ({selectedCards.size})
+                </button>
+              )}
+              
               {/* Layout Toggle - Only show for Kanban view */}
               {viewMode === 'kanban' && (
                 <div className="flex items-center gap-2">
@@ -660,20 +783,50 @@ export default function BoardPage({ params }: PageProps) {
                       
                       return (
                         <div key={column.id} className="flex flex-col relative">
-                          {/* Column Header - Sticky */}
-                          <div className={`sticky top-40 z-[1] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm`}>
-                            <div className="flex items-center justify-between mb-0.5">
-                              <div className="flex items-center gap-1.5">
-                                <column.icon className="w-5 h-5 text-white" />
-                                <h3 className="text-base font-semibold text-white">
+                          {/* Column Header - Enhanced */}
+                          <div className={`sticky top-40 z-[1] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`}>
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2 flex-1 min-w-0">
+                                <button
+                                  onClick={() => toggleColumnCollapse(column.id)}
+                                  className="p-1 hover:bg-white/20 rounded transition-colors flex-shrink-0"
+                                  title={collapsedColumns.has(column.id) ? 'Expand column' : 'Collapse column'}
+                                >
+                                  {collapsedColumns.has(column.id) ? (
+                                    <ChevronDown className="w-4 h-4 text-white" />
+                                  ) : (
+                                    <ChevronUp className="w-4 h-4 text-white" />
+                                  )}
+                                </button>
+                                <column.icon className="w-5 h-5 text-white flex-shrink-0" />
+                                <h3 className="text-base font-semibold text-white truncate">
                                   {column.label}
                                 </h3>
                               </div>
-                              <span className="px-2.5 py-0.5 bg-white/20 backdrop-blur-sm rounded text-xs font-medium text-white">
-                                {columnCards.length}
-                              </span>
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                {getColumnTimeEstimate(columnCards) && (
+                                  <div className="flex items-center gap-1 px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-xs font-medium text-white">
+                                    <Clock className="w-3 h-3" />
+                                    {getColumnTimeEstimate(columnCards)}
+                                  </div>
+                                )}
+                                <span className="px-2.5 py-0.5 bg-white/20 backdrop-blur-sm rounded text-xs font-medium text-white">
+                                  {columnCards.length}
+                                </span>
+                              </div>
                             </div>
-                            <p className="text-xs text-white/70 ml-7">{column.description}</p>
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs text-white/70 ml-7">{column.description}</p>
+                              {!collapsedColumns.has(column.id) && (
+                                <button
+                                  onClick={() => setQuickAddColumn(column.id)}
+                                  className="p-1.5 hover:bg-white/20 rounded transition-colors group"
+                                  title="Quick add card"
+                                >
+                                  <Plus className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+                                </button>
+                              )}
+                            </div>
                           </div>
 
                           {/* Cards */}
@@ -691,13 +844,21 @@ export default function BoardPage({ params }: PageProps) {
                                 />
                               ))}
 
-                              {columnCards.length === 0 && (
-                                <div className="flex flex-col items-center justify-center py-8 text-center bg-gray-50 dark:bg-slate-900/30 border-2 border-dashed border-gray-300 dark:border-slate-800 rounded-lg">
-                                  <p className="text-xs text-gray-500 dark:text-slate-500">No cards</p>
-                                </div>
-                              )}
-                            </DroppableColumn>
-                          </SortableContext>
+                                {columnCards.length === 0 && (
+                                  <div className="flex flex-col items-center justify-center py-8 text-center bg-gray-50 dark:bg-slate-900/30 border-2 border-dashed border-gray-300 dark:border-slate-800 rounded-lg">
+                                    <p className="text-xs text-gray-500 dark:text-slate-500 mb-2">No cards</p>
+                                    <button
+                                      onClick={() => setQuickAddColumn(column.id)}
+                                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors flex items-center gap-1"
+                                    >
+                                      <Plus className="w-3 h-3" />
+                                      Add Card
+                                    </button>
+                                  </div>
+                                )}
+                              </DroppableColumn>
+                            </SortableContext>
+                          )}
                         </div>
                       );
                     })}
@@ -745,46 +906,131 @@ export default function BoardPage({ params }: PageProps) {
                       
                       return (
                         <div key={column.id} className="flex flex-col relative">
-                          {/* Column Header - Sticky with lower z-index */}
-                          <div className={`sticky top-40 z-[1] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm`}>
-                            <div className="flex items-center justify-between mb-0.5">
-                              <div className="flex items-center gap-1.5">
-                                <column.icon className="w-5 h-5 text-white" />
-                                <h3 className="text-base font-semibold text-white">
+                          {/* Column Header - Enhanced */}
+                          <div className={`sticky top-40 z-[1] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`}>
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2 flex-1 min-w-0">
+                                <button
+                                  onClick={() => toggleColumnCollapse(column.id)}
+                                  className="p-1 hover:bg-white/20 rounded transition-colors flex-shrink-0"
+                                  title={collapsedColumns.has(column.id) ? 'Expand column' : 'Collapse column'}
+                                >
+                                  {collapsedColumns.has(column.id) ? (
+                                    <ChevronDown className="w-4 h-4 text-white" />
+                                  ) : (
+                                    <ChevronUp className="w-4 h-4 text-white" />
+                                  )}
+                                </button>
+                                <column.icon className="w-5 h-5 text-white flex-shrink-0" />
+                                <h3 className="text-base font-semibold text-white truncate">
                                   {column.label}
                                 </h3>
                               </div>
-                              <span className="px-2.5 py-0.5 bg-white/20 backdrop-blur-sm rounded text-xs font-medium text-white">
-                                {columnCards.length}
-                              </span>
-                            </div>
-                            <p className="text-xs text-white/70 ml-7">{column.description}</p>
-                          </div>
-
-                          {/* Cards Container - Ensure proper spacing and z-index */}
-                          <div className="relative z-[2]">
-                            <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
-                              <DroppableColumn id={column.id}>
-                                {columnCards.map((card) => (
-                                  <LivingCard
-                                    key={card.id}
-                                    card={card}
-                                    onUpdate={handleUpdateCard}
-                                    onDelete={handleDeleteCard}
-                                    onAddNote={(content) => handleAddNote(card.id, content)}
-                                    onGenerateSummary={() => handleGenerateSummary(card.id)}
-                                    onClick={() => handleCardClick(card)}
-                                  />
-                                ))}
-
-                                {columnCards.length === 0 && (
-                                  <div className="flex flex-col items-center justify-center py-8 text-center bg-gray-50 dark:bg-slate-900/30 border-2 border-dashed border-gray-300 dark:border-slate-800 rounded-lg">
-                                    <p className="text-xs text-gray-500 dark:text-slate-500">No cards</p>
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                {getColumnTimeEstimate(columnCards) && (
+                                  <div className="flex items-center gap-1 px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-xs font-medium text-white">
+                                    <Clock className="w-3 h-3" />
+                                    {getColumnTimeEstimate(columnCards)}
                                   </div>
                                 )}
-                              </DroppableColumn>
-                            </SortableContext>
+                                <span className="px-2.5 py-0.5 bg-white/20 backdrop-blur-sm rounded text-xs font-medium text-white">
+                                  {columnCards.length}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs text-white/70 ml-7">{column.description}</p>
+                              {!collapsedColumns.has(column.id) && (
+                                <button
+                                  onClick={() => setQuickAddColumn(column.id)}
+                                  className="p-1.5 hover:bg-white/20 rounded transition-colors group"
+                                  title="Quick add card"
+                                >
+                                  <Plus className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+                                </button>
+                              )}
+                            </div>
                           </div>
+
+                          {/* Cards Container - Enhanced with animations */}
+                          {!collapsedColumns.has(column.id) && (
+                            <div className="relative z-[2]">
+                              <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
+                                <DroppableColumn id={column.id}>
+                                  {(() => {
+                                    const grouped = groupCardsBySwimlane(columnCards);
+                                    return Object.entries(grouped).map(([swimlaneKey, cards]) => (
+                                      <div key={swimlaneKey} className="mb-4 last:mb-0">
+                                        {swimlaneMode !== 'none' && swimlaneKey && (
+                                          <div className="mb-2 px-2 py-1 bg-gray-100 dark:bg-slate-800 rounded text-xs font-semibold text-gray-700 dark:text-gray-300">
+                                            {swimlaneKey}
+                                          </div>
+                                        )}
+                                        <div className="space-y-2">
+                                          {cards.map((card) => (
+                                            <div
+                                              key={card.id}
+                                              className="relative group transition-all duration-200 hover:scale-[1.02]"
+                                              onMouseEnter={(e) => {
+                                                const rect = e.currentTarget.getBoundingClientRect();
+                                                setHoveredCard({
+                                                  card,
+                                                  position: { x: rect.left, y: rect.top }
+                                                });
+                                              }}
+                                              onMouseLeave={() => setHoveredCard(null)}
+                                            >
+                                              {/* Bulk Selection Checkbox */}
+                                              {(selectedCards.size > 0 || selectedCards.has(card.id)) && (
+                                                <div className="absolute left-2 top-2 z-10">
+                                                  <button
+                                                    onClick={(e) => {
+                                                      e.stopPropagation();
+                                                      handleCardSelect(card.id);
+                                                    }}
+                                                    className="p-1 bg-white dark:bg-slate-800 rounded border-2 border-blue-500 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors"
+                                                  >
+                                                    {selectedCards.has(card.id) ? (
+                                                      <CheckSquare className="w-4 h-4 text-blue-600" />
+                                                    ) : (
+                                                      <Square className="w-4 h-4 text-gray-400" />
+                                                    )}
+                                                  </button>
+                                                </div>
+                                              )}
+                                              <div className={selectedCards.has(card.id) ? 'opacity-50' : ''}>
+                                                <LivingCard
+                                                  card={card}
+                                                  onUpdate={handleUpdateCard}
+                                                  onDelete={handleDeleteCard}
+                                                  onAddNote={(content) => handleAddNote(card.id, content)}
+                                                  onGenerateSummary={() => handleGenerateSummary(card.id)}
+                                                  onClick={() => handleCardClick(card)}
+                                                />
+                                              </div>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    ));
+                                  })()}
+
+                                  {columnCards.length === 0 && (
+                                    <div className="flex flex-col items-center justify-center py-8 text-center bg-gray-50 dark:bg-slate-900/30 border-2 border-dashed border-gray-300 dark:border-slate-800 rounded-lg">
+                                      <p className="text-xs text-gray-500 dark:text-slate-500 mb-2">No cards</p>
+                                      <button
+                                        onClick={() => setQuickAddColumn(column.id)}
+                                        className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors flex items-center gap-1"
+                                      >
+                                        <Plus className="w-3 h-3" />
+                                        Add Card
+                                      </button>
+                                    </div>
+                                  )}
+                                </DroppableColumn>
+                              </SortableContext>
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -815,6 +1061,19 @@ export default function BoardPage({ params }: PageProps) {
           onDelete={handleModalDelete}
         />
       )}
+
+      {/* Hover Preview */}
+      {hoveredCard && (
+        <CardHoverPreview card={hoveredCard.card} position={hoveredCard.position} />
+      )}
+
+      {/* Bulk Actions Bar */}
+      <BulkActionsBar
+        selectedCount={selectedCards.size}
+        onClearSelection={handleClearSelection}
+        onBulkStatusChange={handleBulkStatusChange}
+        onBulkDelete={handleBulkDelete}
+      />
     </div>
   );
 }
