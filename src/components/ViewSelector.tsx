@@ -19,7 +19,7 @@ const iconMap = {
 
 export function ViewSelector({ currentView, onChange, hasComparison = false }: ViewSelectorProps) {
   return (
-    <div className="flex gap-2 mb-6 p-1 bg-gray-100 dark:bg-slate-800 rounded-xl w-fit">
+    <div className="flex gap-2 mb-6 p-1 bg-slate-50/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl w-fit border border-slate-200/80 dark:border-slate-700/80 shadow-sm">
       {Object.values(VIEWS)
         .filter(view => view.id !== 'comparison' || hasComparison) // Hide comparison if not available
         .map(view => {
@@ -31,13 +31,13 @@ export function ViewSelector({ currentView, onChange, hasComparison = false }: V
             key={view.id}
             onClick={() => onChange(view.id)}
             className={`
-              px-4 py-3 rounded-lg flex items-center gap-3 transition-all
+              px-4 py-3 rounded-lg flex items-center gap-3 transition-all duration-300
               ${isActive 
-                ? 'bg-blue-600 text-white shadow-lg scale-105' 
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white'}
+                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30 scale-105 font-semibold' 
+                : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-white hover:shadow-sm font-medium'}
             `}
           >
-            <Icon className="w-5 h-5" />
+            <Icon className="w-5 h-5" strokeWidth={1.5} />
             <div className="text-left">
               <div className="font-semibold text-sm">{view.label}</div>
               <div className={`text-xs ${isActive ? 'text-blue-200' : 'text-gray-500'}`}>

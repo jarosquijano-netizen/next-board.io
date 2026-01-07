@@ -53,24 +53,24 @@ export function Modal({ isOpen, onClose, title, children, size = 'lg' }: ModalPr
     <div className="fixed inset-0 z-[100] overflow-y-auto">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-md transition-opacity duration-300"
         onClick={onClose}
       />
       
       {/* Modal Content */}
       <div className="flex min-h-screen items-center justify-center p-0 sm:p-4">
         <div 
-          className={`relative w-full h-full sm:h-auto ${sizeClasses[size]} bg-slate-800 rounded-none sm:rounded-xl shadow-2xl border-0 sm:border border-slate-700 transform transition-all flex flex-col`}
+          className={`relative w-full h-full sm:h-auto ${sizeClasses[size]} bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg rounded-none sm:rounded-2xl shadow-2xl border-0 sm:border border-slate-200/80 dark:border-slate-700/80 transform transition-all duration-300 flex flex-col`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-700 flex-shrink-0">
-            <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-white break-words pr-2">{title}</h2>
+          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-100 dark:border-slate-700 flex-shrink-0">
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-900 dark:text-white break-words pr-2">{title}</h2>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-slate-700 rounded-lg transition-colors text-slate-400 hover:text-white touch-manipulation active:scale-95 flex-shrink-0"
+              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors duration-300 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white touch-manipulation active:scale-95 flex-shrink-0"
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5" strokeWidth={1.5} />
             </button>
           </div>
 

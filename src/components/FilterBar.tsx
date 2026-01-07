@@ -44,7 +44,7 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
     return (
       <div className="space-y-3">
         <div className="flex items-center gap-2 text-gray-700 dark:text-slate-300">
-          <Filter className="w-4 h-4" />
+          <Filter className="w-4 h-4" strokeWidth={1.5} />
           <span className="text-sm font-medium">Filter:</span>
         </div>
 
@@ -54,8 +54,8 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
           className={cn(
             "w-full px-3 py-2 rounded-lg border transition-all text-sm font-medium",
             selectedTypes.length === cardTypes.length
-              ? "bg-blue-500 dark:bg-slate-700 border-blue-500 dark:border-slate-600 text-white"
-              : "bg-white dark:bg-slate-800/50 border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white"
+              ? "bg-indigo-600 dark:bg-indigo-600 border-indigo-600 dark:border-indigo-600 text-white shadow-sm font-semibold"
+              : "bg-white dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 font-medium transition-all duration-300"
           )}
         >
           All Types
@@ -74,12 +74,12 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
                   "px-3 py-2 rounded-lg border transition-all text-xs font-medium flex flex-col items-center justify-center gap-1 h-16",
                   isSelected
                     ? `${bgColor} ${color} border-current`
-                    : "bg-white dark:bg-slate-800/50 border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white"
+                    : "bg-white dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 transition-all duration-300"
                 )}
               >
                 <span className="text-lg">{emoji}</span>
                 <span className="text-center leading-tight">{label}</span>
-                {isSelected && <CheckCircle2 className="w-3 h-3 absolute top-1 right-1" />}
+                {isSelected && <CheckCircle2 className="w-3 h-3 absolute top-1 right-1" strokeWidth={1.5} />}
               </button>
             );
           })}
@@ -100,9 +100,9 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
         onClick={toggleAll}
         className={cn(
           "px-4 py-2 rounded-lg border transition-all text-sm font-medium",
-          selectedTypes.length === cardTypes.length
-            ? "bg-blue-500 dark:bg-slate-700 border-blue-500 dark:border-slate-600 text-white"
-            : "bg-white dark:bg-slate-800/50 border-gray-300 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white"
+            selectedTypes.length === cardTypes.length
+            ? "bg-indigo-600 dark:bg-indigo-600 border-indigo-600 dark:border-indigo-600 text-white shadow-sm font-semibold"
+            : "bg-white dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 font-medium transition-all duration-300"
         )}
       >
         All Types
@@ -124,7 +124,7 @@ export default function FilterBar({ selectedTypes, onFilterChange, variant = 'ho
           >
             <span className="text-base">{emoji}</span>
             {label}
-            {isSelected && <CheckCircle2 className="w-4 h-4" />}
+            {isSelected && <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />}
           </button>
         );
       })}

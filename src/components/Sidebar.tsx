@@ -66,7 +66,7 @@ export default function Sidebar() {
       )}
 
       {/* Sidebar */}
-      <div className={`fixed left-0 top-0 h-screen ${isCollapsed ? 'w-16' : 'w-64'} bg-gradient-to-b from-white to-gray-50 dark:from-slate-900 dark:to-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col z-50 transform transition-all duration-300 ease-in-out ${
+      <div className={`fixed left-0 top-0 h-screen ${isCollapsed ? 'w-16' : 'w-64'} bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-r border-slate-200/80 dark:border-slate-700/80 flex flex-col z-50 transform transition-all duration-300 ease-in-out shadow-lg ${
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       }`}>
       {/* Logo & Collapse Button */}
@@ -99,15 +99,15 @@ export default function Sidebar() {
                 setIsMobileMenuOpen(false);
               }}
               className={cn(
-                "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 touch-manipulation active:scale-95",
+                "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 touch-manipulation active:scale-95",
                 isActive
-                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/30"
-                  : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white",
+                  ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 font-semibold"
+                  : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white font-medium",
                 isCollapsed && "justify-center"
               )}
               title={isCollapsed ? item.name : undefined}
             >
-              <Icon className="w-5 h-5 flex-shrink-0" />
+              <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={1.5} />
               {!isCollapsed && <span className="font-medium">{item.name}</span>}
             </button>
           );
@@ -120,12 +120,12 @@ export default function Sidebar() {
             setIsMobileMenuOpen(false);
           }}
           className={cn(
-            "w-full flex items-center gap-3 px-4 py-3 mt-4 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg shadow-blue-500/30 touch-manipulation active:scale-95",
+            "w-full flex items-center gap-3 px-4 py-3 mt-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 touch-manipulation active:scale-95 font-semibold",
             isCollapsed && "justify-center"
           )}
           title={isCollapsed ? 'New Board' : undefined}
         >
-          <PlusCircle className="w-5 h-5 flex-shrink-0" />
+          <PlusCircle className="w-5 h-5 flex-shrink-0" strokeWidth={1.5} />
           {!isCollapsed && <span className="font-medium">New Board</span>}
         </button>
       </nav>
@@ -159,12 +159,12 @@ export default function Sidebar() {
             </>
           ) : theme === 'dark' ? (
             <>
-              <Sun className="w-4 h-4" />
-              {!isCollapsed && <span className="text-xs font-medium">Light</span>}
+              <Sun className="w-4 h-4" strokeWidth={1.5} />
+              {!isCollapsed && <span className="text-xs font-semibold">Light</span>}
             </>
           ) : (
             <>
-              <Moon className="w-4 h-4" />
+              <Moon className="w-4 h-4" strokeWidth={1.5} />
               {!isCollapsed && <span className="text-xs font-medium">Dark</span>}
             </>
           )}
@@ -193,7 +193,7 @@ export default function Sidebar() {
                 className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
                 title="Notification Settings"
               >
-                <Settings className="w-4 h-4 text-gray-500 dark:text-slate-400" />
+                <Settings className="w-4 h-4 text-gray-500 dark:text-slate-400" strokeWidth={1.5} />
               </button>
             </>
           )}

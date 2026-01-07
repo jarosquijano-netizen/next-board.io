@@ -573,27 +573,27 @@ export default function BoardPage({ params }: PageProps) {
         style={{ marginLeft: sidebarWidth === '16' ? '16rem' : '4rem' }}
       >
         {/* Header */}
-        <div className="border-b border-gray-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm sticky top-0 z-40">
+        <div className="border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 shadow-sm">
           <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
               <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
                 <button
                   onClick={() => router.push('/boards')}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors touch-manipulation active:scale-95 flex-shrink-0"
+                  className="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-300 touch-manipulation active:scale-95 flex-shrink-0 shadow-sm hover:shadow-md"
                 >
-                  <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-slate-400" />
+                  <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" strokeWidth={1.5} />
                 </button>
                 <div className="min-w-0 flex-1">
-                  <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-1 truncate">
+                  <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-1 truncate tracking-tight">
                     {currentMeeting.title}
                   </h1>
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600 dark:text-slate-400">
                     <div className="flex items-center gap-2">
-                      <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                      <span className="truncate">{formatDateTime(new Date(currentMeeting.createdAt))}</span>
+                      <Calendar className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />
+                      <span className="truncate font-medium">{formatDateTime(new Date(currentMeeting.createdAt))}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <FileText className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />
                       <span>{currentMeeting.cards.length} total items</span>
                     </div>
                   </div>
@@ -603,9 +603,9 @@ export default function BoardPage({ params }: PageProps) {
               <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                 <button
                   onClick={handleExportMarkdown}
-                  className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-gray-200 dark:bg-slate-800 hover:bg-gray-300 dark:hover:bg-slate-700 border border-gray-300 dark:border-slate-700 text-gray-900 dark:text-white rounded-xl text-sm sm:text-base font-medium transition-colors touch-manipulation active:scale-95"
+                  className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl text-sm sm:text-base font-bold transition-all duration-300 touch-manipulation active:scale-95 shadow-sm hover:shadow-md"
                 >
-                  <Download className="w-4 h-4" />
+                  <Download className="w-4 h-4" strokeWidth={1.5} />
                   <span className="hidden sm:inline">Export as Markdown</span>
                   <span className="sm:hidden">Export</span>
                 </button>
@@ -614,15 +614,15 @@ export default function BoardPage({ params }: PageProps) {
 
             {/* Summary */}
             {currentMeeting.summary && (
-              <div className="mt-4 p-4 bg-gray-100 dark:bg-slate-800/50 border border-gray-300 dark:border-slate-700 rounded-xl">
-                <p className="text-sm text-gray-700 dark:text-slate-300">{currentMeeting.summary}</p>
+              <div className="mt-4 p-4 bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl italic">
+                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{currentMeeting.summary}</p>
               </div>
             )}
           </div>
         </div>
 
         {/* View Selector & Toolbar */}
-        <div className="border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 backdrop-blur-sm sticky top-[88px] z-40 shadow-sm">
+        <div className="border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-[88px] z-40 shadow-sm">
           <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-3">
             {/* View Selector & Layout Toggle */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-2">

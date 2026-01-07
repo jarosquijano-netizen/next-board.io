@@ -180,18 +180,18 @@ export default function UploadPanel({ onProcessComplete }: UploadPanelProps) {
     <div className="w-full max-w-2xl mx-auto">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Mode Toggle */}
-        <div className="flex gap-3 p-1 bg-gray-100 dark:bg-slate-800 rounded-xl">
+        <div className="flex gap-3 p-1 bg-slate-50/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm">
           <button
             type="button"
             onClick={() => setMode('file')}
-            className={`flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all font-medium ${
+            className={`flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 font-semibold ${
               mode === 'file'
-                ? 'bg-white dark:bg-slate-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'
             }`}
             disabled={isLoading}
           >
-            <Upload className="w-5 h-5" />
+            <Upload className="w-5 h-5" strokeWidth={1.5} />
             Upload File
           </button>
           <button
@@ -203,14 +203,14 @@ export default function UploadPanel({ onProcessComplete }: UploadPanelProps) {
                 textareaRef.current?.focus();
               }, 100);
             }}
-            className={`flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all font-medium ${
+            className={`flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 font-semibold ${
               mode === 'text'
-                ? 'bg-white dark:bg-slate-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'
             }`}
             disabled={isLoading}
           >
-            <Type className="w-5 h-5" />
+            <Type className="w-5 h-5" strokeWidth={1.5} />
             Paste Text
           </button>
         </div>
@@ -218,10 +218,10 @@ export default function UploadPanel({ onProcessComplete }: UploadPanelProps) {
         {/* File Upload Zone (only show in file mode) */}
         {mode === 'file' && (
           <div
-            className={`relative border-2 border-dashed rounded-lg p-8 transition-colors ${
+            className={`relative border-2 border-dashed rounded-xl p-8 transition-all duration-300 ${
               dragActive
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 bg-white dark:bg-slate-900/50'
+                ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 shadow-lg'
+                : 'border-slate-300 dark:border-slate-600 hover:border-indigo-400 dark:hover:border-indigo-500 bg-white/80 dark:bg-slate-900/50 backdrop-blur-sm hover:shadow-md'
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -242,11 +242,11 @@ export default function UploadPanel({ onProcessComplete }: UploadPanelProps) {
               htmlFor="file-upload"
               className="flex flex-col items-center justify-center cursor-pointer"
             >
-              <Upload className="w-12 h-12 text-gray-400 dark:text-gray-600 mb-4" />
-              <p className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              <Upload className="w-12 h-12 text-slate-400 dark:text-slate-600 mb-4" strokeWidth={1.5} />
+              <p className="text-lg font-bold text-slate-900 dark:text-white mb-2">
                 {file ? file.name : 'Drop your file here, or click to browse'}
               </p>
-              <p className="text-sm text-gray-600 dark:text-gray-500">
+              <p className="text-sm text-slate-600 dark:text-slate-500 font-medium">
                 Supports: MP3, MP4, WAV, TXT, VTT, DOCX, <span className="font-semibold text-blue-600 dark:text-blue-400">PDF</span>
               </p>
             </label>
@@ -258,9 +258,9 @@ export default function UploadPanel({ onProcessComplete }: UploadPanelProps) {
           <div className="relative">
             <label 
               htmlFor="transcript" 
-              className="block text-sm font-medium text-gray-900 dark:text-white mb-2 flex items-center gap-2"
+              className="block text-sm font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2 uppercase tracking-wider"
             >
-              <Clipboard className="w-4 h-4" />
+              <Clipboard className="w-4 h-4" strokeWidth={1.5} />
               Paste Meeting Transcript
             </label>
             <textarea
@@ -280,13 +280,14 @@ Discussion Points:
 - Mike to follow up with engineering team
 - Budget approval needed from finance..."
               rows={16}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-900/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono text-sm"
+              className="w-full px-4 py-3 border border-slate-200 dark:border-slate-600 rounded-xl bg-white/80 dark:bg-slate-900/50 backdrop-blur-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 resize-none font-mono text-sm transition-all duration-300"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
               disabled={isLoading}
               autoFocus={mode === 'text'}
             />
             {transcript && (
               <div className="absolute top-2 right-2">
-                <div className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 border border-blue-300 dark:border-blue-700 rounded text-xs text-blue-700 dark:text-blue-300">
+                <div className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/30 border border-indigo-300 dark:border-indigo-700 rounded-lg text-xs text-indigo-700 dark:text-indigo-300 font-semibold">
                   {transcript.length} characters
                 </div>
               </div>
@@ -297,7 +298,7 @@ Discussion Points:
         {/* Metadata Fields */}
         <div className="space-y-4">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+            <label htmlFor="title" className="block text-sm font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-wider">
               Meeting Title
             </label>
             <input
@@ -306,13 +307,13 @@ Discussion Points:
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Weekly Team Sync"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-900/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl bg-white/80 dark:bg-slate-900/50 backdrop-blur-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 font-medium"
               disabled={isLoading}
             />
           </div>
 
           <div>
-            <label htmlFor="participants" className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+            <label htmlFor="participants" className="block text-sm font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-wider">
               Participants (optional)
             </label>
             <input
@@ -321,7 +322,7 @@ Discussion Points:
               value={participants}
               onChange={(e) => setParticipants(e.target.value)}
               placeholder="Alex, Sarah, Mike"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-900/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-600 rounded-xl bg-white/80 dark:bg-slate-900/50 backdrop-blur-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 font-medium"
               disabled={isLoading}
             />
           </div>
@@ -329,8 +330,8 @@ Discussion Points:
 
         {/* Error Message */}
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+            <p className="text-sm font-semibold text-red-600 dark:text-red-400">{error}</p>
           </div>
         )}
 
@@ -338,7 +339,7 @@ Discussion Points:
         <button
           type="submit"
           disabled={(mode === 'file' && !file) || (mode === 'text' && !transcript.trim()) || isLoading}
-          className="w-full py-3 px-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all shadow-lg disabled:shadow-none flex items-center justify-center gap-2"
+          className="w-full py-3 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-300 shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 disabled:shadow-none flex items-center justify-center gap-2"
         >
           {isUploading && (
             <>
