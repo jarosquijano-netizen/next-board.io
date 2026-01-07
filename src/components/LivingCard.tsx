@@ -188,6 +188,22 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
         ${staleClass}
         touch-manipulation
       `}
+      style={{
+        border: '2px solid #6366f1',
+        boxShadow: '0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -2px rgba(99, 102, 241, 0.2)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = '#4f46e5';
+        e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(79, 70, 229, 0.4), 0 10px 10px -5px rgba(79, 70, 229, 0.2)';
+        e.currentTarget.style.transform = 'scale(1.05)';
+        e.currentTarget.style.backgroundColor = 'rgba(238, 242, 255, 0.8)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = '#6366f1';
+        e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -2px rgba(99, 102, 241, 0.2)';
+        e.currentTarget.style.transform = 'scale(1)';
+        e.currentTarget.style.backgroundColor = '';
+      }}
     >
       {/* Drag Handle */}
       <div 
