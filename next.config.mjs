@@ -10,7 +10,7 @@ const nextConfig = {
   generateBuildId: async () => {
     const timestamp = Date.now();
     const random = Math.random().toString(36).substring(7);
-    return `build-${timestamp}-${random}-v2.3-clean-ui`;
+    return `build-${timestamp}-${random}-v2.4-no-rm`;
   },
   // Disable cache during build to avoid issues
   onDemandEntries: {
