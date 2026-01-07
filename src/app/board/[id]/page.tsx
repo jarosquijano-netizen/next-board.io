@@ -1004,7 +1004,7 @@ export default function BoardPage({ params }: PageProps) {
 
                           {/* Cards Container - Enhanced with animations */}
                           {!collapsedColumns.has(column.id) && (
-                            <div className="relative z-0">
+                            <div className="relative z-[6] mt-0">
                               <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
                                 <DroppableColumn id={column.id}>
                                   {(() => {
