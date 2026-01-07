@@ -85,85 +85,85 @@ export function TimelineDashboard({ cards, allCards }: TimelineDashboardProps) {
 
       {/* Widgets - All 8 in 1 Row */}
       {!isCollapsed && (
-        <div className="grid grid-cols-8 gap-1.5">
+        <div className="grid grid-cols-8 gap-2">
           {/* Stale Items */}
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-500/50 rounded-lg p-2 min-w-0">
-            <div className="flex items-center justify-between mb-1">
+          <div className="group bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-500/50 rounded-xl p-3 min-w-0 transition-all duration-300 hover:shadow-sm hover:-translate-y-0.5">
+            <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-yellow-900 dark:text-white leading-none">{staleCards.length}</p>
-              <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400 flex-shrink-0" />
+              <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[11px] font-semibold text-yellow-700 dark:text-yellow-400 truncate">Stale Items</h3>
-            <p className="text-[9px] text-yellow-600 dark:text-yellow-300 truncate mt-0.5">Stuck 3+ days</p>
+            <h3 className="text-[10px] font-bold text-yellow-700 dark:text-yellow-400 uppercase tracking-widest truncate mb-0.5">Stale Items</h3>
+            <p className="text-[9px] text-yellow-600 dark:text-yellow-300 truncate">Stuck 3+ days</p>
           </div>
 
           {/* Auto-Escalated */}
-          <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-300 dark:border-orange-500/50 rounded-lg p-2 min-w-0">
-            <div className="flex items-center justify-between mb-1">
+          <div className="group bg-orange-50 dark:bg-orange-900/20 border border-orange-300 dark:border-orange-500/50 rounded-xl p-3 min-w-0 transition-all duration-300 hover:shadow-sm hover:-translate-y-0.5">
+            <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-orange-900 dark:text-white leading-none">{autoEscalated.length}</p>
-              <TrendingUp className="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0" />
+              <TrendingUp className="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[11px] font-semibold text-orange-700 dark:text-orange-400 truncate">Auto-Escalated</h3>
-            <p className="text-[9px] text-orange-600 dark:text-orange-300 truncate mt-0.5">Priority ⬆️</p>
+            <h3 className="text-[10px] font-bold text-orange-700 dark:text-orange-400 uppercase tracking-widest truncate mb-0.5">Auto-Escalated</h3>
+            <p className="text-[9px] text-orange-600 dark:text-orange-300 truncate">Priority ⬆️</p>
           </div>
 
           {/* Avg Time */}
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-300 dark:border-blue-500/50 rounded-lg p-2 min-w-0">
-            <div className="flex items-center justify-between mb-1">
+          <div className="group bg-blue-50 dark:bg-blue-900/20 border border-blue-300 dark:border-blue-500/50 rounded-xl p-3 min-w-0 transition-all duration-300 hover:shadow-sm hover:-translate-y-0.5">
+            <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-blue-900 dark:text-white leading-none">{avgTime.toFixed(1)}d</p>
-              <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+              <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[11px] font-semibold text-blue-700 dark:text-blue-400 truncate">Avg Time</h3>
-            <p className="text-[9px] text-blue-600 dark:text-blue-300 truncate mt-0.5">{activeCards.length} active</p>
+            <h3 className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest truncate mb-0.5">Avg Time</h3>
+            <p className="text-[9px] text-blue-600 dark:text-blue-300 truncate">{activeCards.length} active</p>
           </div>
 
           {/* Total Time */}
-          <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-300 dark:border-purple-500/50 rounded-lg p-2 min-w-0">
-            <div className="flex items-center justify-between mb-1">
+          <div className="group bg-purple-50 dark:bg-purple-900/20 border border-purple-300 dark:border-purple-500/50 rounded-xl p-3 min-w-0 transition-all duration-300 hover:shadow-sm hover:-translate-y-0.5">
+            <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-purple-900 dark:text-white leading-none">{totalTime.toFixed(0)}d</p>
-              <Calendar className="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0" />
+              <Calendar className="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[11px] font-semibold text-purple-700 dark:text-purple-400 truncate">Total Time</h3>
-            <p className="text-[9px] text-purple-600 dark:text-purple-300 truncate mt-0.5">{cardsForStats.length} cards</p>
+            <h3 className="text-[10px] font-bold text-purple-700 dark:text-purple-400 uppercase tracking-widest truncate mb-0.5">Total Time</h3>
+            <p className="text-[9px] text-purple-600 dark:text-purple-300 truncate">{cardsForStats.length} cards</p>
           </div>
 
           {/* Overdue */}
-          <div className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/50 dark:to-red-900/30 border border-red-200 dark:border-red-500 rounded-lg p-2 min-w-0">
-            <div className="flex items-center justify-between mb-1">
+          <div className="group bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/50 dark:to-red-900/30 border border-red-200 dark:border-red-500 rounded-xl p-3 min-w-0 transition-all duration-300 hover:shadow-sm hover:-translate-y-0.5">
+            <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{overdueCards.length}</p>
-              <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0" />
+              <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[11px] font-semibold text-red-700 dark:text-red-400 truncate">Overdue</h3>
-            <p className="text-[9px] text-red-600 dark:text-red-300 truncate mt-0.5">{overdueCards.length === 1 ? 'task' : 'tasks'}</p>
+            <h3 className="text-[10px] font-bold text-red-700 dark:text-red-400 uppercase tracking-widest truncate mb-0.5">Overdue</h3>
+            <p className="text-[9px] text-red-600 dark:text-red-300 truncate">{overdueCards.length === 1 ? 'task' : 'tasks'}</p>
           </div>
 
           {/* Due Soon */}
-          <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/50 dark:to-orange-900/30 border border-orange-200 dark:border-orange-500 rounded-lg p-2 min-w-0">
-            <div className="flex items-center justify-between mb-1">
+          <div className="group bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/50 dark:to-orange-900/30 border border-orange-200 dark:border-orange-500 rounded-xl p-3 min-w-0 transition-all duration-300 hover:shadow-sm hover:-translate-y-0.5">
+            <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{urgentCards.length}</p>
-              <Clock className="w-4 h-4 text-orange-600 dark:text-orange-400 animate-pulse flex-shrink-0" />
+              <Clock className="w-4 h-4 text-orange-600 dark:text-orange-400 animate-pulse flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[11px] font-semibold text-orange-700 dark:text-orange-400 truncate">Due Soon</h3>
-            <p className="text-[9px] text-orange-600 dark:text-orange-300 truncate mt-0.5">urgent</p>
+            <h3 className="text-[10px] font-bold text-orange-700 dark:text-orange-400 uppercase tracking-widest truncate mb-0.5">Due Soon</h3>
+            <p className="text-[9px] text-orange-600 dark:text-orange-300 truncate">urgent</p>
           </div>
 
           {/* This Week */}
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/30 border border-blue-200 dark:border-blue-500 rounded-lg p-2 min-w-0">
-            <div className="flex items-center justify-between mb-1">
+          <div className="group bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/30 border border-blue-200 dark:border-blue-500 rounded-xl p-3 min-w-0 transition-all duration-300 hover:shadow-sm hover:-translate-y-0.5">
+            <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{upcomingCards.length}</p>
-              <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+              <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[11px] font-semibold text-blue-700 dark:text-blue-400 truncate">This Week</h3>
-            <p className="text-[9px] text-blue-600 dark:text-blue-300 truncate mt-0.5">upcoming</p>
+            <h3 className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest truncate mb-0.5">This Week</h3>
+            <p className="text-[9px] text-blue-600 dark:text-blue-300 truncate">upcoming</p>
           </div>
 
           {/* Done Today */}
-          <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/50 dark:to-green-900/30 border border-green-200 dark:border-green-500 rounded-lg p-2 min-w-0">
-            <div className="flex items-center justify-between mb-1">
+          <div className="group bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/50 dark:to-green-900/30 border border-green-200 dark:border-green-500 rounded-xl p-3 min-w-0 transition-all duration-300 hover:shadow-sm hover:-translate-y-0.5">
+            <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{completedToday.length}</p>
-              <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[11px] font-semibold text-green-700 dark:text-green-400 truncate">Done Today</h3>
-            <p className="text-[9px] text-green-600 dark:text-green-300 truncate mt-0.5">completed</p>
+            <h3 className="text-[10px] font-bold text-green-700 dark:text-green-400 uppercase tracking-widest truncate mb-0.5">Done Today</h3>
+            <p className="text-[9px] text-green-600 dark:text-green-300 truncate">completed</p>
           </div>
         </div>
       )}

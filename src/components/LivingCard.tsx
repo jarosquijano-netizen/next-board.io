@@ -177,10 +177,10 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
       {...attributes}
       {...listeners}
       className={`
-        relative rounded-lg sm:rounded-xl p-3 sm:p-4 mb-2 sm:mb-3 transition-all duration-300 ease-in-out cursor-move
+        group relative rounded-lg sm:rounded-xl p-3 sm:p-4 mb-2 sm:mb-3 transition-all duration-300 ease-in-out cursor-move
         border-l-4 ${styles.border} ${styles.bg}
         bg-white dark:bg-transparent
-        shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]
+        shadow-sm hover:shadow-md hover:border-indigo-400/60 hover:scale-[1.01] active:scale-[0.98]
         ${getUrgencyBorderClass(timeStatus.urgencyLevel)}
         ${staleClass}
         touch-manipulation
@@ -192,7 +192,7 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
         {...attributes}
         {...listeners}
       >
-        <GripVertical className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 dark:text-slate-400" />
+        <GripVertical className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 dark:text-slate-400" strokeWidth={1.5} />
       </div>
 
       <div 
@@ -208,42 +208,42 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
         <div className="flex items-start justify-between gap-2 mb-1.5 sm:mb-2">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 flex-wrap">
-              <span className={`px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-semibold border ${styles.badge}`}>
+              <span className={`px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider border ${styles.badge}`}>
                 {card.type}
               </span>
               {card.priority && (
-                <span className={`px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-semibold ${getPriorityColor(card.priority)}`}>
+                <span className={`px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-wider ${getPriorityColor(card.priority)}`}>
                   {card.priority.toUpperCase()}
                 </span>
               )}
             </div>
-            <h3 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white leading-snug line-clamp-2">
+            <h3 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 leading-snug line-clamp-2 transition-colors duration-300">
               {card.summary}
             </h3>
             {card.context && (
-              <p className="text-sm text-gray-600 dark:text-slate-400 italic mt-1 border-l-2 border-gray-300 dark:border-gray-600 pl-2 line-clamp-2">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-slate-400 italic mt-1.5 border-l-2 border-gray-300 dark:border-gray-600 pl-2 line-clamp-2 leading-relaxed">
                 &quot;{card.context}&quot;
               </p>
             )}
           </div>
 
-          <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
+          <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             {onUpdate && (
               <button
                 onClick={() => {/* TODO: Implement edit */}}
-                className="p-1.5 sm:p-1.5 text-gray-500 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700/50 rounded transition-colors touch-manipulation active:scale-95"
+                className="p-1.5 sm:p-1.5 text-gray-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded-lg transition-colors duration-300 touch-manipulation active:scale-95"
                 title="Edit"
               >
-                <Pencil className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <Pencil className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />
               </button>
             )}
             {onDelete && (
               <button
                 onClick={() => onDelete(card.id)}
-                className="p-1.5 sm:p-1.5 text-gray-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-200 dark:hover:bg-slate-700/50 rounded transition-colors touch-manipulation active:scale-95"
+                className="p-1.5 sm:p-1.5 text-gray-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition-colors duration-300 touch-manipulation active:scale-95"
                 title="Delete"
               >
-                <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.5} />
               </button>
             )}
           </div>
