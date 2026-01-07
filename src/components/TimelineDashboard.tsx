@@ -87,83 +87,83 @@ export function TimelineDashboard({ cards, allCards }: TimelineDashboardProps) {
       {!isCollapsed && (
         <div className="grid grid-cols-8 gap-2">
           {/* Stale Items */}
-          <div className="stat-card group bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl p-3 min-w-0">
+          <div className="stat-card group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-3 min-w-0 shadow-sm">
             <div className="flex items-center justify-between mb-1.5">
-              <p className="text-2xl font-bold text-yellow-900 dark:text-white leading-none">{staleCards.length}</p>
-              <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400 flex-shrink-0" strokeWidth={1.5} />
+              <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{staleCards.length}</p>
+              <AlertTriangle className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="metadata-label text-yellow-700 dark:text-yellow-400 truncate mb-0.5">Stale Items</h3>
-            <p className="text-[9px] text-yellow-600 dark:text-yellow-300 truncate">Stuck 3+ days</p>
+            <h3 className="metadata-label text-gray-700 dark:text-gray-400 truncate mb-0.5">Stale Items</h3>
+            <p className="text-[9px] text-gray-600 dark:text-gray-300 truncate">Stuck 3+ days</p>
           </div>
 
           {/* Auto-Escalated */}
           <div className="stat-card group bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700 rounded-xl p-3 min-w-0">
             <div className="flex items-center justify-between mb-1.5">
-              <p className="text-2xl font-bold text-orange-900 dark:text-white leading-none">{autoEscalated.length}</p>
-              <TrendingUp className="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0" strokeWidth={1.5} />
+              <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{autoEscalated.length}</p>
+              <TrendingUp className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="metadata-label text-orange-700 dark:text-orange-400 truncate mb-0.5">Auto-Escalated</h3>
-            <p className="text-[9px] text-orange-600 dark:text-orange-300 truncate">Priority ⬆️</p>
+            <h3 className="metadata-label text-gray-700 dark:text-gray-400 truncate mb-0.5">Auto-Escalated</h3>
+            <p className="text-[9px] text-gray-600 dark:text-gray-300 truncate">Priority ⬆️</p>
           </div>
 
           {/* Avg Time */}
-          <div className="stat-card group bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-xl p-3 min-w-0">
+          <div className="stat-card group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-3 min-w-0 shadow-sm">
             <div className="flex items-center justify-between mb-1.5">
-              <p className="text-2xl font-bold text-blue-900 dark:text-white leading-none">{avgTime.toFixed(1)}d</p>
-              <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" strokeWidth={1.5} />
+              <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{avgTime.toFixed(1)}d</p>
+              <Clock className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="metadata-label text-blue-700 dark:text-blue-400 truncate mb-0.5">Avg Time</h3>
-            <p className="text-[9px] text-blue-600 dark:text-blue-300 truncate">{activeCards.length} active</p>
+            <h3 className="metadata-label text-gray-700 dark:text-gray-400 truncate mb-0.5">Avg Time</h3>
+            <p className="text-[9px] text-gray-600 dark:text-gray-300 truncate">{activeCards.length} active</p>
           </div>
 
           {/* Total Time */}
-          <div className="stat-card group bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-xl p-3 min-w-0">
+          <div className="stat-card group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-3 min-w-0 shadow-sm">
             <div className="flex items-center justify-between mb-1.5">
-              <p className="text-2xl font-bold text-purple-900 dark:text-white leading-none">{totalTime.toFixed(0)}d</p>
-              <Calendar className="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0" strokeWidth={1.5} />
+              <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{totalTime.toFixed(0)}d</p>
+              <Calendar className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="metadata-label text-purple-700 dark:text-purple-400 truncate mb-0.5">Total Time</h3>
-            <p className="text-[9px] text-purple-600 dark:text-purple-300 truncate">{cardsForStats.length} cards</p>
+            <h3 className="metadata-label text-gray-700 dark:text-gray-400 truncate mb-0.5">Total Time</h3>
+            <p className="text-[9px] text-gray-600 dark:text-gray-300 truncate">{cardsForStats.length} cards</p>
           </div>
 
           {/* Overdue */}
-          <div className="stat-card group bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/50 dark:to-red-900/30 border border-red-200 dark:border-red-500 rounded-xl p-3 min-w-0">
+          <div className="stat-card group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-3 min-w-0 shadow-sm">
             <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{overdueCards.length}</p>
-              <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0" strokeWidth={1.5} />
+              <AlertTriangle className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="metadata-label text-red-700 dark:text-red-400 truncate mb-0.5">Overdue</h3>
-            <p className="text-[9px] text-red-600 dark:text-red-300 truncate">{overdueCards.length === 1 ? 'task' : 'tasks'}</p>
+            <h3 className="metadata-label text-gray-700 dark:text-gray-400 truncate mb-0.5">Overdue</h3>
+            <p className="text-[9px] text-gray-600 dark:text-gray-300 truncate">{overdueCards.length === 1 ? 'task' : 'tasks'}</p>
           </div>
 
           {/* Due Soon */}
-          <div className="stat-card group bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/50 dark:to-orange-900/30 border border-orange-200 dark:border-orange-500 rounded-xl p-3 min-w-0">
+          <div className="stat-card group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-3 min-w-0 shadow-sm">
             <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{urgentCards.length}</p>
-              <Clock className="w-4 h-4 text-orange-600 dark:text-orange-400 animate-pulse flex-shrink-0" strokeWidth={1.5} />
+              <Clock className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[10px] font-bold text-orange-700 dark:text-orange-400 uppercase tracking-widest truncate mb-0.5">Due Soon</h3>
-            <p className="text-[9px] text-orange-600 dark:text-orange-300 truncate">urgent</p>
+            <h3 className="metadata-label text-gray-700 dark:text-gray-400 truncate mb-0.5">Due Soon</h3>
+            <p className="text-[9px] text-gray-600 dark:text-gray-300 truncate">urgent</p>
           </div>
 
           {/* This Week */}
-          <div className="stat-card group bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/30 border border-blue-200 dark:border-blue-500 rounded-xl p-3 min-w-0">
+          <div className="stat-card group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-3 min-w-0 shadow-sm">
             <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{upcomingCards.length}</p>
-              <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" strokeWidth={1.5} />
+              <Calendar className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest truncate mb-0.5">This Week</h3>
-            <p className="text-[9px] text-blue-600 dark:text-blue-300 truncate">upcoming</p>
+            <h3 className="metadata-label text-gray-700 dark:text-gray-400 truncate mb-0.5">This Week</h3>
+            <p className="text-[9px] text-gray-600 dark:text-gray-300 truncate">upcoming</p>
           </div>
 
           {/* Done Today */}
-          <div className="stat-card group bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/50 dark:to-green-900/30 border border-green-200 dark:border-green-500 rounded-xl p-3 min-w-0">
+          <div className="stat-card group bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-3 min-w-0 shadow-sm">
             <div className="flex items-center justify-between mb-1.5">
               <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">{completedToday.length}</p>
-              <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" strokeWidth={1.5} />
+              <CheckCircle2 className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" strokeWidth={1.5} />
             </div>
-            <h3 className="metadata-label text-green-700 dark:text-green-400 truncate mb-0.5">Done Today</h3>
-            <p className="text-[9px] text-green-600 dark:text-green-300 truncate">completed</p>
+            <h3 className="metadata-label text-gray-700 dark:text-gray-400 truncate mb-0.5">Done Today</h3>
+            <p className="text-[9px] text-gray-600 dark:text-gray-300 truncate">completed</p>
           </div>
         </div>
       )}
