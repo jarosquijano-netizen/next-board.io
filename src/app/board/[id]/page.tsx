@@ -1064,7 +1064,7 @@ export default function BoardPage({ params }: PageProps) {
                                             >
                                               {/* Bulk Selection Checkbox */}
                                               {(selectedCards.size > 0 || selectedCards.has(card.id)) && (
-                                                <div className="absolute left-2 top-2 z-10">
+                                                <div className="absolute left-2 top-2" style={{ zIndex: 1 }}>
                                                   <button
                                                     onClick={(e) => {
                                                       e.stopPropagation();
