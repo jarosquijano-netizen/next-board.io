@@ -9,7 +9,14 @@ const nextConfig = {
   generateBuildId: async () => {
     const timestamp = Date.now();
     const random = Math.random().toString(36).substring(7);
-    return `build-${timestamp}-${random}-v2.1`;
+    return `build-${timestamp}-${random}-v2.3-clean`;
+  },
+  // Disable static page optimization to force fresh CSS
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '50mb',
+    },
+    optimizeCss: true,
   },
   // Disable cache during build to avoid issues
   onDemandEntries: {
