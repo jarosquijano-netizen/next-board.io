@@ -215,14 +215,14 @@ export function CardDetailModal({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 transition-opacity duration-300"
+        className="modal-overlay fixed inset-0 bg-slate-900/60 z-50 transition-opacity duration-300"
         onClick={onClose}
       />
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 pointer-events-none">
         <div
-          className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg rounded-none sm:rounded-2xl shadow-2xl w-full h-full sm:h-auto sm:max-w-4xl sm:max-h-[90vh] overflow-hidden pointer-events-auto border-0 sm:border border-slate-200/80 dark:border-slate-700/80 transition-all duration-300 flex flex-col"
+          className="modal-glass rounded-none sm:rounded-2xl shadow-2xl w-full h-full sm:h-auto sm:max-w-4xl sm:max-h-[90vh] overflow-hidden pointer-events-auto border-0 sm:border transition-all duration-300 flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
