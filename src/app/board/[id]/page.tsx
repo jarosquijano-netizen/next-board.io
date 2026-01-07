@@ -986,14 +986,15 @@ export default function BoardPage({ params }: PageProps) {
                       }
                       
                       return (
-                        <div key={column.id} className="flex flex-col">
+                        <div key={column.id} className="flex flex-col" style={{ position: 'relative' }}>
                           {/* Column Header - Enhanced - Must be above cards */}
                           <div 
                             className={`sticky ${isSearchFiltersVisible ? 'top-[350px]' : 'top-[140px]'} bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`}
                             style={{ 
-                              zIndex: 1000, 
+                              zIndex: 9999, 
                               position: 'sticky',
-                              isolation: 'isolate'
+                              isolation: 'isolate',
+                              transform: 'translateZ(0)'
                             }}
                           >
                             <div className="flex items-center justify-between mb-2">
