@@ -148,7 +148,7 @@ export default function Sidebar() {
       {/* User Profile */}
       <div className="p-4 border-t border-gray-200 dark:border-slate-700">
         <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-100 dark:bg-slate-800/50">
-          <UserButton signOutFallbackRedirectUrl="/sign-in" />
+          <UserButton />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
               {user?.firstName || user?.username || 'User'}
