@@ -785,7 +785,7 @@ export default function BoardPage({ params }: PageProps) {
                       return (
                         <div key={column.id} className="flex flex-col relative">
                           {/* Column Header - Enhanced */}
-                          <div className={`sticky top-40 z-[10] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`}>
+                          <div className={`sticky top-40 z-[5] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`}>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <button
@@ -832,8 +832,9 @@ export default function BoardPage({ params }: PageProps) {
 
                           {/* Cards */}
                           {!collapsedColumns.has(column.id) && (
-                            <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
-                              <DroppableColumn id={column.id}>
+                            <div className="relative z-[6] mt-0">
+                              <SortableContext items={columnCards.map(c => c.id)} strategy={verticalListSortingStrategy}>
+                                <DroppableColumn id={column.id}>
                                 {(() => {
                                   const grouped = groupCardsBySwimlane(columnCards);
                                   return Object.entries(grouped).map(([swimlaneKey, cards]) => (
@@ -906,6 +907,7 @@ export default function BoardPage({ params }: PageProps) {
                                 )}
                               </DroppableColumn>
                             </SortableContext>
+                            </div>
                           )}
                         </div>
                       );
@@ -955,7 +957,7 @@ export default function BoardPage({ params }: PageProps) {
                       return (
                         <div key={column.id} className="flex flex-col relative">
                           {/* Column Header - Enhanced */}
-                          <div className={`sticky top-40 z-[10] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`}>
+                          <div className={`sticky top-40 z-[5] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`}>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <button
