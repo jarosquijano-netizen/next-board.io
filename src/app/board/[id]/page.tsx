@@ -616,7 +616,7 @@ export default function BoardPage({ params }: PageProps) {
         </div>
 
         {/* View Selector & Toolbar */}
-        <div className="border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 backdrop-blur-sm sticky top-0 z-40 shadow-sm">
+        <div className="border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 backdrop-blur-sm sticky top-[88px] z-40 shadow-sm">
           <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-3">
             {/* View Selector & Layout Toggle */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-2">
@@ -785,7 +785,7 @@ export default function BoardPage({ params }: PageProps) {
                       return (
                         <div key={column.id} className="flex flex-col relative">
                           {/* Column Header - Enhanced */}
-                          <div className={`sticky top-40 z-[5] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300 pointer-events-auto`}>
+                          <div className={`sticky top-[200px] z-[5] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300 pointer-events-auto`}>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <button
@@ -957,7 +957,7 @@ export default function BoardPage({ params }: PageProps) {
                       return (
                         <div key={column.id} className="flex flex-col relative">
                           {/* Column Header - Enhanced */}
-                          <div className={`sticky top-40 z-[5] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300 pointer-events-auto`}>
+                          <div className={`sticky top-[200px] z-[5] bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300 pointer-events-auto`}>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <button
