@@ -791,7 +791,7 @@ export default function BoardPage({ params }: PageProps) {
                       return (
                         <div key={column.id} className="flex flex-col relative">
                           {/* Column Header - Clean Minimal Design */}
-                          <div className={`sticky top-[140px] z-[5] ${column.color} border rounded-lg p-3 mb-3 shadow-sm transition-all duration-300 pointer-events-auto`}>
+                          <div className={`sticky top-[140px] z-[5] ${column.color} border border-gray-200 rounded-lg p-3 mb-3 shadow-sm transition-all duration-300 pointer-events-auto`}>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <button

@@ -1,4 +1,4 @@
-/* FORCE CSS RECOMPILATION - BUILD TIMESTAMP: 2026-01-07T19:05:00Z - v2.4 NO RM */
+/* FORCE CSS RECOMPILATION - BUILD TIMESTAMP: 2026-01-07T19:15:00Z - v2.6 CLEAN DESIGN */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -185,27 +185,24 @@ html.dark body {
   border-bottom-color: #334155 !important;
 }
 
-/* Premium Button (Sparkle Button) */
+/* Premium Button (Sparkle Button) - Clean Minimal Design */
 .btn-sparkle,
 button.px-4.py-3.rounded-lg.flex.items-center.gap-3.transition-all.duration-300.bg-indigo-600.text-white.shadow-lg.shadow-indigo-500\/30.scale-105.font-semibold,
 button.w-full.px-3.py-2.rounded-lg.border.transition-all.text-sm.font-medium.bg-indigo-600.dark\:bg-indigo-600.border-indigo-600.dark\:border-indigo-600.text-white.shadow-sm.font-semibold,
 button.px-4.py-2.rounded-lg.border.transition-all.text-sm.font-medium.bg-indigo-600.dark\:bg-indigo-600.border-indigo-600.dark\:border-indigo-600.text-white.shadow-sm.font-semibold {
-  background: linear-gradient(to right, #4f46e5, #8b5cf6) !important;
+  background: #4f46e5 !important; /* Solid indigo, no gradient */
   color: #ffffff !important;
-  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3), 0 4px 6px -2px rgba(79, 70, 229, 0.2) !important;
-  transition: all 0.3s ease-in-out !important;
-  -webkit-transition: all 0.3s ease-in-out !important;
-  -moz-transition: all 0.3s ease-in-out !important;
-  -ms-transition: all 0.3s ease-in-out !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+  transition: all 0.2s ease-in-out !important;
 }
 
 .btn-sparkle:hover,
 button.px-4.py-3.rounded-lg.flex.items-center.gap-3.transition-all.duration-300.bg-indigo-600.text-white.shadow-lg.shadow-indigo-500\/30.scale-105.font-semibold:hover,
 button.w-full.px-3.py-2.rounded-lg.border.transition-all.text-sm.font-medium.bg-indigo-600.dark\:bg-indigo-600.border-indigo-600.dark\:border-indigo-600.text-white.shadow-sm.font-semibold:hover,
 button.px-4.py-2.rounded-lg.border.transition-all.text-sm.font-medium.bg-indigo-600.dark\:bg-indigo-600.border-indigo-600.dark\:border-indigo-600.text-white.shadow-sm.font-semibold:hover {
-  background: linear-gradient(to right, #4338ca, #7c3aed) !important;
-  box-shadow: 0 20px 25px -5px rgba(67, 56, 202, 0.4), 0 10px 10px -5px rgba(67, 56, 202, 0.3) !important;
-  transform: translateY(-2px) scale(1.02) !important;
+  background: #4338ca !important; /* Darker indigo on hover */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  transform: translateY(-1px) !important; /* Subtle lift, no scale */
 }
 
 /* Metadata Labels */
