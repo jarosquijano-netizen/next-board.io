@@ -177,6 +177,7 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
       {...attributes}
       {...listeners}
       className={`
+        kanban-card
         group relative rounded-xl p-4 mb-3 transition-all duration-300 ease-in-out cursor-move
         border-l-4 ${styles.border} ${styles.bg}
         bg-white dark:bg-transparent

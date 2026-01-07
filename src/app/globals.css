@@ -2,7 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* UI Improvements - Force Tailwind recompilation - Updated 2026-01-07 17:45 */
+/* UI Improvements - Force Tailwind recompilation - Updated 2026-01-07 17:50 */
+
+/* FORCE VISIBLE CHANGES - Direct CSS */
+.kanban-card {
+  border: 2px solid #6366f1 !important;
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -2px rgba(99, 102, 241, 0.2) !important;
+}
+
+.kanban-card:hover {
+  border-color: #4f46e5 !important;
+  box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4), 0 10px 10px -5px rgba(79, 70, 229, 0.2) !important;
+  transform: scale(1.05) !important;
+  background-color: rgba(238, 242, 255, 0.8) !important;
+}
+
+body {
+  border-top: 6px solid #4f46e5 !important;
+}
 
 @layer base {
   * {
