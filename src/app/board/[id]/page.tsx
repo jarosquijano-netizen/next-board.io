@@ -975,8 +975,8 @@ export default function BoardPage({ params }: PageProps) {
           {/* Kanban Board View - Top Layout */}
           {viewMode === 'kanban' && layoutMode === 'top' && (
                 <DndContext sensors={sensors} collisionDetection={rectIntersection} onDragEnd={handleDragEnd}>
-                  <div className="overflow-x-auto scrollbar-hide pb-4 lg:pb-0">
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 min-w-[800px] lg:min-w-0 px-4 sm:px-6 lg:px-8">
+                  <div className="overflow-x-auto scrollbar-hide pb-4 lg:pb-0" style={{ position: 'relative' }}>
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-4 min-w-[800px] lg:min-w-0 px-4 sm:px-6 lg:px-8" style={{ position: 'relative', zIndex: 0 }}>
                     {COLUMNS.map((column) => {
                       let columnCards = filteredCards.filter(card => card.status === column.id);
                       
@@ -986,9 +986,9 @@ export default function BoardPage({ params }: PageProps) {
                       }
                       
                       return (
-                        <div key={column.id} className="flex flex-col">
+                        <div key={column.id} className="flex flex-col" style={{ position: 'relative', zIndex: 0 }}>
                           {/* Column Header - Enhanced */}
-                          <div className={`sticky ${isSearchFiltersVisible ? 'top-[350px]' : 'top-[140px]'} bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`} style={{ zIndex: 100, position: 'sticky' }}>
+                          <div className={`sticky ${isSearchFiltersVisible ? 'top-[350px]' : 'top-[140px]'} bg-gradient-to-r ${column.color} rounded-lg p-3 mb-3 shadow-lg backdrop-blur-sm transition-all duration-300`} style={{ zIndex: 1000, position: 'sticky' }}>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <button
