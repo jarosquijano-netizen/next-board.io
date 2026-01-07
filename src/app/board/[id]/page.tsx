@@ -30,7 +30,7 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { 
-  Loader2, ArrowLeft, Download, Plus, Calendar, FileText, LayoutGrid, ChevronUp, ChevronDown, PanelTop, PanelRight, CheckSquare, Square, GripVertical, Clock, X
+  Loader2, ArrowLeft, Download, Plus, Calendar, FileText, LayoutGrid, ChevronUp, ChevronDown, PanelTop, PanelRight, CheckSquare, Square, GripVertical, Clock, X, Menu, X as XIcon
 } from 'lucide-react';
 import { formatDateTime } from '@/lib/utils';
 import { CardHoverPreview } from '@/components/CardHoverPreview';
@@ -125,6 +125,7 @@ function DroppableColumn({
 export default function BoardPage({ params }: PageProps) {
   const { id } = use(params);
   const router = useRouter();
+  const { sidebarWidth } = useSidebar();
   const { currentMeeting, isLoading, fetchMeeting, updateCardStatus, updateCard } = useMeetingsStore();
   
   const [searchQuery, setSearchQuery] = useState('');
@@ -135,7 +136,7 @@ export default function BoardPage({ params }: PageProps) {
   const [selectedCard, setSelectedCard] = useState<MeetingCard | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSearchFiltersVisible, setIsSearchFiltersVisible] = useState(true);
-  const [layoutMode, setLayoutMode] = useState<'top' | 'side'>('top'); // Layout toggle
+  const [layoutMode, setLayoutMode] = useState<'top' | 'side'>('side'); // Layout toggle - default to side
   const [comparisonData, setComparisonData] = useState<any | null>(null);
   const [hasComparison, setHasComparison] = useState(false);
   
@@ -565,7 +566,10 @@ export default function BoardPage({ params }: PageProps) {
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
       <Sidebar />
       
-      <div className="lg:ml-64 min-h-screen pb-20 lg:pb-0">
+      <div 
+        className="min-h-screen pb-20 lg:pb-0 transition-all duration-300"
+        style={{ marginLeft: sidebarWidth === '16' ? '16rem' : '4rem' }}
+      >
         {/* Header */}
         <div className="border-b border-gray-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm sticky top-0 z-40">
           <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
@@ -917,25 +921,50 @@ export default function BoardPage({ params }: PageProps) {
               </div>
 
               {/* Side Panel - Right Side (Filters Only) */}
-              <div className="w-80 flex-shrink-0 space-y-4">
-                {/* Search Bar */}
-                <div>
-                  <SearchBar onSearch={setSearchQuery} />
-                </div>
+              <div className={`${isSideFiltersVisible ? 'w-80' : 'w-0'} flex-shrink-0 transition-all duration-300 overflow-hidden`}>
+                {isSideFiltersVisible && (
+                  <div className="space-y-4 pr-4">
+                    {/* Collapse Button */}
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Filters</h3>
+                      <button
+                        onClick={() => setIsSideFiltersVisible(false)}
+                        className="p-1.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                        title="Hide filters"
+                      >
+                        <ChevronDown className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                      </button>
+                    </div>
 
-                {/* Filter Bar - Grid Layout */}
-                <div>
-                  <FilterBar selectedTypes={selectedTypes} onFilterChange={setSelectedTypes} variant="grid" />
-                </div>
+                    {/* Search Bar */}
+                    <div>
+                      <SearchBar onSearch={setSearchQuery} />
+                    </div>
 
-                {/* People Filter - Vertical Layout */}
-                {currentMeeting && (
-                  <PeopleFilter
-                    cards={currentMeeting.cards}
-                    selectedPeople={selectedPeople}
-                    onPeopleChange={setSelectedPeople}
-                    variant="vertical"
-                  />
+                    {/* Filter Bar - Grid Layout */}
+                    <div>
+                      <FilterBar selectedTypes={selectedTypes} onFilterChange={setSelectedTypes} variant="grid" />
+                    </div>
+
+                    {/* People Filter - Vertical Layout */}
+                    {currentMeeting && (
+                      <PeopleFilter
+                        cards={currentMeeting.cards}
+                        selectedPeople={selectedPeople}
+                        onPeopleChange={setSelectedPeople}
+                        variant="vertical"
+                      />
+                    )}
+                  </div>
+                )}
+                {!isSideFiltersVisible && (
+                  <button
+                    onClick={() => setIsSideFiltersVisible(true)}
+                    className="absolute -left-12 top-1/2 -translate-y-1/2 p-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-l-lg shadow-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors z-10"
+                    title="Show filters"
+                  >
+                    <ChevronUp className="w-4 h-4 text-gray-600 dark:text-gray-400 rotate-90" />
+                  </button>
                 )}
               </div>
             </div>

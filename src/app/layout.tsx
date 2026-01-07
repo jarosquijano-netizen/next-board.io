@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { SidebarProvider } from '@/contexts/SidebarContext';
 import { ThemeScript } from './theme-script';
 import './globals.css';
 
@@ -24,7 +25,9 @@ export default function RootLayout({
         </head>
         <body className="bg-white dark:bg-slate-950 transition-colors duration-300">
           <ThemeProvider>
-            {children}
+            <SidebarProvider>
+              {children}
+            </SidebarProvider>
           </ThemeProvider>
         </body>
       </html>
