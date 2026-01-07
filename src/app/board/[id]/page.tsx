@@ -817,20 +817,20 @@ export default function BoardPage({ params }: PageProps) {
                                     {getColumnTimeEstimate(columnCards)}
                                   </div>
                                 )}
-                                <span className="px-2.5 py-0.5 bg-white/20 backdrop-blur-sm rounded text-xs font-medium text-white">
+                                <span className="px-2.5 py-0.5 bg-white border border-gray-200 rounded text-xs font-medium text-gray-600">
                                   {columnCards.length}
                                 </span>
                               </div>
                             </div>
                             <div className="flex items-center justify-between">
-                              <p className="text-xs text-white/70 ml-7">{column.description}</p>
+                              <p className="text-xs text-gray-600 ml-7">{column.description}</p>
                               {!collapsedColumns.has(column.id) && (
                                 <button
                                   onClick={() => setQuickAddColumn(column.id)}
-                                  className="p-1.5 hover:bg-white/20 rounded transition-colors group"
+                                  className="p-1.5 hover:bg-gray-200 rounded transition-colors group"
                                   title="Quick add card"
                                 >
-                                  <Plus className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+                                  <Plus className="w-4 h-4 text-gray-600 group-hover:scale-110 transition-transform" />
                                 </button>
                               )}
                             </div>
@@ -1022,20 +1022,20 @@ export default function BoardPage({ params }: PageProps) {
                                     {getColumnTimeEstimate(columnCards)}
                                   </div>
                                 )}
-                                <span className="px-2.5 py-0.5 bg-white/20 backdrop-blur-sm rounded text-xs font-medium text-white">
+                                <span className="px-2.5 py-0.5 bg-white border border-gray-200 rounded text-xs font-medium text-gray-600">
                                   {columnCards.length}
                                 </span>
                               </div>
                             </div>
                             <div className="flex items-center justify-between">
-                              <p className="text-xs text-white/70 ml-7">{column.description}</p>
+                              <p className="text-xs text-gray-600 ml-7">{column.description}</p>
                               {!collapsedColumns.has(column.id) && (
                                 <button
                                   onClick={() => setQuickAddColumn(column.id)}
-                                  className="p-1.5 hover:bg-white/20 rounded transition-colors group"
+                                  className="p-1.5 hover:bg-gray-200 rounded transition-colors group"
                                   title="Quick add card"
                                 >
-                                  <Plus className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+                                  <Plus className="w-4 h-4 text-gray-600 group-hover:scale-110 transition-transform" />
                                 </button>
                               )}
                             </div>
