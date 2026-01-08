@@ -88,10 +88,10 @@ export default function AnalyticsPage() {
           <div className="max-w-7xl mx-auto px-8 py-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-1">
                   📊 Analytics Dashboard
                 </h1>
-                <p className="text-gray-600 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-slate-400">
                   Track your team&apos;s performance and identify improvements
                 </p>
               </div>
@@ -160,7 +160,7 @@ export default function AnalyticsPage() {
             <div className="flex items-center gap-3 mb-6">
               <Calendar className="w-6 h-6 text-blue-500 dark:text-blue-400" />
               <div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Meeting Efficiency</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Meeting Efficiency</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">How productive are your meetings?</p>
               </div>
             </div>
@@ -258,7 +258,7 @@ export default function AnalyticsPage() {
               <div className="flex items-center gap-3 mb-6">
                 <Users className="w-6 h-6 text-blue-500 dark:text-blue-400" />
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Top Contributors</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Top Contributors</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Who&apos;s getting things done?</p>
                 </div>
               </div>
@@ -281,7 +281,7 @@ export default function AnalyticsPage() {
               <div className="flex items-center gap-3 mb-6">
                 <AlertTriangle className="w-6 h-6 text-red-500 dark:text-red-400" />
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Top Blockers</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Top Blockers</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">What&apos;s slowing your team down?</p>
                 </div>
               </div>

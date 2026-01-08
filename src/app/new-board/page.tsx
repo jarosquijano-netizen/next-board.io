@@ -50,10 +50,10 @@ export default function NewBoard() {
         <div className="border-b border-gray-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm sticky top-0 z-40 transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-8 py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-1">
                 Create New Board
               </h1>
-              <p className="text-gray-600 dark:text-slate-400">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-slate-400">
                 Upload a file or paste your meeting transcript and let AI extract action items
               </p>
             </div>
@@ -70,7 +70,7 @@ export default function NewBoard() {
                   <Upload className="w-6 h-6 text-blue-500 dark:text-blue-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">Quick Upload</p>
+                  <p className="text-lg font-semibold text-gray-900 dark:text-white">Quick Upload</p>
                   <p className="text-sm text-gray-600 dark:text-slate-400">Drag & drop or browse</p>
                 </div>
               </div>
@@ -82,7 +82,7 @@ export default function NewBoard() {
                   <Sparkles className="w-6 h-6 text-purple-500 dark:text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">AI Powered</p>
+                  <p className="text-lg font-semibold text-gray-900 dark:text-white">AI Powered</p>
                   <p className="text-sm text-gray-600 dark:text-slate-400">Claude 3.5 Sonnet</p>
                 </div>
               </div>
@@ -94,7 +94,7 @@ export default function NewBoard() {
                   <TrendingUp className="w-6 h-6 text-emerald-500 dark:text-emerald-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">Smart Boards</p>
+                  <p className="text-lg font-semibold text-gray-900 dark:text-white">Smart Boards</p>
                   <p className="text-sm text-gray-600 dark:text-slate-400">Auto-organized</p>
                 </div>
               </div>

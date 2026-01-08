@@ -70,10 +70,10 @@ export default function BoardsPage() {
         <div className="border-b border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/50 backdrop-blur-sm sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-8 py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-1">
                 My Boards
               </h1>
-              <p className="text-gray-600 dark:text-slate-400">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-slate-400">
                 View and manage all your meeting boards
               </p>
             </div>

@@ -583,7 +583,7 @@ export default function BoardPage({ params }: PageProps) {
                   <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" strokeWidth={1.5} />
                 </button>
                 <div className="min-w-0 flex-1">
-                  <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-1 truncate tracking-tight border-b-4 border-indigo-700 pb-2 shadow-md" style={{ borderBottomColor: '#4f46e5', borderBottomWidth: '4px', boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.3)' }}>
+                  <h1 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white mb-1 truncate tracking-tight border-b-2 border-indigo-600 pb-1.5" style={{ borderBottomColor: '#4f46e5' }}>
                     {currentMeeting.title}
                   </h1>
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600 dark:text-slate-400">

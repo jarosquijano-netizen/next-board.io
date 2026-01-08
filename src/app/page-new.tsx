@@ -70,7 +70,7 @@ export default function Home() {
                   <Upload className="w-6 h-6 text-blue-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-white">Quick Upload</p>
+                  <p className="text-lg font-semibold text-white">Quick Upload</p>
                   <p className="text-sm text-slate-400">Drag & drop or browse</p>
                 </div>
               </div>
@@ -82,7 +82,7 @@ export default function Home() {
                   <Sparkles className="w-6 h-6 text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-white">AI Powered</p>
+                  <p className="text-lg font-semibold text-white">AI Powered</p>
                   <p className="text-sm text-slate-400">Claude 3.5 Sonnet</p>
                 </div>
               </div>
@@ -94,7 +94,7 @@ export default function Home() {
                   <TrendingUp className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-white">Smart Boards</p>
+                  <p className="text-lg font-semibold text-white">Smart Boards</p>
                   <p className="text-sm text-slate-400">Auto-organized</p>
                 </div>
               </div>
