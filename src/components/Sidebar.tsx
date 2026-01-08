@@ -66,7 +66,7 @@ export default function Sidebar() {
       )}
 
       {/* Sidebar */}
-      <div className={`lg:relative fixed left-0 top-0 h-screen ${isCollapsed ? 'w-16' : 'w-64'} bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 flex flex-col z-30 lg:z-auto transform transition-all duration-300 ease-in-out shadow-sm ${
+      <div className={`lg:relative fixed left-0 top-0 h-screen ${isCollapsed ? 'w-16' : 'w-64'} bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 flex flex-col flex-none z-30 lg:z-auto transform transition-all duration-300 ease-in-out shadow-sm ${
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       }`}>
       {/* Logo & Collapse Button */}
