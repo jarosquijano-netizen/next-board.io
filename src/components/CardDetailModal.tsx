@@ -71,8 +71,6 @@ export function CardDetailModal({
   const [editedSummary, setEditedSummary] = useState(card.summary);
   const [noteText, setNoteText] = useState('');
   const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
-  const [transcriptSummary, setTranscriptSummary] = useState<string | null>(null);
-  const [isLoadingTranscriptSummary, setIsLoadingTranscriptSummary] = useState(false);
   
   // Editable fields
   const [isEditingStatus, setIsEditingStatus] = useState(false);
@@ -165,32 +163,6 @@ export function CardDetailModal({
     }
   };
 
-  // Load transcript summary when modal opens
-  useEffect(() => {
-    const loadTranscriptSummary = async () => {
-      if (isOpen && card?.id && card?.context) {
-        setIsLoadingTranscriptSummary(true);
-        try {
-          const response = await fetch(`/api/cards/${card.id}/transcript-summary`, {
-            method: 'POST',
-          });
-          if (response.ok) {
-            const data = await response.json();
-            setTranscriptSummary(data.summary);
-          }
-        } catch (error) {
-          console.error('Failed to load transcript summary:', error);
-          setTranscriptSummary(card.context);
-        } finally {
-          setIsLoadingTranscriptSummary(false);
-        }
-      } else {
-        setTranscriptSummary(null);
-      }
-    };
-
-    loadTranscriptSummary();
-  }, [isOpen, card?.id, card?.context]);
 
   const generateMessage = async (messageType?: string) => {
     if (!card?.id) return;
