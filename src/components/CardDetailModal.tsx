@@ -641,122 +641,139 @@ export function CardDetailModal({
               )}
             </div>
 
-            {/* Comments Section */}
-            <div className="p-4 sm:p-6 bg-gray-50 dark:bg-slate-950/50">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <MessageSquare className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                  Comments
+            {/* Comments & Activity Section */}
+            <div className="p-4 sm:p-6 bg-white dark:bg-slate-900">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                  <MessageSquare className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                  Comments & Activity
                 </h3>
                 <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold rounded-full">
-                    {card.activities?.filter(a => a.activityType === 'note').length || 0} comments
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-full">
+                    {card.activities?.filter(a => a.activityType === 'note').length || 0} COMMENTS
                   </span>
                 </div>
               </div>
 
-              {/* Comments Timeline */}
-              {(card.activities && card.activities.filter(a => a.activityType === 'note').length > 0) || card.context ? (
-                <div className="space-y-4 mb-4">
-                  {/* Original extraction */}
-                  {card.context && (
-                    <div className="flex gap-4 relative">
-                      <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0 relative z-10">
-                        <Sparkles className="w-5 h-5 text-white" />
+              {/* Activity Feed */}
+              <div className="space-y-4 mb-4">
+                {/* Original extraction */}
+                {card.context && (
+                  <div className="flex gap-3">
+                    <div className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 border-2 border-purple-200 dark:border-purple-800 flex items-center justify-center flex-shrink-0">
+                      <Sparkles className="w-5 h-5 text-purple-400 dark:text-purple-500" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium text-purple-600 dark:text-purple-400">AI Extracted from Meeting</span>
+                        <span className="text-gray-400">•</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {formatDateTime(new Date(card.createdAt))}
+                        </span>
                       </div>
-                      <div className="flex-1 pb-4">
+                      <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{card.context || card.summary}</p>
+                      {card.timestamp && (
+                        <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                          </svg>
+                          <span>TRANSCRIPT: {card.timestamp}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* User comments only */}
+                {card.activities && card.activities.filter(a => a.activityType === 'note').length > 0 && (
+                  card.activities.filter(a => a.activityType === 'note').map((activity) => (
+                    <div key={activity.id} className="flex gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                        <MessageSquare className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">AI Extracted from Meeting</span>
-                          <span className="text-xs text-gray-500">
-                            {formatDateTime(new Date(card.createdAt))}
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">
+                            You
+                          </span>
+                          <span className="text-gray-400">•</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            {formatDateTime(new Date(activity.createdAt))}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-700 dark:text-gray-300">{card.context || card.summary}</p>
-                        {card.timestamp && (
-                          <p className="text-xs text-gray-500 mt-1">📍 Transcript: {card.timestamp}</p>
-                        )}
+                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{activity.content}</p>
                       </div>
                     </div>
-                  )}
+                  ))
+                )}
 
-                  {/* User comments only */}
-                  {card.activities && card.activities.filter(a => a.activityType === 'note').length > 0 && (
-                    card.activities.filter(a => a.activityType === 'note').map((activity) => (
-                      <div key={activity.id} className="flex gap-4 relative">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0 relative z-10">
-                          <MessageSquare className="w-5 h-5 text-white" />
-                        </div>
-                        <div className="flex-1 pb-4">
-                          <div className="rounded-lg p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm">
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                                You
-                              </span>
-                              <span className="text-xs text-gray-500 dark:text-gray-400">
-                                {formatDateTime(new Date(activity.createdAt))}
-                              </span>
-                            </div>
-                            <p className="text-sm text-gray-900 dark:text-gray-100 leading-relaxed">{activity.content}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  )}
+                {/* Empty State */}
+                {(!card.activities || card.activities.filter(a => a.activityType === 'note').length === 0) && (
+                  <div className="text-center py-6">
+                    <MessageSquare className="w-16 h-16 text-gray-200 dark:text-gray-700 mx-auto mb-3" strokeWidth={1} />
+                    <p className="text-sm text-gray-500 dark:text-gray-400">No comments yet. Be the first to add a note!</p>
+                  </div>
+                )}
 
-                  {/* AI Summary (if completed) */}
-                  {card.status === 'Done' && card.aiSummary && (
-                    <div className="flex gap-4 relative">
-                      <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0 relative z-10">
-                        <Sparkles className="w-5 h-5 text-white" />
-                      </div>
-                      <div className="flex-1 pb-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-600/30 rounded-lg p-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-sm font-semibold text-green-700 dark:text-green-400">AI Summary</span>
-                          <span className="text-xs text-gray-500">
-                            {card.aiSummaryCreatedAt && formatDateTime(new Date(card.aiSummaryCreatedAt))}
-                          </span>
-                        </div>
-                        <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-wrap">{card.aiSummary}</p>
-                      </div>
+                {/* AI Summary (if completed) */}
+                {card.status === 'Done' && card.aiSummary && (
+                  <div className="flex gap-3">
+                    <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0">
+                      <Sparkles className="w-5 h-5 text-white" />
                     </div>
-                  )}
-                </div>
-              ) : null}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium text-green-700 dark:text-green-400">AI Summary</span>
+                        <span className="text-gray-400">•</span>
+                        <span className="text-xs text-gray-500">
+                          {card.aiSummaryCreatedAt && formatDateTime(new Date(card.aiSummaryCreatedAt))}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{card.aiSummary}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Add Comment Section - Combined at the end */}
               {card.status !== 'Done' && (
                 <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-                      <User className="w-5 h-5 text-white" />
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-full bg-purple-600 dark:bg-purple-700 flex items-center justify-center flex-shrink-0">
+                      <span className="text-white font-semibold text-sm">
+                        {card.owner ? card.owner.charAt(0).toUpperCase() : 'J'}
+                      </span>
                     </div>
-                    <div className="flex-1 space-y-2">
+                    <div className="flex-1 flex items-end gap-2">
                       <textarea
                         value={noteText}
                         onChange={(e) => setNoteText(e.target.value)}
-                        placeholder="Write a comment..."
-                        rows={2}
-                        className="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none text-sm"
+                        placeholder="Write a comment, update, or note..."
+                        rows={1}
+                        className="flex-1 bg-white dark:bg-slate-800 text-gray-900 dark:text-white px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none text-sm min-h-[44px]"
                         onKeyPress={(e) => {
                           if (e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault();
                             handleAddNote();
                           }
                         }}
+                        style={{ 
+                          height: 'auto',
+                          maxHeight: '120px'
+                        }}
+                        onInput={(e) => {
+                          const target = e.target as HTMLTextAreaElement;
+                          target.style.height = 'auto';
+                          target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
+                        }}
                       />
-                      <div className="flex items-center justify-between">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          Press <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-slate-800 rounded text-xs font-mono border border-gray-300 dark:border-slate-600">Enter</kbd> to send
-                        </p>
-                        <button
-                          onClick={handleAddNote}
-                          disabled={!noteText.trim()}
-                          className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed text-white rounded-lg flex items-center gap-2 transition-colors font-medium text-sm shadow-sm"
-                        >
-                          <Send className="w-3.5 h-3.5" />
-                          Post
-                        </button>
-                      </div>
+                      <button
+                        onClick={handleAddNote}
+                        disabled={!noteText.trim()}
+                        className="w-11 h-11 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed text-white rounded-lg flex items-center justify-center transition-colors shadow-sm flex-shrink-0"
+                      >
+                        <Send className="w-5 h-5" />
+                      </button>
                     </div>
                   </div>
                 </div>
