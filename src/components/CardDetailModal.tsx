@@ -643,7 +643,7 @@ export function CardDetailModal({
 
             {/* Comments Section */}
             <div className="p-4 sm:p-6 bg-gray-50 dark:bg-slate-950/50">
-              <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                   <MessageSquare className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                   Comments
@@ -656,112 +656,111 @@ export function CardDetailModal({
               </div>
 
               {/* Comments Timeline */}
-              <div className="space-y-4">
-                {/* Original extraction */}
-                <div className="flex gap-4 relative">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0 relative z-10">
-                    <Sparkles className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1 pb-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">AI Extracted from Meeting</span>
-                      <span className="text-xs text-gray-500">
-                        {formatDateTime(new Date(card.createdAt))}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">{card.context || card.summary}</p>
-                    {card.timestamp && (
-                      <p className="text-xs text-gray-500 mt-1">📍 Transcript: {card.timestamp}</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* User comments only */}
-                {card.activities && card.activities.filter(a => a.activityType === 'note').length > 0 ? (
-                  card.activities.filter(a => a.activityType === 'note').map((activity) => (
-                    <div key={activity.id} className="flex gap-4 relative">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 relative z-10 ${
-                        activity.activityType === 'note' 
-                          ? 'bg-gradient-to-br from-blue-500 to-purple-600' 
-                          : 'bg-gradient-to-br from-purple-500 to-pink-600'
-                      }`}>
-                        {activity.activityType === 'note' && <MessageSquare className="w-5 h-5 text-white" />}
-                        {activity.activityType === 'status_change' && <Tag className="w-5 h-5 text-white" />}
-                        {activity.activityType === 'attachment' && <Paperclip className="w-5 h-5 text-white" />}
-                        {activity.activityType === 'edit' && <Edit3 className="w-5 h-5 text-white" />}
+              {(card.activities && card.activities.filter(a => a.activityType === 'note').length > 0) || card.context ? (
+                <div className="space-y-4 mb-4">
+                  {/* Original extraction */}
+                  {card.context && (
+                    <div className="flex gap-4 relative">
+                      <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0 relative z-10">
+                        <Sparkles className="w-5 h-5 text-white" />
                       </div>
                       <div className="flex-1 pb-4">
-                        <div className={`rounded-lg p-4 ${
-                          activity.activityType === 'note' 
-                            ? 'bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm' 
-                            : 'bg-gray-100 dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700/50'
-                        }`}>
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className={`text-sm font-bold ${
-                              activity.activityType === 'note' 
-                                ? 'text-blue-600 dark:text-blue-400' 
-                                : 'text-purple-600 dark:text-purple-400'
-                            }`}>
-                              You
-                            </span>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">
-                              {formatDateTime(new Date(activity.createdAt))}
-                            </span>
-                            {activity.activityType !== 'note' && (
-                              <span className="text-xs px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded font-medium">
-                                {activity.activityType.replace('_', ' ')}
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">AI Extracted from Meeting</span>
+                          <span className="text-xs text-gray-500">
+                            {formatDateTime(new Date(card.createdAt))}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">{card.context || card.summary}</p>
+                        {card.timestamp && (
+                          <p className="text-xs text-gray-500 mt-1">📍 Transcript: {card.timestamp}</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* User comments only */}
+                  {card.activities && card.activities.filter(a => a.activityType === 'note').length > 0 && (
+                    card.activities.filter(a => a.activityType === 'note').map((activity) => (
+                      <div key={activity.id} className="flex gap-4 relative">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0 relative z-10">
+                          <MessageSquare className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="flex-1 pb-4">
+                          <div className="rounded-lg p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm">
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                                You
                               </span>
-                            )}
-                          </div>
-                          <p className="text-sm text-gray-900 dark:text-gray-100 leading-relaxed">{activity.content}</p>
-                          {activity.metadata && activity.activityType === 'status_change' && (
-                            <div className="mt-2 text-xs text-gray-600 dark:text-gray-400 italic">
-                              {(() => {
-                                try {
-                                  const metadata = typeof activity.metadata === 'string' 
-                                    ? JSON.parse(activity.metadata) 
-                                    : activity.metadata;
-                                  return (
-                                    <>
-                                      Moved from <span className="font-semibold">{metadata.oldStatus}</span> to{' '}
-                                      <span className="font-semibold">{metadata.newStatus}</span>
-                                    </>
-                                  );
-                                } catch {
-                                  return null;
-                                }
-                              })()}
+                              <span className="text-xs text-gray-500 dark:text-gray-400">
+                                {formatDateTime(new Date(activity.createdAt))}
+                              </span>
                             </div>
-                          )}
+                            <p className="text-sm text-gray-900 dark:text-gray-100 leading-relaxed">{activity.content}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-8">
-                    <MessageSquare className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-                    <p className="text-sm text-gray-500 dark:text-gray-400">No comments yet. Be the first to add a note!</p>
-                  </div>
-                )}
+                    ))
+                  )}
 
-                {/* AI Summary (if completed) */}
-                {card.status === 'Done' && card.aiSummary && (
-                  <div className="flex gap-4 relative">
-                    <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0 relative z-10">
-                      <Sparkles className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1 pb-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-600/30 rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm font-semibold text-green-700 dark:text-green-400">AI Summary</span>
-                        <span className="text-xs text-gray-500">
-                          {card.aiSummaryCreatedAt && formatDateTime(new Date(card.aiSummaryCreatedAt))}
-                        </span>
+                  {/* AI Summary (if completed) */}
+                  {card.status === 'Done' && card.aiSummary && (
+                    <div className="flex gap-4 relative">
+                      <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0 relative z-10">
+                        <Sparkles className="w-5 h-5 text-white" />
                       </div>
-                      <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-wrap">{card.aiSummary}</p>
+                      <div className="flex-1 pb-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-600/30 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-sm font-semibold text-green-700 dark:text-green-400">AI Summary</span>
+                          <span className="text-xs text-gray-500">
+                            {card.aiSummaryCreatedAt && formatDateTime(new Date(card.aiSummaryCreatedAt))}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-wrap">{card.aiSummary}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : null}
+
+              {/* Add Comment Section - Combined at the end */}
+              {card.status !== 'Done' && (
+                <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                      <User className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1 space-y-2">
+                      <textarea
+                        value={noteText}
+                        onChange={(e) => setNoteText(e.target.value)}
+                        placeholder="Write a comment..."
+                        rows={2}
+                        className="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none text-sm"
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleAddNote();
+                          }
+                        }}
+                      />
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          Press <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-slate-800 rounded text-xs font-mono border border-gray-300 dark:border-slate-600">Enter</kbd> to send
+                        </p>
+                        <button
+                          onClick={handleAddNote}
+                          disabled={!noteText.trim()}
+                          className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed text-white rounded-lg flex items-center gap-2 transition-colors font-medium text-sm shadow-sm"
+                        >
+                          <Send className="w-3.5 h-3.5" />
+                          Post
+                        </button>
+                      </div>
                     </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
 
             {/* AI Message Composer Section */}
