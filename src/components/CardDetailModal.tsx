@@ -1046,7 +1046,6 @@ export function CardDetailModal({
               </>
             )}
               </div>
-            </div>
           </div>
         </div>
       </div>
