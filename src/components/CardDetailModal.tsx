@@ -319,10 +319,11 @@ export function CardDetailModal({
               {/* Type Badge */}
               <div className="flex items-center gap-2 mb-4 flex-wrap">
                 <span 
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold text-white shadow-sm`}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold text-white shadow-sm flex items-center gap-1.5`}
                   style={{ backgroundColor: typeConfig.color }}
                 >
-                  {typeConfig.emoji} {typeConfig.label}
+                  <Sparkles className="w-3.5 h-3.5" />
+                  {typeConfig.label.toUpperCase()}
                 </span>
                 
                 {/* Priority Badge - Editable */}
@@ -333,7 +334,7 @@ export function CardDetailModal({
                       onChange={(e) => handleSavePriority(e.target.value)}
                       onBlur={() => setIsEditingPriority(false)}
                       autoFocus
-                      className={`px-2.5 py-1 rounded text-xs font-semibold appearance-none cursor-pointer ${getPriorityColor(editedPriority)} focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                      className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold appearance-none cursor-pointer ${getPriorityColor(editedPriority)} focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center gap-1 border`}
                     >
                       {ALL_PRIORITIES.map((priority) => (
                         <option key={priority} value={priority}>
@@ -344,10 +345,10 @@ export function CardDetailModal({
                   ) : (
                     <button
                       onClick={() => setIsEditingPriority(true)}
-                      className={`px-2.5 py-1 rounded text-xs font-semibold ${getPriorityColor(card.priority || 'medium')} hover:opacity-80 transition-opacity flex items-center gap-1`}
+                      className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold ${getPriorityColor(card.priority || 'medium')} hover:opacity-80 transition-opacity flex items-center gap-1 border`}
                     >
-                      {(card.priority || 'MEDIUM').toUpperCase()}
                       <ChevronDown className="w-3 h-3" />
+                      {(card.priority || 'MEDIUM').toUpperCase()}
                     </button>
                   )}
                 </div>
@@ -360,7 +361,7 @@ export function CardDetailModal({
                       onChange={(e) => handleSaveStatus(e.target.value as CardStatus)}
                       onBlur={() => setIsEditingStatus(false)}
                       autoFocus
-                      className={`px-2.5 py-1 rounded text-xs font-medium bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-300 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                      className={`px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-slate-600 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500`}
                     >
                       {ALL_STATUSES.map((status) => (
                         <option key={status} value={status}>
@@ -371,10 +372,10 @@ export function CardDetailModal({
                   ) : (
                     <button
                       onClick={() => setIsEditingStatus(true)}
-                      className={`px-2.5 py-1 rounded text-xs font-medium bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors flex items-center gap-1`}
+                      className={`px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-1`}
                     >
+                      <CheckCircle2 className="w-3 h-3" />
                       {card.status}
-                      <ChevronDown className="w-3 h-3" />
                     </button>
                   )}
                 </div>
