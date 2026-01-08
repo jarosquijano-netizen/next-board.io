@@ -762,8 +762,8 @@ export function CardDetailModal({
             {/* AI Message Generator Section */}
             <div className="p-4 sm:p-6 bg-gray-50 dark:bg-slate-950/50">
               <div className="pt-6">
-                  {/* Header */}
-                  <div className="flex items-center justify-between mb-4">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                       <Sparkles className="h-5 w-5 text-purple-500" />
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -879,26 +879,26 @@ export function CardDetailModal({
                         </p>
                       </div>
                     )}
-                  </div>
+                </div>
 
-                  {/* Info Box */}
-                  <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <div className="flex gap-2">
-                      <svg className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <div>
-                        <p className="text-xs font-medium text-blue-900 dark:text-blue-300 mb-1">
-                          💡 Pro Tip
-                        </p>
-                        <p className="text-xs text-blue-700 dark:text-blue-400">
-                          Messages adapt based on: card type (Action, Decision, etc.), priority (High, Urgent), 
-                          status (overdue, due today), and assigned owner. Perfect for quick follow-ups!
-                        </p>
-                      </div>
+                {/* Info Box */}
+                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <div className="flex gap-2">
+                    <svg className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <p className="text-xs font-medium text-blue-900 dark:text-blue-300 mb-1">
+                        💡 Pro Tip
+                      </p>
+                      <p className="text-xs text-blue-700 dark:text-blue-400">
+                        Messages adapt based on: card type (Action, Decision, etc.), priority (High, Urgent), 
+                        status (overdue, due today), and assigned owner. Perfect for quick follow-ups!
+                      </p>
                     </div>
                   </div>
                 </div>
+              </div>
             </div>
 
             {/* Activity Section - Moved to end */}
