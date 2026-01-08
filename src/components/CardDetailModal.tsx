@@ -20,6 +20,8 @@ import {
   ChevronDown,
   UserPlus,
   Users,
+  Copy,
+  Loader2,
 } from 'lucide-react';
 import { formatDateTime } from '@/lib/utils';
 import { getTimeStatus, formatDueDate, getPriorityColor } from '@/lib/time-utils';
@@ -35,6 +37,13 @@ interface CardDetailModalProps {
   onAddNote: (content: string) => Promise<void>;
   onGenerateSummary: () => Promise<void>;
   onDelete: () => Promise<void>;
+}
+
+interface MessageSuggestion {
+  type: string;
+  label: string;
+  icon: string;
+  color: string;
 }
 
 // Card type configuration
@@ -76,6 +85,12 @@ export function CardDetailModal({
   const [editedOwner, setEditedOwner] = useState(card.owner || '');
   const [isEditingCoOwners, setIsEditingCoOwners] = useState(false);
   const [editedCoOwners, setEditedCoOwners] = useState('');
+  
+  // AI Message Generator state
+  const [generatedMessage, setGeneratedMessage] = useState<string>('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [messageCopied, setMessageCopied] = useState(false);
+  const [suggestions, setSuggestions] = useState<MessageSuggestion[]>([]);
   
   // Parse additional contacts as co-owners
   const coOwners = (() => {
@@ -124,6 +139,78 @@ export function CardDetailModal({
       activitiesData: card.activities
     });
   }, [card.summary, card.status, card.priority, card.dueDate, card.owner, card.activities]);
+
+  // Load message suggestions when modal opens
+  useEffect(() => {
+    if (isOpen && card?.id) {
+      loadMessageSuggestions();
+      setGeneratedMessage(''); // Reset message when card changes
+    }
+  }, [isOpen, card?.id]);
+
+  const loadMessageSuggestions = async () => {
+    if (!card?.id) return;
+    
+    try {
+      const response = await fetch(`/api/cards/${card.id}/generate-message`);
+      if (response.ok) {
+        const data = await response.json();
+        setSuggestions(data.suggestions || []);
+      }
+    } catch (error) {
+      console.error('Error loading suggestions:', error);
+    }
+  };
+
+  const generateMessage = async (messageType?: string) => {
+    if (!card?.id) return;
+    
+    setIsGenerating(true);
+    setMessageCopied(false);
+    
+    try {
+      const response = await fetch(`/api/cards/${card.id}/generate-message`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messageType, tone: 'professional' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate message');
+      }
+
+      const data = await response.json();
+      setGeneratedMessage(data.message);
+    } catch (error) {
+      console.error('Error generating message:', error);
+      alert('Failed to generate message. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const copyMessage = async () => {
+    try {
+      await navigator.clipboard.writeText(generatedMessage);
+      setMessageCopied(true);
+      setTimeout(() => setMessageCopied(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+      alert('Failed to copy message');
+    }
+  };
+
+  const getColorClass = (color: string) => {
+    const colors: Record<string, string> = {
+      blue: 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50',
+      red: 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50',
+      orange: 'bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 hover:bg-orange-100 dark:hover:bg-orange-900/50',
+      yellow: 'bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 hover:bg-yellow-100 dark:hover:bg-yellow-900/50',
+      green: 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50',
+      gray: 'bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+    };
+    return colors[color] || colors.gray;
+  };
 
   if (!isOpen) return null;
 
@@ -226,12 +313,12 @@ export function CardDetailModal({
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-start justify-between p-4 sm:p-6 border-b border-slate-100 dark:border-slate-700 flex-shrink-0">
+          <div className="flex items-start justify-between p-5 sm:p-6 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex-shrink-0">
             <div className="flex-1 pr-4">
               {/* Type Badge */}
-              <div className="flex items-center gap-2 mb-3 flex-wrap">
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
                 <span 
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold text-white`}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold text-white shadow-sm`}
                   style={{ backgroundColor: typeConfig.color }}
                 >
                   {typeConfig.emoji} {typeConfig.label}
@@ -315,7 +402,7 @@ export function CardDetailModal({
                 </div>
               ) : (
                 <div className="flex items-start gap-2 group">
-                  <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white flex-1 break-words">{card.summary}</h2>
+                  <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white flex-1 break-words leading-relaxed">{card.summary}</h2>
                   <button
                     onClick={() => setIsEditing(true)}
                     className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded transition-all touch-manipulation active:scale-95 flex-shrink-0"
@@ -327,7 +414,7 @@ export function CardDetailModal({
 
               {/* Original Context */}
               {card.context && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 italic mt-2 border-l-2 border-blue-500 pl-3">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 italic mt-3 border-l-2 border-blue-500 pl-3 leading-relaxed">
                   &quot;{card.context}&quot;
                 </p>
               )}
@@ -344,16 +431,16 @@ export function CardDetailModal({
           </div>
 
           {/* Body - Scrollable - includes everything below header */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-slate-950">
             {/* Metadata Section */}
-            <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 border-b border-gray-200 dark:border-slate-800">
+            <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900">
               {/* Owner - Editable */}
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
                   <User className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Owner</p>
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wide">Owner</p>
                   {isEditingOwner ? (
                     <div className="flex items-center gap-2">
                       <input
@@ -389,7 +476,7 @@ export function CardDetailModal({
                   <Calendar className={`w-5 h-5 ${timeStatus.isOverdue ? 'text-white' : 'text-gray-600 dark:text-gray-400'}`} />
                 </div>
                 <div className="flex-1">
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Due Date</p>
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wide">Due Date</p>
                   {isEditingDueDate ? (
                     <div className="flex items-center gap-2">
                       <DatePicker
@@ -425,7 +512,7 @@ export function CardDetailModal({
                   <Clock className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Created</p>
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Created</p>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {formatDateTime(new Date(card.createdAt))}
                   </p>
@@ -439,7 +526,7 @@ export function CardDetailModal({
                     <CheckCircle2 className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Completed</p>
+                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Completed</p>
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
                       {formatDateTime(new Date(card.completedAt))}
                     </p>
@@ -454,7 +541,7 @@ export function CardDetailModal({
                     <Users className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Co-Owners</p>
+                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Co-Owners</p>
                     
                     {/* Display existing co-owners */}
                     {coOwners.length > 0 && (
@@ -668,6 +755,146 @@ export function CardDetailModal({
                     </div>
                   </div>
                 )}
+
+                {/* AI Message Generator Section */}
+                <div className="border-t border-gray-200 dark:border-slate-700 pt-6 mt-6">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-purple-500" />
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        AI Message Generator
+                      </h3>
+                    </div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 bg-purple-50 dark:bg-purple-900/30 px-2 py-1 rounded">
+                      Copy & Paste Ready
+                    </span>
+                  </div>
+
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    Generate contextual messages for Slack or email based on card status, priority, and situation.
+                  </p>
+
+                  {/* Message Type Buttons */}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap gap-2">
+                      {suggestions.map((suggestion) => (
+                        <button
+                          key={suggestion.type}
+                          onClick={() => generateMessage(suggestion.type)}
+                          disabled={isGenerating}
+                          className={`px-3 py-2 text-sm rounded-lg font-medium transition-all flex items-center gap-2 ${getColorClass(suggestion.color)} disabled:opacity-50 disabled:cursor-not-allowed`}
+                        >
+                          <span>{suggestion.icon}</span>
+                          <span>{suggestion.label}</span>
+                        </button>
+                      ))}
+                      
+                      {/* Default Follow-up button if no suggestions */}
+                      {suggestions.length === 0 && (
+                        <button
+                          onClick={() => generateMessage('follow-up')}
+                          disabled={isGenerating}
+                          className={`px-3 py-2 text-sm rounded-lg font-medium transition-all flex items-center gap-2 ${getColorClass('blue')} disabled:opacity-50`}
+                        >
+                          <span>💬</span>
+                          <span>Generate Follow-up</span>
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Generated Message Display */}
+                    {generatedMessage && (
+                      <div className="relative animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="p-4 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg border-2 border-purple-200 dark:border-purple-800">
+                          {/* Header with copy button */}
+                          <div className="flex items-start justify-between gap-2 mb-3">
+                            <div className="flex items-center gap-2">
+                              <MessageSquare className="h-4 w-4 text-purple-600 dark:text-purple-400 flex-shrink-0" />
+                              <span className="text-xs font-semibold text-purple-900 dark:text-purple-300 uppercase tracking-wide">
+                                Generated Message
+                              </span>
+                            </div>
+                            <button
+                              onClick={copyMessage}
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border-2 border-purple-300 dark:border-purple-700 rounded-md hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-all font-medium text-purple-700 dark:text-purple-300 shadow-sm"
+                            >
+                              {messageCopied ? (
+                                <>
+                                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                  <span>Copied!</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="h-4 w-4" />
+                                  <span>Copy</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                          
+                          {/* Message Content */}
+                          <div className="bg-white dark:bg-gray-900 rounded-md p-3 border border-purple-100 dark:border-purple-800">
+                            <p className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap leading-relaxed">
+                              {generatedMessage}
+                            </p>
+                          </div>
+                          
+                          {/* Footer */}
+                          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-purple-200 dark:border-purple-800">
+                            <div className="flex items-center gap-1.5 text-xs text-purple-600 dark:text-purple-400">
+                              <Sparkles className="h-3 w-3" />
+                              <span>AI-generated • Ready for Slack or Email</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Loading State */}
+                    {isGenerating && (
+                      <div className="flex items-center justify-center gap-3 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
+                        <Loader2 className="h-5 w-5 animate-spin text-purple-500" />
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                          Generating your message...
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Empty State - First Time */}
+                    {!generatedMessage && !isGenerating && (
+                      <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 text-center">
+                        <Sparkles className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Click a button above to generate a contextual message
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                          Messages are tailored to card type, priority, and current status
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Info Box */}
+                  <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <div className="flex gap-2">
+                      <svg className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <div>
+                        <p className="text-xs font-medium text-blue-900 dark:text-blue-300 mb-1">
+                          💡 Pro Tip
+                        </p>
+                        <p className="text-xs text-blue-700 dark:text-blue-400">
+                          Messages adapt based on: card type (Action, Decision, etc.), priority (High, Urgent), 
+                          status (overdue, due today), and assigned owner. Perfect for quick follow-ups!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Add Comment Section - Now inside scrollable area */}
