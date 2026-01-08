@@ -925,84 +925,55 @@ export function CardDetailModal({
               </div>
             )}
 
-            {/* Add Comment Section - Now inside scrollable area */}
-            <div className="p-6 border-t-2 border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
-            {card.status !== 'Done' ? (
-              <div className="space-y-4">
-                <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                  Add a comment
-                </h4>
-                <div className="flex gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-                    <User className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1 space-y-3">
-                    <textarea
-                      value={noteText}
-                      onChange={(e) => setNoteText(e.target.value)}
-                      placeholder="Write a comment, update, or note..."
-                      rows={3}
-                      className="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault();
-                          handleAddNote();
-                        }
-                      }}
-                    />
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Press <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-slate-800 rounded text-xs font-mono border border-gray-300 dark:border-slate-600">Enter</kbd> to send
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={handleDelete}
-                          className="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-1 px-3 py-1.5 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                          Delete Card
-                        </button>
-                        <button
-                          onClick={handleAddNote}
-                          disabled={!noteText.trim()}
-                          className="px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed text-white rounded-lg flex items-center gap-2 transition-colors font-semibold text-sm shadow-sm"
-                        >
-                          <Send className="w-4 h-4" />
-                          Post Comment
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <>
-                {!card.aiSummary ? (
+            {/* Footer Actions */}
+            <div className="p-4 sm:p-6 border-t border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+              {card.status !== 'Done' ? (
+                <div className="flex items-center justify-between">
                   <button
-                    onClick={handleGenerateSummary}
-                    disabled={isGeneratingSummary}
-                    className="w-full py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 dark:disabled:bg-slate-700 text-white rounded-lg flex items-center justify-center gap-2 font-semibold transition-colors"
+                    onClick={handleDelete}
+                    className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                   >
-                    <Sparkles className={`w-5 h-5 ${isGeneratingSummary ? 'animate-spin' : ''}`} />
-                    {isGeneratingSummary ? 'Generating Summary...' : 'Generate AI Summary'}
+                    <Trash2 className="w-4 h-4" />
+                    Delete Card
                   </button>
-                ) : (
-                  <div className="text-center">
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                      ✅ This card has been completed with an AI summary
-                    </p>
+                  {!card.aiSummary && (
                     <button
-                      onClick={handleDelete}
-                      className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-1 mx-auto"
+                      onClick={handleGenerateSummary}
+                      disabled={isGeneratingSummary}
+                      className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 dark:disabled:bg-slate-700 text-white rounded-lg flex items-center gap-2 font-medium transition-colors"
                     >
-                      <Trash2 className="w-4 h-4" />
-                      Delete Card
+                      <Sparkles className={`w-4 h-4 ${isGeneratingSummary ? 'animate-spin' : ''}`} />
+                      {isGeneratingSummary ? 'Generating...' : 'Generate AI Summary'}
                     </button>
-                  </div>
-                )}
-              </>
-            )}
+                  )}
+                </div>
+              ) : (
+                <div className="text-center">
+                  {!card.aiSummary ? (
+                    <button
+                      onClick={handleGenerateSummary}
+                      disabled={isGeneratingSummary}
+                      className="w-full py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 dark:disabled:bg-slate-700 text-white rounded-lg flex items-center justify-center gap-2 font-semibold transition-colors"
+                    >
+                      <Sparkles className={`w-5 h-5 ${isGeneratingSummary ? 'animate-spin' : ''}`} />
+                      {isGeneratingSummary ? 'Generating Summary...' : 'Generate AI Summary'}
+                    </button>
+                  ) : (
+                    <div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                        ✅ This card has been completed with an AI summary
+                      </p>
+                      <button
+                        onClick={handleDelete}
+                        className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 flex items-center gap-1 mx-auto"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete Card
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
