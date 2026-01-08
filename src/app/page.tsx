@@ -115,9 +115,9 @@ export default function Home() {
 
   if (!isLoaded || loading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-slate-950">
+      <div className="min-h-screen bg-white dark:bg-slate-950 flex">
         <Sidebar />
-        <div className={`${contentMargin} min-h-screen transition-all duration-300 pb-20 lg:pb-0`}>
+        <div className="flex-1 min-h-screen transition-all duration-300 pb-20 lg:pb-0">
           <div className="border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-50 shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
               <div className="mb-6">
