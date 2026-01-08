@@ -636,21 +636,21 @@ export function CardDetailModal({
               )}
             </div>
 
-            {/* Comments & Activity Section */}
+            {/* Comments Section */}
             <div className="p-4 sm:p-6 bg-gray-50 dark:bg-slate-950/50">
               <div className="flex items-center justify-between mb-4 sm:mb-6">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                   <MessageSquare className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                  Comments & Activity
+                  Comments
                 </h3>
                 <div className="flex items-center gap-2">
                   <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold rounded-full">
-                    {(card.activities?.length || 0)} comments
+                    {card.activities?.filter(a => a.activityType === 'note').length || 0} comments
                   </span>
                 </div>
               </div>
 
-              {/* Timeline */}
+              {/* Comments Timeline */}
               <div className="space-y-4 relative before:absolute before:left-5 before:top-0 before:bottom-0 before:w-0.5 before:bg-gray-200 dark:before:bg-slate-700">
                 {/* Original extraction */}
                 <div className="flex gap-4 relative">
@@ -671,9 +671,9 @@ export function CardDetailModal({
                   </div>
                 </div>
 
-                {/* User activities - Comments & Updates */}
-                {card.activities && card.activities.length > 0 ? (
-                  card.activities.map((activity) => (
+                {/* User comments only */}
+                {card.activities && card.activities.filter(a => a.activityType === 'note').length > 0 ? (
+                  card.activities.filter(a => a.activityType === 'note').map((activity) => (
                     <div key={activity.id} className="flex gap-4 relative">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 relative z-10 ${
                         activity.activityType === 'note' 
@@ -756,9 +756,12 @@ export function CardDetailModal({
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
 
-                {/* AI Message Generator Section */}
-                <div className="border-t border-gray-200 dark:border-slate-700 pt-6 mt-6">
+            {/* AI Message Generator Section */}
+            <div className="p-4 sm:p-6 bg-gray-50 dark:bg-slate-950/50">
+              <div className="pt-6">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
@@ -897,6 +900,72 @@ export function CardDetailModal({
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Activity Section - Moved to end */}
+            {card.activities && card.activities.filter(a => a.activityType !== 'note').length > 0 && (
+              <div className="p-4 sm:p-6 bg-gray-50 dark:bg-slate-950/50 border-t border-gray-200 dark:border-slate-700">
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <FileText className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                    Activity
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-full">
+                      {card.activities.filter(a => a.activityType !== 'note').length} activities
+                    </span>
+                  </div>
+                </div>
+
+                {/* Activity Timeline */}
+                <div className="space-y-4 relative before:absolute before:left-5 before:top-0 before:bottom-0 before:w-0.5 before:bg-gray-200 dark:before:bg-slate-700">
+                  {card.activities.filter(a => a.activityType !== 'note').map((activity) => (
+                    <div key={activity.id} className="flex gap-4 relative">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center flex-shrink-0 relative z-10">
+                        {activity.activityType === 'status_change' && <Tag className="w-5 h-5 text-white" />}
+                        {activity.activityType === 'attachment' && <Paperclip className="w-5 h-5 text-white" />}
+                        {activity.activityType === 'edit' && <Edit3 className="w-5 h-5 text-white" />}
+                      </div>
+                      <div className="flex-1 pb-4">
+                        <div className="rounded-lg p-4 bg-gray-100 dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700/50">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-sm font-bold text-purple-600 dark:text-purple-400">
+                              You
+                            </span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              {formatDateTime(new Date(activity.createdAt))}
+                            </span>
+                            <span className="text-xs px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded font-medium">
+                              {activity.activityType.replace('_', ' ')}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-900 dark:text-gray-100 leading-relaxed">{activity.content}</p>
+                          {activity.metadata && activity.activityType === 'status_change' && (
+                            <div className="mt-2 text-xs text-gray-600 dark:text-gray-400 italic">
+                              {(() => {
+                                try {
+                                  const metadata = typeof activity.metadata === 'string' 
+                                    ? JSON.parse(activity.metadata) 
+                                    : activity.metadata;
+                                  return (
+                                    <>
+                                      Moved from <span className="font-semibold">{metadata.oldStatus}</span> to{' '}
+                                      <span className="font-semibold">{metadata.newStatus}</span>
+                                    </>
+                                  );
+                                } catch {
+                                  return null;
+                                }
+                              })()}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
               {/* Add Comment Section - Now inside scrollable area */}
               <div className="p-6 border-t-2 border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
