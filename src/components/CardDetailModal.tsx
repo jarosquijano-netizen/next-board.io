@@ -712,20 +712,20 @@ export function CardDetailModal({
 
               {/* Add Comment Section - Combined at the end */}
               {card.status !== 'Done' && (
-                <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-purple-600 dark:bg-purple-700 flex items-center justify-center flex-shrink-0">
-                      <span className="text-white font-semibold text-sm">
+                <div className="border-t border-gray-200 dark:border-slate-700 pt-3 mt-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-purple-600 dark:bg-purple-700 flex items-center justify-center flex-shrink-0">
+                      <span className="text-white font-semibold text-xs">
                         {card.owner ? card.owner.charAt(0).toUpperCase() : 'J'}
                       </span>
                     </div>
-                    <div className="flex-1 flex items-end gap-2">
+                    <div className="flex-1 flex items-center gap-2">
                       <textarea
                         value={noteText}
                         onChange={(e) => setNoteText(e.target.value)}
                         placeholder="Write a comment, update, or note..."
                         rows={1}
-                        className="flex-1 bg-white dark:bg-slate-800 text-gray-900 dark:text-white px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none text-sm min-h-[44px]"
+                        className="flex-1 bg-white dark:bg-slate-800 text-gray-900 dark:text-white px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none text-sm min-h-[36px]"
                         onKeyPress={(e) => {
                           if (e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault();
@@ -734,20 +734,20 @@ export function CardDetailModal({
                         }}
                         style={{ 
                           height: 'auto',
-                          maxHeight: '120px'
+                          maxHeight: '100px'
                         }}
                         onInput={(e) => {
                           const target = e.target as HTMLTextAreaElement;
                           target.style.height = 'auto';
-                          target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
+                          target.style.height = `${Math.min(target.scrollHeight, 100)}px`;
                         }}
                       />
                       <button
                         onClick={handleAddNote}
                         disabled={!noteText.trim()}
-                        className="w-11 h-11 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed text-white rounded-lg flex items-center justify-center transition-colors shadow-sm flex-shrink-0"
+                        className="w-9 h-9 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed text-white rounded-lg flex items-center justify-center transition-colors shadow-sm flex-shrink-0"
                       >
-                        <Send className="w-5 h-5" />
+                        <Send className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
