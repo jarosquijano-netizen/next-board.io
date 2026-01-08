@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Sidebar from '@/components/Sidebar';
 import { NotificationSettings } from '@/components/NotificationSettings';
 
 export default function NotificationSettingsPage() {
@@ -70,18 +71,24 @@ export default function NotificationSettingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-white">Loading...</div>
+      <div className="min-h-screen bg-slate-950 flex">
+        <Sidebar />
+        <div className="flex-1 flex items-center justify-center transition-all duration-300">
+          <div className="text-white">Loading...</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 py-12 px-4">
-      <NotificationSettings 
-        preferences={preferences} 
-        onSave={handleSave}
-      />
+    <div className="min-h-screen bg-slate-950 flex">
+      <Sidebar />
+      <div className="flex-1 min-h-screen transition-all duration-300 py-12 px-4">
+        <NotificationSettings 
+          preferences={preferences} 
+          onSave={handleSave}
+        />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Sidebar from '@/components/Sidebar';
 
 export default function EmailPreview() {
   const [activeTemplate, setActiveTemplate] = useState<'digest' | 'overdue' | 'duetoday'>('digest');
@@ -33,7 +34,10 @@ export default function EmailPreview() {
   ];
 
   return (
-    <div style={{ padding: '40px', maxWidth: '1400px', margin: '0 auto', fontFamily: 'system-ui' }}>
+    <div className="min-h-screen bg-white dark:bg-slate-950 flex">
+      <Sidebar />
+      <div className="flex-1 min-h-screen transition-all duration-300 overflow-auto">
+        <div style={{ padding: '40px', maxWidth: '1400px', margin: '0 auto', fontFamily: 'system-ui' }}>
       <div style={{ marginBottom: '40px' }}>
         <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '12px' }}>
           📧 Email Template Previews
@@ -146,6 +150,8 @@ export default function EmailPreview() {
           <li>⏳ Add Resend API key to .env</li>
           <li>⏳ Run <code style={{ background: '#1e293b', padding: '2px 8px', borderRadius: '4px' }}>.\test-email.ps1</code> to test</li>
         </ul>
+      </div>
+        </div>
       </div>
     </div>
   );
