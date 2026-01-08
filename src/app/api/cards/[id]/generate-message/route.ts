@@ -1,8 +1,8 @@
 // File: /src/app/api/cards/[id]/generate-message/route.ts
-// AI Message Generator API Endpoint
+// AI Message Generator API Endpoint - Comprehensive Testing Matrix Implementation
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 import Anthropic from '@anthropic-ai/sdk';
 
@@ -11,6 +11,12 @@ interface CardSituation {
   daysOverdue?: number;
   daysSinceStatusChange?: number;
   daysUntilDue?: number;
+}
+
+interface MessageRecipient {
+  type: 'specific_person' | 'team' | 'self_reminder';
+  name?: string;
+  names?: string[];
 }
 
 // POST - Generate message for a specific card
@@ -23,6 +29,10 @@ export async function POST(
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    // Get logged in user details
+    const clerkUser = await currentUser();
+    const loggedInUserName = clerkUser?.firstName || clerkUser?.username || 'User';
 
     const { id: cardId } = await params;
     const body = await request.json();
@@ -40,13 +50,34 @@ export async function POST(
       return NextResponse.json({ error: 'Card not found' }, { status: 404 });
     }
 
+    // Parse involvedPeople and additionalContacts
+    const involvedPeople = card.involvedPeople 
+      ? (typeof card.involvedPeople === 'string' ? JSON.parse(card.involvedPeople) : card.involvedPeople)
+      : [];
+    const additionalContacts = card.additionalContacts
+      ? (typeof card.additionalContacts === 'string' ? JSON.parse(card.additionalContacts) : card.additionalContacts)
+      : [];
+
     const situation = determineCardSituation(card);
-    const message = await generateContextualMessage(card, situation, messageType, tone);
+    const recipient = determineMessageRecipient(card, loggedInUserName, involvedPeople, additionalContacts);
+    const message = await generateContextualMessage(
+      card, 
+      situation, 
+      recipient,
+      loggedInUserName,
+      messageType, 
+      tone
+    );
 
     return NextResponse.json({
       success: true,
       message,
       situation: situation.type,
+      recipient: {
+        type: recipient.type,
+        name: recipient.name,
+        names: recipient.names
+      },
       metadata: {
         cardType: card.type,
         priority: card.priority,
@@ -103,6 +134,118 @@ export async function GET(
       { status: 500 }
     );
   }
+}
+
+/**
+ * Determine message recipient based on comprehensive matrix
+ * Priority order:
+ * 1. primaryContact presente → TO: primaryContact
+ * 2. involvedPeople presente → TO: other people (exclude logged user)
+ * 3. Follow-up + name in context → TO: extracted name
+ * 4. Question OR Blocker → TO: team
+ * 5. Decision OR Update → TO: team
+ * 6. Type = Risk OR Idea → TO: team
+ * 7. owner ≠ logged user → TO: owner
+ * 8. Default → TO: team OR self_reminder
+ */
+function determineMessageRecipient(
+  card: any,
+  loggedInUserName: string,
+  involvedPeople: string[],
+  additionalContacts: string[]
+): MessageRecipient {
+  // 1. primaryContact has highest priority
+  if (card.primaryContact && card.primaryContact !== loggedInUserName) {
+    return {
+      type: 'specific_person',
+      name: card.primaryContact
+    };
+  }
+
+  // 2. involvedPeople - exclude logged user
+  if (involvedPeople && involvedPeople.length > 0) {
+    const otherPeople = involvedPeople.filter(
+      (person: string) => person !== loggedInUserName
+    );
+    if (otherPeople.length > 0) {
+      if (otherPeople.length === 1) {
+        return {
+          type: 'specific_person',
+          name: otherPeople[0]
+        };
+      }
+      return {
+        type: 'specific_person',
+        names: otherPeople
+      };
+    }
+  }
+
+  // 3. Follow-up + name extraction from context/title
+  if (card.type === 'Follow-up') {
+    const extractedName = extractNameFromContext(card.summary, card.context);
+    if (extractedName && extractedName !== loggedInUserName) {
+      return {
+        type: 'specific_person',
+        name: extractedName
+      };
+    }
+  }
+
+  // 4. Question OR Blocker → TO: team
+  if (card.type === 'Question' || card.type === 'Blocker' || card.status === 'Blocked') {
+    return { type: 'team' };
+  }
+
+  // 5. Decision OR Update → TO: team
+  if (card.type === 'Decision' || card.type === 'Update') {
+    return { type: 'team' };
+  }
+
+  // 6. Risk OR Idea → TO: team
+  if (card.type === 'Risk' || card.type === 'Idea') {
+    return { type: 'team' };
+  }
+
+  // 7. owner ≠ logged user → TO: owner
+  if (card.owner && card.owner !== loggedInUserName) {
+    return {
+      type: 'specific_person',
+      name: card.owner
+    };
+  }
+
+  // 8. Default → TO: team OR self_reminder
+  if (card.owner === loggedInUserName || (!card.owner && card.type === 'Action')) {
+    return { type: 'self_reminder' };
+  }
+
+  return { type: 'team' };
+}
+
+/**
+ * Extract name from context or title (simple pattern matching)
+ */
+function extractNameFromContext(summary: string, context?: string | null): string | null {
+  const text = `${summary} ${context || ''}`.toLowerCase();
+  
+  // Common name patterns
+  const namePatterns = [
+    /(?:with|to|from|contact)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/g,
+    /([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s+(?:about|regarding|concerning)/g
+  ];
+
+  for (const pattern of namePatterns) {
+    const matches = text.match(pattern);
+    if (matches && matches.length > 0) {
+      const name = matches[0].replace(/(?:with|to|from|contact|about|regarding|concerning)\s+/i, '').trim();
+      if (name && name.length > 1) {
+        return name.split(' ').map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(' ');
+      }
+    }
+  }
+
+  return null;
 }
 
 function determineCardSituation(card: any): CardSituation {
@@ -215,12 +358,14 @@ function getSuggestedMessageTypes(card: any, situation: CardSituation) {
 async function generateContextualMessage(
   card: any,
   situation: CardSituation,
+  recipient: MessageRecipient,
+  loggedInUserName: string,
   messageType?: string,
   tone: 'professional' | 'casual' | 'urgent' = 'professional'
 ): Promise<string> {
   
   if (!process.env.ANTHROPIC_API_KEY) {
-    return generateTemplateMessage(card, situation, messageType);
+    return generateTemplateMessage(card, situation, recipient, loggedInUserName, messageType);
   }
 
   try {
@@ -228,7 +373,7 @@ async function generateContextualMessage(
       apiKey: process.env.ANTHROPIC_API_KEY
     });
 
-    const prompt = buildMessagePrompt(card, situation, messageType, tone);
+    const prompt = buildMessagePrompt(card, situation, recipient, loggedInUserName, messageType, tone);
 
     const response = await anthropic.messages.create({
       model: 'claude-3-haiku-20240307',
@@ -246,13 +391,15 @@ async function generateContextualMessage(
     
   } catch (error) {
     console.error('Claude API error:', error);
-    return generateTemplateMessage(card, situation, messageType);
+    return generateTemplateMessage(card, situation, recipient, loggedInUserName, messageType);
   }
 }
 
 function buildMessagePrompt(
   card: any,
   situation: CardSituation,
+  recipient: MessageRecipient,
+  loggedInUserName: string,
   messageType?: string,
   tone: string = 'professional'
 ): string {
@@ -262,12 +409,29 @@ function buildMessagePrompt(
   contextParts.push(`Title: "${card.summary}"`);
   contextParts.push(`Priority: ${card.priority || 'Medium'}`);
   contextParts.push(`Status: ${card.status}`);
+  contextParts.push(`Logged In User: ${loggedInUserName}`);
   
+  // Recipient information
+  if (recipient.type === 'specific_person') {
+    if (recipient.names && recipient.names.length > 1) {
+      contextParts.push(`Recipient: ${recipient.names.join(', ')} (multiple people)`);
+    } else {
+      contextParts.push(`Recipient: ${recipient.name || 'Unknown'}`);
+    }
+    contextParts.push(`Message Direction: FROM ${loggedInUserName} TO ${recipient.name || recipient.names?.join(', ') || 'recipient'}`);
+  } else if (recipient.type === 'team') {
+    contextParts.push(`Recipient: Team`);
+    contextParts.push(`Message Direction: FROM ${loggedInUserName} TO Team`);
+  } else {
+    contextParts.push(`Recipient: Self reminder`);
+    contextParts.push(`Message Direction: FROM ${loggedInUserName} (self)`);
+  }
+
   if (card.owner) {
     const firstName = card.owner.split(' ')[0];
-    contextParts.push(`Owner: ${card.owner} (use first name: ${firstName})`);
+    contextParts.push(`Owner: ${card.owner} (first name: ${firstName})`);
   } else {
-    contextParts.push(`Owner: Unassigned (address as "team")`);
+    contextParts.push(`Owner: Unassigned`);
   }
 
   if (card.dueDate) {
@@ -282,7 +446,9 @@ function buildMessagePrompt(
   if (card.context) contextParts.push(`Context: ${card.context}`);
   if (card.primaryContact) contextParts.push(`Primary Contact: ${card.primaryContact}`);
   if (card.interactionType) contextParts.push(`Interaction Type: ${card.interactionType}`);
+  if (card.interactionNote) contextParts.push(`Interaction Note: ${card.interactionNote}`);
   if (card.blockedReason) contextParts.push(`Blocked Reason: ${card.blockedReason}`);
+  if (card.blockedBy) contextParts.push(`Blocked By: ${card.blockedBy}`);
 
   const toneGuide = {
     professional: 'Professional, respectful, and formal',
@@ -290,19 +456,36 @@ function buildMessagePrompt(
     urgent: 'Direct, action-oriented, and time-sensitive'
   }[tone];
 
+  // Build recipient addressing instruction
+  let recipientInstruction = '';
+  if (recipient.type === 'specific_person') {
+    if (recipient.names && recipient.names.length > 1) {
+      recipientInstruction = `Address as "Hi everyone" or "Hey ${recipient.names.map(n => n.split(' ')[0]).join(', ')}"`;
+    } else {
+      const firstName = recipient.name?.split(' ')[0] || 'there';
+      recipientInstruction = `Start with "Hey ${firstName}," or "Hi ${firstName},"`;
+    }
+  } else if (recipient.type === 'team') {
+    recipientInstruction = `Start with "Hi team,"`;
+  } else {
+    recipientInstruction = `Use first person self-reminder format like "Remember to..." or "I need to..."`;
+  }
+
   return `Generate a brief follow-up message for this action item that can be copied into Slack/email.
 
 CARD INFO:
 ${contextParts.join('\n')}
 
-REQUIREMENTS:
+CRITICAL REQUIREMENTS:
+- ALWAYS use FIRST PERSON perspective: "I wanted", "I have", "I'm", "I noticed" (NOT "You should", "Please do")
+- Message goes FROM ${loggedInUserName} TO ${recipient.type === 'specific_person' ? recipient.name || recipient.names?.join(', ') : recipient.type === 'team' ? 'Team' : 'Self'}
+- ${recipientInstruction}
 - 2-4 sentences maximum
 - Tone: ${toneGuide}
 - Plain text, no subject line
-- Include card title in quotes
-- ${card.owner ? `Address ${card.owner.split(' ')[0]} by first name` : 'Address "team"'}
-- Be specific about ${situation.type} situation
-- End with clear call-to-action
+- Focus on purpose/action, not full card title
+- Include relevant situation context (${situation.type})
+- End with clear call-to-action or question
 - Message type: ${messageType || 'general follow-up'}
 
 Generate the message:`;
@@ -311,72 +494,130 @@ Generate the message:`;
 function generateTemplateMessage(
   card: any,
   situation: CardSituation,
+  recipient: MessageRecipient,
+  loggedInUserName: string,
   messageType?: string
 ): string {
-  const owner = card.owner || 'team';
-  const firstName = owner === 'team' ? 'team' : owner.split(' ')[0];
-  const title = card.summary;
-  const type = card.type;
-
-  // Overdue messages
-  if (messageType === 'overdue' || situation.type === 'overdue') {
-    const daysText = situation.daysOverdue === 1 ? 'yesterday' : `${situation.daysOverdue} days ago`;
-    
-    if (type === 'Action') {
-      return `Hi ${firstName}, just following up on "${title}". This action was due ${daysText} - have you been able to complete it? Let me know if you need any support.`;
-    } else if (type === 'Follow-up') {
-      return `Hi ${firstName}, checking in on "${title}". This was scheduled for ${daysText}${card.primaryContact ? ` - have you connected with ${card.primaryContact}?` : ''} Let me know the status.`;
-    } else if (type === 'Question') {
-      return `Hi team, we still need an answer on "${title}". This was raised ${daysText} and may be blocking progress. Can someone clarify?`;
+  const cardTitle = card.summary;
+  const cardType = card.type;
+  
+  // Get recipient name for addressing
+  let recipientName = 'team';
+  if (recipient.type === 'specific_person') {
+    if (recipient.names && recipient.names.length > 1) {
+      recipientName = recipient.names.map(n => n.split(' ')[0]).join(', ');
+    } else {
+      recipientName = recipient.name?.split(' ')[0] || 'team';
     }
   }
 
-  // Blocker messages
-  if (messageType === 'blocker' || situation.type === 'blocked') {
+  // FOLLOW-UP CARDS
+  if (cardType === 'Follow-up') {
+    if (situation.type === 'overdue') {
+      const daysText = situation.daysOverdue === 1 ? 'earlier' : `${situation.daysOverdue} days ago`;
+      if (recipient.type === 'specific_person') {
+        return `Hey ${recipientName}, I wanted to follow up with you about ${cardTitle}. I know we had planned to connect ${daysText} - do you have time to discuss this soon?`;
+      }
+      return `Hi team, I wanted to follow up about ${cardTitle}. This was scheduled ${daysText} - can we reconnect on this?`;
+    }
+    
+    if (recipient.type === 'specific_person') {
+      return `Hey ${recipientName}, I wanted to follow up with you about ${cardTitle}. ${card.interactionNote ? card.interactionNote + '. ' : ''}Can we connect soon?`;
+    }
+    return `Hi team, I wanted to follow up about ${cardTitle}. Can we discuss this?`;
+  }
+
+  // ACTION CARDS
+  if (cardType === 'Action') {
+    if (situation.type === 'overdue') {
+      if (recipient.type === 'specific_person' && card.owner !== loggedInUserName) {
+        return `Hey ${recipientName}, I wanted to check in about ${cardTitle}. This was due ${situation.daysOverdue} day${situation.daysOverdue === 1 ? '' : 's'} ago - how is it progressing? Let me know if you need any support.`;
+      }
+      return `Remember to complete ${cardTitle}. This was due ${situation.daysOverdue} day${situation.daysOverdue === 1 ? '' : 's'} ago.`;
+    }
+    
+    if (situation.type === 'stagnant') {
+      if (recipient.type === 'specific_person' && card.owner !== loggedInUserName) {
+        return `Hey ${recipientName}, I noticed ${cardTitle} has been ${card.status} for ${situation.daysSinceStatusChange} days. Is there anything blocking progress or do you need help?`;
+      }
+      return `Remember that ${cardTitle} has been ${card.status} for ${situation.daysSinceStatusChange} days. Time to move forward?`;
+    }
+    
+    if (recipient.type === 'specific_person' && card.owner !== loggedInUserName) {
+      return `Hey ${recipientName}, I wanted to check in about ${cardTitle}. How is this progressing? Let me know if you need any support.`;
+    }
+    
+    if (recipient.type === 'specific_person' && card.primaryContact) {
+      return `Hey ${recipientName}, I wanted to ${card.interactionType || 'connect'} with you about ${cardTitle}. ${card.interactionNote || ''}`;
+    }
+    
+    return `Remember to ${cardTitle.toLowerCase()}. Let me know if you need any support.`;
+  }
+
+  // QUESTION CARDS
+  if (cardType === 'Question') {
+    if (situation.type === 'overdue') {
+      return `Hi team, I still need an answer on ${cardTitle}. This was raised ${situation.daysOverdue} day${situation.daysOverdue === 1 ? '' : 's'} ago and may be blocking progress. Can someone help clarify?`;
+    }
+    
+    if (situation.type === 'stagnant') {
+      return `Hi team, I have a question about ${cardTitle} that's been open for ${situation.daysSinceStatusChange} days. This is important for next steps - can someone help clarify?`;
+    }
+    
+    return `Hi team, I have a question about ${cardTitle}. This is important for ${card.context || 'next steps'} - can someone help clarify?`;
+  }
+
+  // BLOCKER CARDS
+  if (cardType === 'Blocker' || card.status === 'Blocked') {
     const reason = card.blockedReason ? ` (${card.blockedReason})` : '';
-    return `🚧 Team - blocker needs attention: "${title}"${reason}. This is blocking progress. Can we prioritize resolving this?`;
+    const blockedBy = card.blockedBy ? ` by ${card.blockedBy}` : '';
+    
+    if (card.priority === 'URGENT' || card.priority === 'urgent') {
+      return `Hi team - URGENT: I'm blocked on ${cardTitle}${reason}${blockedBy}. This needs immediate attention. Can we get all hands on this?`;
+    }
+    
+    return `Hi team, I wanted to flag that ${card.owner === loggedInUserName ? "I'm" : 'we are'} currently blocked on ${cardTitle}${reason}${blockedBy}. Can we prioritize getting this resolved?`;
   }
 
-  // Stagnant/Status check
-  if (messageType === 'status-check' || situation.type === 'stagnant') {
-    const days = situation.daysSinceStatusChange || 3;
-    return `Hi ${firstName}, "${title}" has been in ${card.status} for ${days} days. Is there anything blocking progress or do you need help?`;
+  // DECISION CARDS
+  if (cardType === 'Decision') {
+    if (situation.type === 'completed') {
+      return `Hi team, I wanted to share that we've decided to ${cardTitle.toLowerCase()}. ${card.context || 'This is now documented for reference.'}`;
+    }
+    return `Hi team, I wanted to share this decision: ${cardTitle}. ${card.context || 'This will guide our next steps.'}`;
   }
 
-  // Due today
+  // UPDATE CARDS
+  if (cardType === 'Update') {
+    return `Hi team, quick update: ${cardTitle}. ${card.context || ''}`;
+  }
+
+  // IDEA CARDS
+  if (cardType === 'Idea') {
+    return `Hi team, I had an idea I wanted to share: ${cardTitle}. ${card.context || ''} Thoughts?`;
+  }
+
+  // RISK CARDS
+  if (cardType === 'Risk') {
+    if (card.priority === 'URGENT' || card.priority === 'urgent') {
+      return `Hi team - URGENT RISK: ${cardTitle}. ${card.context || ''} We need immediate attention and mitigation plan!`;
+    }
+    return `Hi team, I wanted to flag a risk: ${cardTitle}. This is ${card.priority || 'high'} priority. ${card.context || ''} We should discuss mitigation strategies.`;
+  }
+
+  // Default fallback
+  if (situation.type === 'overdue') {
+    const daysText = situation.daysOverdue === 1 ? 'yesterday' : `${situation.daysOverdue} days ago`;
+    return `Hi ${recipientName}, just following up on ${cardTitle}. This was due ${daysText} - have you been able to complete it? Let me know if you need any support.`;
+  }
+
   if (situation.type === 'due_today') {
-    return `Hi ${firstName}, friendly reminder that "${title}" is due today. Let me know how it's progressing!`;
+    return `Hi ${recipientName}, friendly reminder that ${cardTitle} is due today. Let me know how it's progressing!`;
   }
 
-  // Due soon
-  if (situation.type === 'due_soon') {
-    const daysText = situation.daysUntilDue === 1 ? 'tomorrow' : `in ${situation.daysUntilDue} days`;
-    return `Hi ${firstName}, "${title}" is coming up ${daysText}. Just wanted to make sure it's on your radar!`;
-  }
-
-  // Completed
   if (situation.type === 'completed') {
-    return `Great work completing "${title}"!${card.context ? ` ${card.context}` : ''} Thanks for getting this done.`;
+    return `Great work completing ${cardTitle}! ${card.context || ''} Thanks for getting this done.`;
   }
 
-  // Type-specific defaults
-  switch (type) {
-    case 'Action':
-      return `Hi ${firstName}, checking in on "${title}". Let me know the status and if you need support!`;
-    case 'Decision':
-      return `Team - documenting this decision: "${title}".${card.context ? ` ${card.context}` : ''} Recorded for reference.`;
-    case 'Follow-up':
-      const contact = card.primaryContact ? ` with ${card.primaryContact}` : '';
-      return `Hi ${firstName}, following up on "${title}". Have you connected${contact}? Let me know!`;
-    case 'Question':
-      return `Hi team, we need an answer on "${title}". Can someone help clarify?`;
-    case 'Blocker':
-      return `🚧 Blocker: "${title}". This needs immediate attention. Can we prioritize?`;
-    case 'Risk':
-      return `⚠️ Risk: "${title}". Priority: ${card.priority || 'Medium'}. We should discuss mitigation.`;
-    case 'Idea':
-      return `💡 Idea to consider: "${title}".${card.context ? ` ${card.context}` : ''} Worth discussing?`;
-    default:
-      return `Hi ${firstName}, following up on "${title}". Let me know the status!`;
-  }
+  return `Hi ${recipientName}, I wanted to follow up on ${cardTitle}. Let me know the status!`;
 }
