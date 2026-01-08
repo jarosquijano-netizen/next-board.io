@@ -967,8 +967,8 @@ export function CardDetailModal({
               </div>
             )}
 
-              {/* Add Comment Section - Now inside scrollable area */}
-              <div className="p-6 border-t-2 border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
+            {/* Add Comment Section - Now inside scrollable area */}
+            <div className="p-6 border-t-2 border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
             {card.status !== 'Done' ? (
               <div className="space-y-4">
                 <h4 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -1045,7 +1045,7 @@ export function CardDetailModal({
                 )}
               </>
             )}
-              </div>
+            </div>
           </div>
         </div>
       </div>
