@@ -651,7 +651,7 @@ export function CardDetailModal({
               </div>
 
               {/* Comments Timeline */}
-              <div className="space-y-4 relative before:absolute before:left-5 before:top-0 before:bottom-0 before:w-0.5 before:bg-gray-200 dark:before:bg-slate-700">
+              <div className="space-y-4">
                 {/* Original extraction */}
                 <div className="flex gap-4 relative">
                   <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0 relative z-10">
@@ -759,145 +759,100 @@ export function CardDetailModal({
               </div>
             </div>
 
-            {/* AI Message Generator Section */}
-            <div className="p-4 sm:p-6 bg-gray-50 dark:bg-slate-950/50">
-              <div className="pt-6">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-purple-500" />
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                        AI Message Generator
-                      </h3>
+            {/* AI Message Composer Section */}
+            <div className="p-4 sm:p-6">
+              <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 shadow-lg">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <Sparkles className="h-6 w-6 text-white" />
                     </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 bg-purple-50 dark:bg-purple-900/30 px-2 py-1 rounded">
-                      Copy & Paste Ready
-                    </span>
+                    <div>
+                      <h3 className="text-lg font-bold text-white mb-1">
+                        AI Message Composer
+                      </h3>
+                      <p className="text-sm text-purple-100">
+                        Need to nudge someone or confirm a decision? AI can draft a brief update for Slack or Email based on the card status.
+                      </p>
+                    </div>
                   </div>
+                  <button
+                    onClick={() => generateMessage('follow-up')}
+                    disabled={isGenerating}
+                    className="px-6 py-3 bg-white text-purple-600 rounded-lg font-bold text-sm hover:bg-purple-50 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 flex-shrink-0"
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    GENERATE MESSAGE
+                  </button>
+                </div>
 
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    Generate contextual messages for Slack or email based on card status, priority, and situation.
-                  </p>
-
-                  {/* Message Type Buttons */}
-                  <div className="space-y-3">
+                {/* Message Type Buttons - Hidden by default, shown when message is generated */}
+                {generatedMessage && (
+                  <div className="mt-4 pt-4 border-t border-white/20">
                     <div className="flex flex-wrap gap-2">
                       {suggestions.map((suggestion) => (
                         <button
                           key={suggestion.type}
                           onClick={() => generateMessage(suggestion.type)}
                           disabled={isGenerating}
-                          className={`px-3 py-2 text-sm rounded-lg font-medium transition-all flex items-center gap-2 ${getColorClass(suggestion.color)} disabled:opacity-50 disabled:cursor-not-allowed`}
+                          className={`px-3 py-2 text-sm rounded-lg font-medium transition-all flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed`}
                         >
                           <span>{suggestion.icon}</span>
                           <span>{suggestion.label}</span>
                         </button>
                       ))}
-                      
-                      {/* Default Follow-up button if no suggestions */}
-                      {suggestions.length === 0 && (
-                        <button
-                          onClick={() => generateMessage('follow-up')}
-                          disabled={isGenerating}
-                          className={`px-3 py-2 text-sm rounded-lg font-medium transition-all flex items-center gap-2 ${getColorClass('blue')} disabled:opacity-50`}
-                        >
-                          <span>💬</span>
-                          <span>Generate Follow-up</span>
-                        </button>
-                      )}
                     </div>
+                  </div>
+                )}
 
-                    {/* Generated Message Display */}
-                    {generatedMessage && (
-                      <div className="relative animate-in fade-in slide-in-from-top-2 duration-300">
-                        <div className="p-4 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg border-2 border-purple-200 dark:border-purple-800">
-                          {/* Header with copy button */}
-                          <div className="flex items-start justify-between gap-2 mb-3">
-                            <div className="flex items-center gap-2">
-                              <MessageSquare className="h-4 w-4 text-purple-600 dark:text-purple-400 flex-shrink-0" />
-                              <span className="text-xs font-semibold text-purple-900 dark:text-purple-300 uppercase tracking-wide">
-                                Generated Message
-                              </span>
-                            </div>
-                            <button
-                              onClick={copyMessage}
-                              className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border-2 border-purple-300 dark:border-purple-700 rounded-md hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-all font-medium text-purple-700 dark:text-purple-300 shadow-sm"
-                            >
-                              {messageCopied ? (
-                                <>
-                                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                  </svg>
-                                  <span>Copied!</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Copy className="h-4 w-4" />
-                                  <span>Copy</span>
-                                </>
-                              )}
-                            </button>
-                          </div>
-                          
-                          {/* Message Content */}
-                          <div className="bg-white dark:bg-gray-900 rounded-md p-3 border border-purple-100 dark:border-purple-800">
-                            <p className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap leading-relaxed">
-                              {generatedMessage}
-                            </p>
-                          </div>
-                          
-                          {/* Footer */}
-                          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-purple-200 dark:border-purple-800">
-                            <div className="flex items-center gap-1.5 text-xs text-purple-600 dark:text-purple-400">
-                              <Sparkles className="h-3 w-3" />
-                              <span>AI-generated • Ready for Slack or Email</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Loading State */}
-                    {isGenerating && (
-                      <div className="flex items-center justify-center gap-3 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-                        <Loader2 className="h-5 w-5 animate-spin text-purple-500" />
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                          Generating your message...
+                {/* Generated Message Display */}
+                {generatedMessage && (
+                  <div className="mt-4 p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                    <div className="flex items-start justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-2">
+                        <MessageSquare className="h-4 w-4 text-white flex-shrink-0" />
+                        <span className="text-xs font-semibold text-white uppercase tracking-wide">
+                          Generated Message
                         </span>
                       </div>
-                    )}
-
-                    {/* Empty State - First Time */}
-                    {!generatedMessage && !isGenerating && (
-                      <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 text-center">
-                        <Sparkles className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          Click a button above to generate a contextual message
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                          Messages are tailored to card type, priority, and current status
-                        </p>
-                      </div>
-                    )}
-                </div>
-
-                {/* Info Box */}
-                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <div className="flex gap-2">
-                    <svg className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <div>
-                      <p className="text-xs font-medium text-blue-900 dark:text-blue-300 mb-1">
-                        💡 Pro Tip
-                      </p>
-                      <p className="text-xs text-blue-700 dark:text-blue-400">
-                        Messages adapt based on: card type (Action, Decision, etc.), priority (High, Urgent), 
-                        status (overdue, due today), and assigned owner. Perfect for quick follow-ups!
+                      <button
+                        onClick={copyMessage}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-white text-purple-600 rounded-md hover:bg-purple-50 transition-all font-medium shadow-sm"
+                      >
+                        {messageCopied ? (
+                          <>
+                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="h-4 w-4" />
+                            <span>Copy</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                    
+                    {/* Message Content */}
+                    <div className="bg-white rounded-md p-4 border border-white/20">
+                      <p className="text-sm text-gray-900 whitespace-pre-wrap leading-relaxed">
+                        {generatedMessage}
                       </p>
                     </div>
                   </div>
-                </div>
+                )}
+
+                {/* Loading State */}
+                {isGenerating && (
+                  <div className="mt-4 flex items-center justify-center gap-3 p-6 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                    <Loader2 className="h-5 w-5 animate-spin text-white" />
+                    <span className="text-sm font-medium text-white">
+                      Generating your message...
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
