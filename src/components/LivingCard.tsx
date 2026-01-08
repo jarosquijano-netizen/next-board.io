@@ -178,25 +178,28 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
         ...style,
         // Clean minimal design - matching reference
         border: '1px solid #e5e7eb',
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
         backgroundColor: '#ffffff',
-        borderRadius: '0.5rem',
+        borderRadius: '0.75rem',
         transition: 'all 0.2s ease-in-out',
       }}
       {...attributes}
       {...listeners}
       className={`
         kanban-card
-        group relative rounded-lg mb-3 cursor-move
-        bg-white
-        hover:shadow-md
+        group relative rounded-xl mb-3 cursor-move
+        bg-white dark:bg-slate-900
+        hover:shadow-lg hover:shadow-blue-500/10
+        border-gray-200 dark:border-slate-700
         touch-manipulation
       `}
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+        e.currentTarget.style.boxShadow = '0 4px 12px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+        e.currentTarget.style.borderColor = '#cbd5e1';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)';
+        e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
+        e.currentTarget.style.borderColor = '#e5e7eb';
       }}
     >
       {/* Drag Handle */}
@@ -220,21 +223,21 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
         {/* Card Header - Clean Minimal Design */}
         <div className="flex items-start justify-between gap-2 mb-3">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide ${styles.badge}`}>
+            <div className="flex items-center gap-2 mb-2.5 flex-wrap">
+              <span className={`px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wide border ${styles.badge}`}>
                 {card.type}
               </span>
-              {card.priority && (
-                <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${getPriorityColor(card.priority)}`}>
+              {card.priority && card.priority !== 'medium' && (
+                <span className={`px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase border ${getPriorityColor(card.priority)}`}>
                   {card.priority.toUpperCase()}
                 </span>
               )}
             </div>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white leading-relaxed mb-2">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white leading-relaxed mb-2.5 line-clamp-2">
               {card.summary}
             </h3>
             {card.context && (
-              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-2">
+              <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed mb-2.5 line-clamp-2 italic">
                 &quot;{card.context}&quot;
               </p>
             )}
@@ -319,33 +322,33 @@ export default function LivingCard({ card, onUpdate, onDelete, onAddNote, onGene
         )}
 
         {/* Metadata Row - Clean minimal matching reference */}
-        <div className="flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400 flex-wrap">
+        <div className="flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400 flex-wrap pt-2 border-t border-gray-100 dark:border-gray-800">
           {card.owner && (
             <div className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-700 dark:text-purple-300 font-semibold text-[10px]">
-                {card.owner.charAt(0)}
+              <div className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-semibold text-[10px] shadow-sm">
+                {card.owner.charAt(0).toUpperCase()}
               </div>
-              <span className="truncate">{card.owner}</span>
+              <span className="truncate font-medium">{card.owner}</span>
             </div>
           )}
           {card.dueDate && (
-            <div className="flex items-center gap-1.5">
-              <Clock className="w-3 h-3 flex-shrink-0" />
-              <span className={timeStatus.displayColor}>
+            <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md ${timeStatus.isOverdue ? 'bg-red-50 dark:bg-red-900/20' : 'bg-gray-50 dark:bg-gray-800/50'}`}>
+              <Clock className={`w-3 h-3 flex-shrink-0 ${timeStatus.isOverdue ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`} />
+              <span className={`font-medium ${timeStatus.displayColor}`}>
                 {timeStatus.displayText}
               </span>
             </div>
           )}
           {activities.length > 0 && (
-            <div className="flex items-center gap-1.5">
-              <MessageSquare className="w-3 h-3 flex-shrink-0" />
-              <span>{activities.length}</span>
+            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900/20">
+              <MessageSquare className="w-3 h-3 flex-shrink-0 text-blue-600 dark:text-blue-400" />
+              <span className="font-medium text-blue-700 dark:text-blue-300">{activities.length}</span>
             </div>
           )}
           {card.timeEstimate && (
-            <div className="flex items-center gap-1.5">
-              <Clock className="w-3 h-3 flex-shrink-0" />
-              <span>{getTimeEstimateDisplay(card.timeEstimate)}</span>
+            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-gray-50 dark:bg-gray-800/50">
+              <Clock className="w-3 h-3 flex-shrink-0 text-gray-500 dark:text-gray-400" />
+              <span className="font-medium">{getTimeEstimateDisplay(card.timeEstimate)}</span>
             </div>
           )}
         </div>
