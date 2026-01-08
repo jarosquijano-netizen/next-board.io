@@ -437,87 +437,91 @@ export function CardDetailModal({
             {/* Metadata Section */}
             <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900">
               {/* Owner - Editable */}
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-                  <User className="w-5 h-5 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wide">Owner</p>
-                  {isEditingOwner ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={editedOwner}
-                        onChange={(e) => setEditedOwner(e.target.value)}
-                        onBlur={handleSaveOwner}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') handleSaveOwner();
-                          if (e.key === 'Escape') setIsEditingOwner(false);
-                        }}
-                        placeholder="Enter owner name"
-                        autoFocus
-                        className="flex-1 text-sm font-medium bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white px-2 py-1 rounded border-2 border-blue-500 focus:outline-none"
-                      />
+              <div>
+                <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">OWNER</p>
+                {isEditingOwner ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={editedOwner}
+                      onChange={(e) => setEditedOwner(e.target.value)}
+                      onBlur={handleSaveOwner}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleSaveOwner();
+                        if (e.key === 'Escape') setIsEditingOwner(false);
+                      }}
+                      placeholder="Enter owner name"
+                      autoFocus
+                      className="flex-1 text-sm font-medium bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white px-3 py-2 rounded-lg border-2 border-blue-500 focus:outline-none"
+                    />
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setIsEditingOwner(true)}
+                    className="w-full bg-purple-50 dark:bg-purple-900/20 rounded-lg px-3 py-2.5 flex items-center gap-2 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors text-left"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center flex-shrink-0">
+                      <User className="w-4 h-4 text-purple-600 dark:text-purple-400" strokeWidth={2} />
                     </div>
-                  ) : (
-                    <button
-                      onClick={() => setIsEditingOwner(true)}
-                      className="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-left w-full truncate"
-                    >
+                    <span className="text-sm font-medium text-gray-900 dark:text-white truncate">
                       {card.owner || 'Click to assign'}
-                    </button>
-                  )}
-                </div>
+                    </span>
+                  </button>
+                )}
               </div>
 
               {/* Due Date - Editable */}
-              <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  timeStatus.isOverdue ? 'bg-red-600' : 'bg-gray-200 dark:bg-slate-700'
-                }`}>
-                  <Calendar className={`w-5 h-5 ${timeStatus.isOverdue ? 'text-white' : 'text-gray-600 dark:text-gray-400'}`} />
-                </div>
-                <div className="flex-1">
-                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wide">Due Date</p>
-                  {isEditingDueDate ? (
-                    <div className="flex items-center gap-2">
-                      <DatePicker
-                        selected={editedDueDate}
-                        onChange={(date) => {
-                          setEditedDueDate(date);
-                          handleSaveDueDate(date);
-                        }}
-                        showTimeSelect
-                        dateFormat="MMM d, yyyy h:mm aa"
-                        className="text-sm font-medium bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white px-2 py-1 rounded border-2 border-blue-500 focus:outline-none"
-                        placeholderText="No deadline"
-                        isClearable
-                      />
+              <div>
+                <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">DUE DATE</p>
+                {isEditingDueDate ? (
+                  <div className="flex items-center gap-2">
+                    <DatePicker
+                      selected={editedDueDate}
+                      onChange={(date) => {
+                        setEditedDueDate(date);
+                        handleSaveDueDate(date);
+                      }}
+                      showTimeSelect
+                      dateFormat="MMM d, yyyy h:mm aa"
+                      className="w-full text-sm font-medium bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white px-3 py-2 rounded-lg border-2 border-blue-500 focus:outline-none"
+                      placeholderText="No deadline"
+                      isClearable
+                    />
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setIsEditingDueDate(true)}
+                    className={`w-full bg-gray-50 dark:bg-gray-800/50 rounded-lg px-3 py-2.5 flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left ${
+                      timeStatus.isOverdue ? 'border border-red-200 dark:border-red-900/50' : ''
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                      timeStatus.isOverdue ? 'bg-red-100 dark:bg-red-900/40' : 'bg-gray-100 dark:bg-gray-700'
+                    }`}>
+                      <Calendar className={`w-4 h-4 ${
+                        timeStatus.isOverdue ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400'
+                      }`} strokeWidth={2} />
                     </div>
-                  ) : (
-                    <button
-                      onClick={() => setIsEditingDueDate(true)}
-                      className={`text-sm font-medium hover:underline text-left ${timeStatus.displayColor}`}
-                    >
+                    <span className={`text-sm font-medium ${timeStatus.displayColor}`}>
                       {card.dueDate ? formatDueDate(card.dueDate) : 'Set deadline'}
-                    </button>
-                  )}
-                  {card.dueDate && !isEditingDueDate && (
-                    <p className="text-xs text-gray-500">{timeStatus.displayText}</p>
-                  )}
-                </div>
+                    </span>
+                  </button>
+                )}
+                {card.dueDate && !isEditingDueDate && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-11">{timeStatus.displayText}</p>
+                )}
               </div>
 
               {/* Created */}
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Created</p>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+              <div>
+                <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">CREATED</p>
+                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg px-3 py-2.5 flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-4 h-4 text-gray-600 dark:text-gray-400" strokeWidth={2} />
+                  </div>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">
                     {formatDateTime(new Date(card.createdAt))}
-                  </p>
+                  </span>
                 </div>
               </div>
 
@@ -536,81 +540,81 @@ export function CardDetailModal({
                 </div>
               )}
 
-              {/* Co-Owners Section - Full Width */}
-              <div className="col-span-2">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center flex-shrink-0">
-                    <Users className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Co-Owners</p>
-                    
-                    {/* Display existing co-owners */}
-                    {coOwners.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-2">
-                        {coOwners.map((coOwner: string, index: number) => (
-                          <div
-                            key={index}
-                            className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm"
-                          >
-                            <span>{coOwner}</span>
-                            <button
-                              onClick={() => handleRemoveCoOwner(coOwner)}
-                              className="hover:bg-purple-200 dark:hover:bg-purple-800 rounded-full p-0.5 transition-colors"
-                              title="Remove co-owner"
-                            >
-                              <X className="w-3 h-3" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Add co-owner form */}
-                    {isEditingCoOwners ? (
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          value={editedCoOwners}
-                          onChange={(e) => setEditedCoOwners(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') handleSaveCoOwners();
-                            if (e.key === 'Escape') {
-                              setIsEditingCoOwners(false);
-                              setEditedCoOwners('');
-                            }
-                          }}
-                          placeholder="Enter names separated by commas"
-                          autoFocus
-                          className="flex-1 text-sm bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white px-3 py-2 rounded border-2 border-purple-500 focus:outline-none"
-                        />
-                        <button
-                          onClick={handleSaveCoOwners}
-                          className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm font-medium transition-colors"
-                        >
-                          Add
-                        </button>
-                        <button
-                          onClick={() => {
-                            setIsEditingCoOwners(false);
-                            setEditedCoOwners('');
-                          }}
-                          className="px-3 py-2 bg-gray-300 dark:bg-slate-700 hover:bg-gray-400 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300 rounded text-sm font-medium transition-colors"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setIsEditingCoOwners(true)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 rounded text-sm font-medium transition-colors"
+              {/* Co-Owners Section */}
+              <div>
+                <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">CO-OWNERS</p>
+                
+                {/* Display existing co-owners */}
+                {coOwners.length > 0 && (
+                  <div className="space-y-2 mb-2">
+                    {coOwners.map((coOwner: string, index: number) => (
+                      <div
+                        key={index}
+                        className="bg-gray-50 dark:bg-gray-800/50 rounded-lg px-3 py-2.5 flex items-center gap-2 border border-gray-200 dark:border-gray-700"
                       >
-                        <UserPlus className="w-4 h-4" />
-                        Add Co-Owner
-                      </button>
-                    )}
+                        <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
+                          <Users className="w-4 h-4 text-gray-600 dark:text-gray-400" strokeWidth={2} />
+                        </div>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white flex-1">{coOwner}</span>
+                        <button
+                          onClick={() => handleRemoveCoOwner(coOwner)}
+                          className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+                          title="Remove co-owner"
+                        >
+                          <X className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                </div>
+                )}
+
+                {/* Add co-owner form */}
+                {isEditingCoOwners ? (
+                  <div className="space-y-2">
+                    <input
+                      type="text"
+                      value={editedCoOwners}
+                      onChange={(e) => setEditedCoOwners(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleSaveCoOwners();
+                        if (e.key === 'Escape') {
+                          setIsEditingCoOwners(false);
+                          setEditedCoOwners('');
+                        }
+                      }}
+                      placeholder="Enter names separated by commas"
+                      autoFocus
+                      className="w-full text-sm bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white px-3 py-2 rounded-lg border-2 border-purple-500 focus:outline-none"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleSaveCoOwners}
+                        className="flex-1 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-colors"
+                      >
+                        Add
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIsEditingCoOwners(false);
+                          setEditedCoOwners('');
+                        }}
+                        className="flex-1 px-3 py-2 bg-gray-300 dark:bg-slate-700 hover:bg-gray-400 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setIsEditingCoOwners(true)}
+                    className="w-full bg-gray-50 dark:bg-gray-800/50 rounded-lg px-3 py-2.5 flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border border-gray-200 dark:border-gray-700"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
+                      <Users className="w-4 h-4 text-gray-600 dark:text-gray-400" strokeWidth={2} />
+                    </div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Add Co-Owner</span>
+                  </button>
+                )}
               </div>
 
               {/* Blocked Info */}
