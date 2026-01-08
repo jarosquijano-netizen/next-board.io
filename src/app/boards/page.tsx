@@ -3,12 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
+import { useSidebar } from '@/contexts/SidebarContext';
 import { useMeetingsStore } from '@/store/meetings';
 import { formatDateTime } from '@/lib/utils';
 import { Loader2, FolderKanban, Calendar, FileText, Trash2, Link2, Repeat, Link as LinkIcon } from 'lucide-react';
 
 export default function BoardsPage() {
   const router = useRouter();
+  const { contentMargin } = useSidebar();
   const { meetings, isLoading, fetchMeetings, deleteBoard } = useMeetingsStore();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [expandedSeries, setExpandedSeries] = useState<Set<string>>(new Set());
@@ -65,7 +67,7 @@ export default function BoardsPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
       <Sidebar />
       
-      <div className="lg:ml-64 min-h-screen">
+      <div className={`${contentMargin} min-h-screen transition-all duration-300`}>
         {/* Header */}
         <div className="border-b border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/50 backdrop-blur-sm sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-8 py-6">

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import Sidebar from '@/components/Sidebar';
+import { useSidebar } from '@/contexts/SidebarContext';
 import {
   LineChart,
   Line,
@@ -31,6 +32,7 @@ import {
 
 export default function AnalyticsPage() {
   const { userId, isLoaded } = useAuth();
+  const { contentMargin } = useSidebar();
   const [period, setPeriod] = useState<'7d' | '30d' | '90d' | 'all'>('30d');
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -60,7 +62,7 @@ export default function AnalyticsPage() {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-950">
         <Sidebar />
-        <div className="lg:ml-64 flex items-center justify-center h-screen">
+        <div className={`${contentMargin} flex items-center justify-center h-screen transition-all duration-300`}>
           <div className="text-white text-lg">Loading analytics...</div>
         </div>
       </div>
@@ -71,7 +73,7 @@ export default function AnalyticsPage() {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-950">
         <Sidebar />
-        <div className="lg:ml-64 flex items-center justify-center h-screen">
+        <div className={`${contentMargin} flex items-center justify-center h-screen transition-all duration-300`}>
           <div className="text-white text-lg">No analytics data available</div>
         </div>
       </div>
@@ -82,7 +84,7 @@ export default function AnalyticsPage() {
     <div className="min-h-screen bg-white dark:bg-slate-950">
       <Sidebar />
       
-      <div className="lg:ml-64 min-h-screen transition-colors duration-300">
+      <div className={`${contentMargin} min-h-screen transition-all duration-300`}>
         {/* Header */}
         <div className="border-b border-gray-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-8 py-6">

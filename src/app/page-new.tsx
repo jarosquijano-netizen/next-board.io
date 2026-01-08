@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import Sidebar from '@/components/Sidebar';
+import { useSidebar } from '@/contexts/SidebarContext';
 import UploadPanel from '@/components/UploadPanel';
 import { Sparkles, Upload, TrendingUp } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -12,6 +13,7 @@ const DEMO_MODE = !process.env.NEXT_PUBLIC_HAS_API_KEY;
 export default function Home() {
   const { user, isLoaded } = useUser();
   const router = useRouter();
+  const { contentMargin } = useSidebar();
 
   const handleProcessComplete = (meetingId: string) => {
     router.push(`/board/${meetingId}`);
@@ -30,7 +32,7 @@ export default function Home() {
       <Sidebar />
       
       {/* Main Content */}
-      <div className="ml-64 min-h-screen">
+      <div className={`${contentMargin} min-h-screen transition-all duration-300`}>
         {/* Demo Mode Banner */}
         {DEMO_MODE && (
           <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-b border-amber-500/20">

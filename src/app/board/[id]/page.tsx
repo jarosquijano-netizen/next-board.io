@@ -126,7 +126,7 @@ function DroppableColumn({
 export default function BoardPage({ params }: PageProps) {
   const { id } = use(params);
   const router = useRouter();
-  const { sidebarWidth } = useSidebar();
+  const { sidebarWidth, contentMargin } = useSidebar();
   const { currentMeeting, isLoading, fetchMeeting, updateCardStatus, updateCard } = useMeetingsStore();
   
   const [searchQuery, setSearchQuery] = useState('');
@@ -536,7 +536,7 @@ export default function BoardPage({ params }: PageProps) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
         <Sidebar />
-        <div className="ml-64">
+        <div className={`${contentMargin} transition-all duration-300`}>
           <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
         </div>
       </div>
@@ -547,7 +547,7 @@ export default function BoardPage({ params }: PageProps) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
         <Sidebar />
-        <div className="ml-64 flex items-center justify-center py-20">
+        <div className={`${contentMargin} flex items-center justify-center py-20 transition-all duration-300`}>
           <div className="text-center">
             <p className="text-gray-600 dark:text-slate-400 mb-4">Meeting not found</p>
             <button
@@ -569,8 +569,7 @@ export default function BoardPage({ params }: PageProps) {
       <Sidebar />
       
       <div 
-        className="min-h-screen pb-20 lg:pb-0 transition-all duration-300"
-        style={{ marginLeft: sidebarWidth === '16' ? '16rem' : '4rem' }}
+        className={`${contentMargin} min-h-screen pb-20 lg:pb-0 transition-all duration-300`}
       >
         {/* Header */}
         <div className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 sticky top-0 z-40 shadow-sm">

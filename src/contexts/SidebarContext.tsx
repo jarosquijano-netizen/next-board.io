@@ -6,6 +6,7 @@ interface SidebarContextType {
   isCollapsed: boolean;
   toggleSidebar: () => void;
   sidebarWidth: string;
+  contentMargin: string; // Dynamic margin class for content
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
@@ -30,9 +31,11 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
   };
 
   const sidebarWidth = isCollapsed ? '16' : '64';
+  // Dynamic margin class: ml-16 (64px) when collapsed, ml-64 (256px) when expanded
+  const contentMargin = isCollapsed ? 'lg:ml-16' : 'lg:ml-64';
 
   return (
-    <SidebarContext.Provider value={{ isCollapsed, toggleSidebar, sidebarWidth }}>
+    <SidebarContext.Provider value={{ isCollapsed, toggleSidebar, sidebarWidth, contentMargin }}>
       {children}
     </SidebarContext.Provider>
   );
