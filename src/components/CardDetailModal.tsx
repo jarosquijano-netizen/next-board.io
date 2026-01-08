@@ -146,6 +146,7 @@ export function CardDetailModal({
       loadMessageSuggestions();
       setGeneratedMessage(''); // Reset message when card changes
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, card?.id]);
 
   const loadMessageSuggestions = async () => {

@@ -2,11 +2,9 @@
 // AI Message Generator API Endpoint
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs';
-import { PrismaClient } from '@prisma/client';
+import { auth } from '@clerk/nextjs/server';
+import { prisma } from '@/lib/prisma';
 import Anthropic from '@anthropic-ai/sdk';
-
-const prisma = new PrismaClient();
 
 interface CardSituation {
   type: 'overdue' | 'due_today' | 'due_soon' | 'stagnant' | 'blocked' | 'escalated' | 'completed' | 'active';
@@ -72,7 +70,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
