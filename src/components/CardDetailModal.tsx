@@ -71,6 +71,8 @@ export function CardDetailModal({
   const [editedSummary, setEditedSummary] = useState(card.summary);
   const [noteText, setNoteText] = useState('');
   const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+  const [transcriptSummary, setTranscriptSummary] = useState<string | null>(null);
+  const [isLoadingTranscriptSummary, setIsLoadingTranscriptSummary] = useState(false);
   
   // Editable fields
   const [isEditingStatus, setIsEditingStatus] = useState(false);
@@ -657,8 +659,8 @@ export function CardDetailModal({
 
               {/* Activity Feed */}
               <div className="space-y-4 mb-4">
-                {/* Original extraction */}
-                {card.context && (
+                {/* Short Summary of Transcript */}
+                {(transcriptSummary || card.context) && (
                   <div className="flex gap-3">
                     <div className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 border-2 border-purple-200 dark:border-purple-800 flex items-center justify-center flex-shrink-0">
                       <Sparkles className="w-5 h-5 text-purple-400 dark:text-purple-500" />
@@ -671,7 +673,16 @@ export function CardDetailModal({
                           {formatDateTime(new Date(card.createdAt))}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{card.context || card.summary}</p>
+                      {isLoadingTranscriptSummary ? (
+                        <div className="flex items-center gap-2 mb-2">
+                          <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                          <span className="text-sm text-gray-500 dark:text-gray-400">Generating summary...</span>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                          {transcriptSummary || card.context || card.summary}
+                        </p>
+                      )}
                       {card.timestamp && (
                         <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
                           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
