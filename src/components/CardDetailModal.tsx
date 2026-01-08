@@ -684,9 +684,9 @@ export function CardDetailModal({
 
                 {/* Empty State */}
                 {(!card.activities || card.activities.filter(a => a.activityType === 'note').length === 0) && (
-                  <div className="text-center py-6">
-                    <MessageSquare className="w-16 h-16 text-gray-200 dark:text-gray-700 mx-auto mb-3" strokeWidth={1} />
-                    <p className="text-sm text-gray-500 dark:text-gray-400">No comments yet. Be the first to add a note!</p>
+                  <div className="text-center py-2">
+                    <MessageSquare className="w-8 h-8 text-gray-200 dark:text-gray-700 mx-auto mb-1" strokeWidth={1} />
+                    <p className="text-xs text-gray-400 dark:text-gray-500">No comments yet. Be the first to add a note!</p>
                   </div>
                 )}
 
