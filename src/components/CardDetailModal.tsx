@@ -686,41 +686,6 @@ export function CardDetailModal({
 
               {/* Activity Feed */}
               <div className="space-y-4 mb-4">
-                {/* Short Summary of Transcript */}
-                {(transcriptSummary || card.context) && (
-                  <div className="flex gap-3">
-                    <div className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 border-2 border-purple-200 dark:border-purple-800 flex items-center justify-center flex-shrink-0">
-                      <Sparkles className="w-5 h-5 text-purple-400 dark:text-purple-500" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium text-purple-600 dark:text-purple-400">AI Extracted from Meeting</span>
-                        <span className="text-gray-400">•</span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          {formatDateTime(new Date(card.createdAt))}
-                        </span>
-                      </div>
-                      {isLoadingTranscriptSummary ? (
-                        <div className="flex items-center gap-2 mb-2">
-                          <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
-                          <span className="text-sm text-gray-500 dark:text-gray-400">Generating summary...</span>
-                        </div>
-                      ) : (
-                        <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
-                          {transcriptSummary || card.context || card.summary}
-                        </p>
-                      )}
-                      {card.timestamp && (
-                        <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                          </svg>
-                          <span>TRANSCRIPT: {card.timestamp}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
 
                 {/* User comments only */}
                 {card.activities && card.activities.filter(a => a.activityType === 'note').length > 0 && (
